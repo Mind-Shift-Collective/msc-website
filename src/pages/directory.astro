@@ -7,7 +7,7 @@ const focus = [...new Set(members.flatMap((m) => m.focus))].sort();
 const anySample = members.some((m) => m.sample);
 ---
 <Base title="Member directory" current="/directory" description="Meet the members of Mind Shift Collective: founders, clinicians, researchers, funders and builders in mental health and psychedelic medicine.">
-  {anySample && <div class="notice">Preview: these are sample members. Real cards appear as members are approved.</div>}
+  {anySample && <div class="notice">Preview: Nick and David are draft cards; the rest are sample members. Real cards appear as members are approved.</div>}
   <section style="padding-top:64px;padding-bottom:24px;">
     <div class="wrap stack">
       <p class="eyebrow">The directory</p>

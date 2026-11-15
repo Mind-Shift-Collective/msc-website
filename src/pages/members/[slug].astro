@@ -28,6 +28,7 @@ const schema = {
 <Base title={m.name} current="/directory" description={`${m.name}: ${m.headline} Member of Mind Shift Collective.`}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
   {m.sample && <div class="notice">Preview: this is a sample member card.</div>}
+  {m.draft && <div class="notice">Draft card: waiting for approval. Bracketed text still needs filling in.</div>}
   <section style="padding-top:56px;">
     <div class="wrap row" style="gap:56px;align-items:flex-start;">
       <div class="stack-lg" style="flex:999 1 560px;min-width:0;">

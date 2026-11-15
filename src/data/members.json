@@ -1,21 +1,103 @@
 [
   {
+    "slug": "nick-nowak",
+    "sample": false,
+    "draft": true,
+    "name": "Nick Nowak",
+    "initials": "NN",
+    "city": "Asheville, NC",
+    "headline": "A pharmacist who builds things: companies, networks and care models at the edges of what healthcare is willing to try.",
+    "roles": [
+      "Founder",
+      "Consultant"
+    ],
+    "focus": [
+      "Ketamine",
+      "Payers",
+      "Compounding",
+      "Policy"
+    ],
+    "bio": "Nick is a pharmacist (PharmD, BCPS) whose career runs from emergency medicine and ICU high-dose ketamine to running 503A compounding pharmacy operations. He co-founded Meeko Health, which credentialed more than 100 clinics into a national psychedelic therapy network and brought ketamine and TMS care to employers. He founded Mind Shift Collective and serves on the board of Pearl Institute in Western North Carolina.",
+    "helpWith": "Compounding regulation, payer and TPA infrastructure, building clinic networks, and pharmaceutical commercialization.",
+    "lookingFor": "[What Nick is looking for right now]",
+    "openTo": [
+      "Advising",
+      "Collaborating"
+    ],
+    "website": "https://www.mindshiftcollective.net",
+    "linkedin": "",
+    "youtube": "",
+    "companies": [
+      {
+        "name": "Mind Shift Collective",
+        "line": "A referral-based community of practice for builders in mental health and psychedelic medicine.",
+        "website": "https://www.mindshiftcollective.net"
+      }
+    ],
+    "memberSince": "2025"
+  },
+  {
+    "slug": "david-drapkin",
+    "sample": false,
+    "draft": true,
+    "name": "David Drapkin",
+    "initials": "DD",
+    "city": "[City]",
+    "headline": "Co-founder of Mind Shift Collective. [One line on David's work]",
+    "roles": [
+      "Founder",
+      "Consultant"
+    ],
+    "focus": [],
+    "bio": "[Two or three sentences from David about his work in the field.]",
+    "helpWith": "[What David can help members with]",
+    "lookingFor": "[What David is looking for right now]",
+    "openTo": [
+      "Collaborating"
+    ],
+    "website": "",
+    "linkedin": "",
+    "youtube": "",
+    "companies": [
+      {
+        "name": "Mind Shift Collective",
+        "line": "A referral-based community of practice for builders in mental health and psychedelic medicine.",
+        "website": "https://www.mindshiftcollective.net"
+      }
+    ],
+    "memberSince": "2025"
+  },
+  {
     "slug": "maya-okafor",
     "sample": true,
     "name": "Maya Okafor",
     "initials": "MO",
     "city": "Denver, CO",
     "headline": "Building integration care for veterans after ketamine treatment.",
-    "roles": ["Founder"],
-    "focus": ["Ketamine", "Veterans"],
+    "roles": [
+      "Founder"
+    ],
+    "focus": [
+      "Ketamine",
+      "Veterans"
+    ],
     "bio": "Sample bio. Maya spent ten years in emergency medicine before starting Threshold Health, which pairs veterans with integration support in the weeks after ketamine treatment.",
     "helpWith": "Building veteran referral networks, clinic partnerships, and measuring outcomes after treatment.",
     "lookingFor": "Clinics in the Southeast to pilot with, and a payer advisor.",
-    "openTo": ["Collaborating", "Speaking"],
+    "openTo": [
+      "Collaborating",
+      "Speaking"
+    ],
     "website": "",
     "linkedin": "",
     "youtube": "",
-    "companies": [{ "name": "Threshold Health", "line": "Integration support for veterans after ketamine treatment.", "website": "" }],
+    "companies": [
+      {
+        "name": "Threshold Health",
+        "line": "Integration support for veterans after ketamine treatment.",
+        "website": ""
+      }
+    ],
     "memberSince": "2025"
   },
   {
@@ -25,16 +107,30 @@
     "initials": "DR",
     "city": "New York, NY",
     "headline": "Psychiatrist and researcher studying psilocybin for depression.",
-    "roles": ["Clinician", "Researcher"],
-    "focus": ["Psilocybin", "Research"],
+    "roles": [
+      "Clinician",
+      "Researcher"
+    ],
+    "focus": [
+      "Psilocybin",
+      "Research"
+    ],
     "bio": "Sample bio.",
     "helpWith": "Study design and clinical protocols.",
     "lookingFor": "Real-world outcomes data partners.",
-    "openTo": ["Advising"],
+    "openTo": [
+      "Advising"
+    ],
     "website": "",
     "linkedin": "",
     "youtube": "",
-    "companies": [{ "name": "Northbound Research", "line": "Psychedelic clinical research.", "website": "" }],
+    "companies": [
+      {
+        "name": "Northbound Research",
+        "line": "Psychedelic clinical research.",
+        "website": ""
+      }
+    ],
     "memberSince": "2025"
   },
   {
@@ -44,16 +140,29 @@
     "initials": "PN",
     "city": "London, UK",
     "headline": "Early-stage investor in mental health infrastructure.",
-    "roles": ["Funder"],
-    "focus": ["Tech & AI", "Payers"],
+    "roles": [
+      "Funder"
+    ],
+    "focus": [
+      "Tech & AI",
+      "Payers"
+    ],
     "bio": "Sample bio.",
     "helpWith": "Fundraising strategy and investor introductions.",
     "lookingFor": "Founders building measurement and care infrastructure.",
-    "openTo": ["Investing"],
+    "openTo": [
+      "Investing"
+    ],
     "website": "",
     "linkedin": "",
     "youtube": "",
-    "companies": [{ "name": "Open Field Capital", "line": "Early-stage fund.", "website": "" }],
+    "companies": [
+      {
+        "name": "Open Field Capital",
+        "line": "Early-stage fund.",
+        "website": ""
+      }
+    ],
     "memberSince": "2025"
   },
   {
@@ -63,16 +172,30 @@
     "initials": "TL",
     "city": "Asheville, NC",
     "headline": "Helps clinics through state licensing and payer contracts.",
-    "roles": ["Consultant"],
-    "focus": ["Policy", "Payers"],
+    "roles": [
+      "Consultant"
+    ],
+    "focus": [
+      "Policy",
+      "Payers"
+    ],
     "bio": "Sample bio.",
     "helpWith": "Licensing, payer contracting, compliance.",
     "lookingFor": "Clinics with outcomes data willing to share it.",
-    "openTo": ["Advising", "Hiring"],
+    "openTo": [
+      "Advising",
+      "Hiring"
+    ],
     "website": "",
     "linkedin": "",
     "youtube": "",
-    "companies": [{ "name": "Lattice Policy Group", "line": "Regulatory and payer consulting.", "website": "" }],
+    "companies": [
+      {
+        "name": "Lattice Policy Group",
+        "line": "Regulatory and payer consulting.",
+        "website": ""
+      }
+    ],
     "memberSince": "2025"
   },
   {
@@ -82,16 +205,29 @@
     "initials": "AD",
     "city": "Lisbon, Portugal",
     "headline": "Trains facilitators in trauma-informed group care.",
-    "roles": ["Educator"],
-    "focus": ["Training", "Psilocybin"],
+    "roles": [
+      "Educator"
+    ],
+    "focus": [
+      "Training",
+      "Psilocybin"
+    ],
     "bio": "Sample bio.",
     "helpWith": "Facilitator training and curriculum design.",
     "lookingFor": "Partners to host a pilot cohort in the US.",
-    "openTo": ["Speaking"],
+    "openTo": [
+      "Speaking"
+    ],
     "website": "",
     "linkedin": "",
     "youtube": "",
-    "companies": [{ "name": "Kinship Training Institute", "line": "Facilitator training.", "website": "" }],
+    "companies": [
+      {
+        "name": "Kinship Training Institute",
+        "line": "Facilitator training.",
+        "website": ""
+      }
+    ],
     "memberSince": "2026"
   },
   {
@@ -101,17 +237,29 @@
     "initials": "RD",
     "city": "Albuquerque, NM",
     "headline": "Integration coach and community organizer.",
-    "roles": ["Other"],
+    "roles": [
+      "Other"
+    ],
     "otherRole": "Integration coach",
-    "focus": ["Training"],
+    "focus": [
+      "Training"
+    ],
     "bio": "Sample bio.",
     "helpWith": "Community-based integration circles.",
     "lookingFor": "Clinicians who refer to integration support.",
-    "openTo": ["Collaborating"],
+    "openTo": [
+      "Collaborating"
+    ],
     "website": "",
     "linkedin": "",
     "youtube": "",
-    "companies": [{ "name": "Clearwater Integration Co.", "line": "Integration support.", "website": "" }],
+    "companies": [
+      {
+        "name": "Clearwater Integration Co.",
+        "line": "Integration support.",
+        "website": ""
+      }
+    ],
     "memberSince": "2026"
   }
 ]
