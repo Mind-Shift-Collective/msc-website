@@ -1,8 +1,8 @@
 ---
-import Base from '../layouts/Base.astro';
-import companies from '../data/companies.json';
-// Only companies Nick has approved, and whose member opted in, are listed here.
-const sorted = [...companies].sort((a, b) => a.name.localeCompare(b.name));
+import Base from '../../layouts/Base.astro';
+import companies from '../../data/companies.json';
+// Only companies with a signed Company Listing Consent on file (consentDate set) are listed.
+const sorted = companies.filter((c) => c.consentDate).sort((a, b) => a.name.localeCompare(b.name));
 ---
 <Base title="Companies represented" current="/companies" description="The clinics, research groups, startups, funders and nonprofits where Mind Shift Collective members do their work.">
   <section style="padding-top:104px;padding-bottom:56px;">
@@ -32,7 +32,7 @@ const sorted = [...companies].sort((a, b) => a.name.localeCompare(b.name));
           ))}
         </div>
       )}
-      <p style="margin-top:32px;color:var(--ink-2);">Is your organization missing or listed wrong? <a href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Companies%5D%20Listing%20update">Tell us</a>.</p>
+      <p style="margin-top:32px;color:var(--ink-2);">Want your organization listed? A person authorized to act for it can <a href="/companies/consent">give consent here</a>. To change or remove a listing, email <a href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Companies%5D%20Listing%20update">hello@mindshiftcollective.net</a>.</p>
     </div>
   </section>
 </Base>
