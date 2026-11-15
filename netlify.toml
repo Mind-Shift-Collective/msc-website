@@ -11,3 +11,126 @@
   for = "/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# Soft launch: on the real domain, only the join form and its support pages are reachable.
+# Everything else stays on the netlify.app preview. Delete these rules at full launch.
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/join"
+  to = "/join"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/join/*"
+  to = "/join/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/thank-you"
+  to = "/thank-you"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/thank-you/*"
+  to = "/thank-you/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/privacy"
+  to = "/privacy"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/privacy/*"
+  to = "/privacy/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/_astro/*"
+  to = "/_astro/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/favicon.svg"
+  to = "/favicon.svg"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/"
+  to = "/join/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/*"
+  to = "/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/join"
+  to = "/join"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/join/*"
+  to = "/join/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/thank-you"
+  to = "/thank-you"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/thank-you/*"
+  to = "/thank-you/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/privacy"
+  to = "/privacy"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/privacy/*"
+  to = "/privacy/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/_astro/*"
+  to = "/_astro/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/favicon.svg"
+  to = "/favicon.svg"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/"
+  to = "/join/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/*"
+  to = "/"
+  status = 302
+  force = true
