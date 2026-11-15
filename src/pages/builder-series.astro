@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import sessions from '../data/builder-series.json';
+const sorted = [...sessions].sort((a, b) => b.date.localeCompare(a.date));
+const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title="Builder Series" current="/builder-series" description="Mind Shift Collective's monthly, members-only, off-the-record panel with the people building mental health and psychedelic medicine.">
+  <section style="padding-top:104px;padding-bottom:56px;">
+    <div class="wrap stack-lg">
+      <p class="eyebrow">Builder Series</p>
+      <h1 style="max-width:920px;font-size:clamp(40px,5.5vw,68px);">Off the record. Never recorded.</h1>
+      <p class="lede">Once a month, three people who are building the field sit down with our members for 90 minutes of honest conversation. Less panel, more campfire: a moderated discussion, open questions, then breakout rooms with each guest.</p>
+      <div class="row" style="gap:12px;flex-wrap:wrap;">
+        <span class="chip">Third Tuesday, 10 to 11:30am PT</span>
+        <span class="chip">Members only</span>
+        <span class="chip">Chatham House Rule</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:80px;">
+    <div class="wrap stack-lg">
+      <h2 style="font-size:clamp(28px,3.5vw,38px);">Past sessions</h2>
+      <div class="grid">
+        {sorted.map((s) => (
+          <article class="card" id={s.slug}>
+            {s.image && <img src={s.image} alt={`Builder Series poster: ${s.title}`} loading="lazy" style="width:100%;border-radius:10px;aspect-ratio:4/5;object-fit:cover;" />}
+            <p class="eyebrow" style="margin:0;">{fmt(s.date)}</p>
+            <h3 style="margin:0;font-size:22px;">{s.title}</h3>
+            <p style="margin:0;color:var(--ink-2);">{s.summary}</p>
+            <ul style="margin:0;padding-left:18px;font-size:15px;">
+              {s.speakers.map((p) => <li><strong>{p.name}</strong>{p.org && <span style="color:var(--ink-2);">, {p.org}</span>}</li>)}
+            </ul>
+            {s.moderator && <p style="margin:0;font-size:14px;color:var(--ink-2);">Moderated by {s.moderator}</p>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding:72px 0;">
+    <div class="wrap stack-lg" style="max-width:760px;">
+      <h2 style="font-size:clamp(28px,3.5vw,38px);">Want a seat at the next one?</h2>
+      <p style="color:var(--ink-2);">Builder Series is open to Mind Shift Collective members. Members RSVP through Slack. If you are building in this field, request an invite through a member who knows your work.</p>
+      <p><a class="btn" href="/join">Request an invite</a></p>
+    </div>
+  </section>
+</Base>

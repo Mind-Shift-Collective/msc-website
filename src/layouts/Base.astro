@@ -4,6 +4,7 @@ interface Props { title: string; description?: string; current?: string; }
 const { title, description = 'Mind Shift Collective is a referral-based community of practice for the people building the future of mental health and psychedelic medicine.', current = '' } = Astro.props;
 const nav = [
   { href: '/directory', label: 'Directory' },
+  { href: '/builder-series', label: 'Builder Series' },
   { href: '/presenter-series', label: 'Presenter Series' },
   { href: '/events', label: 'Events' },
   { href: '/advisory', label: 'Work with experts' },
