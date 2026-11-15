@@ -68,6 +68,46 @@
     "memberSince": "2025"
   },
   {
+    "slug": "renuka-surujnarain",
+    "sample": false,
+    "draft": true,
+    "name": "Renuka Surujnarain",
+    "initials": "RS",
+    "city": "Washington, DC and Baltimore",
+    "headline": "Clinical research and quality lead working to bring psychedelic therapy from trials to safe, affordable care.",
+    "roles": [
+      "Researcher",
+      "Operator"
+    ],
+    "focus": [
+      "Research",
+      "Clinical trials",
+      "Policy"
+    ],
+    "bio": "Renuka has supported the execution and quality systems of psychedelic clinical trials at Sunstone Therapies, working alongside therapists, principal investigators and multiple sponsors. She is also COO of Washington Integrative Mental Health Services. With her MPH training, she is focused on safe, affordable implementation of psychedelic therapy after FDA approval, and is beginning to work in state policy.",
+    "helpWith": "Operationalizing complex trial protocols, quality systems, how sponsors approach the therapeutic mechanism differently, REMS, informed consent in psychedelic-assisted therapy, and keeping patients psychologically safe through their care.",
+    "lookingFor": "Healthcare professionals who know where the system breaks and can bring that to psychedelic care, and people on the East Coast, especially near DC and Baltimore, working on what comes after FDA approval.",
+    "openTo": [
+      "Collaborating"
+    ],
+    "website": "",
+    "linkedin": "https://www.linkedin.com/in/renuka-narain-045881164/",
+    "youtube": "",
+    "companies": [
+      {
+        "name": "Sunstone Therapies",
+        "line": "A leading research site for psychedelic-assisted therapy clinical trials.",
+        "website": ""
+      },
+      {
+        "name": "Washington Integrative Mental Health Services",
+        "line": "A small integrative psychiatry clinic reimagining mental health care for patients and clinicians.",
+        "website": ""
+      }
+    ],
+    "memberSince": "2026"
+  },
+  {
     "slug": "maya-okafor",
     "sample": true,
     "name": "Maya Okafor",
