@@ -1,68 +1,95 @@
 ---
 import Base from '../layouts/Base.astro';
-const caps = ['Founder', 'Builder', 'Clinician', 'Researcher', 'Funder', 'Consultant', 'Educator', 'Operator', 'Policy & legal', 'Other'];
+
+// Questions and options mirror the original Notion intake form
+// ("Request an Invite: Mind Shift Collective") so new answers line up with past ones.
+const engagement = ['Actively or recently engaged', 'Interested in getting started'];
+const heard = ['Friend / Colleague', 'Social media / LinkedIn', 'Event / Conference', 'Other'];
+const capacities = [
+  'Founder / co-founder',
+  'Consultant / solopreneur',
+  'Researcher',
+  'Medical professional / clinician',
+  'Licensed Therapist',
+  'Pharmaceutical industry',
+  'Investor (for-profit focus)',
+  'Philanthropic Executive / Funder (non-profit focus)',
+  'Government / policy / lawyer / legal support',
+  'Professional educator or learning designer',
+  'Journalist / media',
+  'Indigenous / cultural leader',
+  'Student (pursuing a career in psychedelics)',
+  'Other',
+];
+const privacyUrl = '/privacy';
 ---
-<Base title="Request to join" current="/join" description="Mind Shift Collective grows by referral. Request to join through a current member.">
+<Base title="Request an invite" current="/join" description="Mind Shift Collective grows by referral. Request an invite to join the community.">
   <section style="padding-top:64px;">
     <div class="wrap row" style="gap:56px;align-items:flex-start;">
       <div class="stack" style="flex:1 1 300px;min-width:0;gap:18px;">
-        <p class="eyebrow" style="margin:0;">Request to join</p>
+        <p class="eyebrow" style="margin:0;">Request an invite</p>
         <h1 style="font-size:clamp(38px,5vw,48px);">Come in through someone you trust</h1>
-        <p style="color:var(--ink-2);">Mind Shift Collective grows by referral. Name the member who is sponsoring you and we'll check with them, then review your request.</p>
+        <p style="color:var(--ink-2);">Mind Shift Collective is a referral-based community of builders in mental health and psychedelic medicine. Tell us about yourself and who referred you. Every request is reviewed by a person.</p>
         <ol style="margin:8px 0 0;padding-left:20px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px;">
           <li>You send this request.</li>
-          <li>We confirm with your sponsor.</li>
-          <li>We review it and, if it's a fit, send your Slack invite.</li>
+          <li>We confirm with your sponsor, if you have one.</li>
+          <li>We review it and, if it's a fit, send your welcome and Slack invite.</li>
         </ol>
       </div>
+
       <form class="panel" style="flex:999 1 560px;min-width:0;" name="join-request" method="POST" action="/thank-you?f=join" data-netlify="true" netlify-honeypot="company_website">
         <input type="hidden" name="form-name" value="join-request" />
-        <input type="hidden" name="subject" value="[MSC Join] New membership request" />
+        <input type="hidden" name="subject" value="[MSC Join] New invite request" />
         <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+
         <div class="row" style="gap:16px;align-items:flex-start;">
-          <div class="field"><label for="a-first">First name</label><input id="a-first" name="first_name" type="text" required autocomplete="given-name" /></div>
-          <div class="field"><label for="a-last">Last name</label><input id="a-last" name="last_name" type="text" required autocomplete="family-name" /></div>
+          <div class="field"><label for="j-first">First Name</label><input id="j-first" name="First Name" type="text" required autocomplete="given-name" /></div>
+          <div class="field"><label for="j-last">Last Name</label><input id="j-last" name="Last Name" type="text" required autocomplete="family-name" /></div>
         </div>
-        <div class="row" style="gap:16px;align-items:flex-start;">
-          <div class="field"><label for="a-email">Email</label><input id="a-email" name="email" type="email" required autocomplete="email" /></div>
-          <div class="field"><label for="a-li">LinkedIn profile</label><input id="a-li" name="linkedin" type="url" placeholder="https://linkedin.com/in/..." /></div>
-        </div>
-        <div class="row" style="gap:16px;align-items:flex-start;">
-          <div class="field"><label for="a-title">Job title (current or most recent)</label><input id="a-title" name="job_title" type="text" /></div>
-          <div class="field"><label for="a-city">Closest major city</label><input id="a-city" name="city" type="text" placeholder="List all if you split time" /></div>
-        </div>
-        <div class="field"><label for="a-org">Company or organization (current or most recent)</label><input id="a-org" name="organization" type="text" /></div>
-        <div class="field"><label for="a-orgdesc">One sentence about it</label><input id="a-orgdesc" name="organization_description" type="text" /></div>
+        <div class="field"><label for="j-email">Email</label><input id="j-email" name="Email" type="email" required autocomplete="email" /></div>
+
         <fieldset>
-          <legend>Are you building in the field now, or getting started?</legend>
-          <label class="check"><input type="radio" name="engagement" value="Actively or recently building" required /> Actively or recently building</label>
-          <label class="check"><input type="radio" name="engagement" value="Interested in getting started" /> Interested in getting started</label>
-          <label class="check"><input type="radio" name="engagement" value="Other" /> Other</label>
+          <legend>Are you actively or recently engaged in building the psychedelics ecosystem, or interested in getting started?</legend>
+          {engagement.map((o) => <label class="check"><input type="checkbox" name="Engagement" value={o} /> {o}</label>)}
         </fieldset>
+
+        <div class="field"><label for="j-city">Closest major city (list all, if in multiple cities)</label><input id="j-city" name="Closest major city" type="text" /></div>
+
+        <div class="row" style="gap:16px;align-items:flex-start;">
+          <div class="field"><label for="j-org">Company / Organization Name (current or most recent)</label><input id="j-org" name="Company / Organization" type="text" autocomplete="organization" /></div>
+          <div class="field"><label for="j-title">Job Title (current or most recent)</label><input id="j-title" name="Job Title" type="text" autocomplete="organization-title" /></div>
+        </div>
+        <div class="field"><label for="j-orgdesc">One sentence description of that company / organization</label><input id="j-orgdesc" name="Organization description" type="text" /></div>
+        <div class="field"><label for="j-li">LinkedIn Profile</label><input id="j-li" name="LinkedIn Profile" type="url" placeholder="https://www.linkedin.com/in/..." /></div>
+
         <fieldset>
-          <legend>How have you worked in the past five years? (pick any)</legend>
+          <legend>In which of the following capacities have you worked (professionally, within the past five years)?</legend>
           <div class="pills">
-            {caps.map((c) => <label><input type="checkbox" name="capacities" value={c} /><span>{c}</span></label>)}
+            {capacities.map((c) => <label><input type="checkbox" name="Capacities" value={c} /><span>{c}</span></label>)}
           </div>
-          <div class="field" style="margin-top:6px;"><label for="a-other">If other, describe your work in the field</label><input id="a-other" name="other_description" type="text" /></div>
         </fieldset>
+        <div class="field"><label for="j-other">If Other please describe your engagement in the field:</label><textarea id="j-other" name="Other engagement" rows="3"></textarea></div>
+
         <div class="stack" style="background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:22px;gap:14px;">
-          <span style="font-family:var(--serif);font-size:22px;">Your sponsor</span>
-          <div class="row" style="gap:16px;align-items:flex-start;">
-            <div class="field"><label for="a-sp">Sponsor's name</label><input id="a-sp" name="sponsor_name" type="text" /></div>
-            <div class="field"><label for="a-spe">Sponsor's email</label><input id="a-spe" name="sponsor_email" type="email" /></div>
-          </div>
-          <div class="field"><label for="a-nosp">No sponsor yet? Tell us about your interest in the collective</label><textarea id="a-nosp" name="interest_without_sponsor" rows="3"></textarea></div>
-          <span class="muted">Requests without a sponsor are reviewed less often. A member may reach out to get to know you.</span>
+          <div class="field"><label for="j-sponsor">Please name a current member who is your sponsor/referral</label><input id="j-sponsor" name="Sponsor" type="text" /></div>
+          <div class="field"><label for="j-sponsor-email">Your sponsor's email (optional, helps us confirm quickly)</label><input id="j-sponsor-email" name="Sponsor email" type="email" /></div>
+          <div class="field"><label for="j-nosponsor">If you do not have a sponsor/referral, please tell us about your interest in the Collective?</label><textarea id="j-nosponsor" name="Interest without sponsor" rows="4"></textarea></div>
         </div>
-        <div class="field"><label for="a-ask">One thing you'd like to ask of the community</label><textarea id="a-ask" name="ask" rows="3"></textarea></div>
-        <div class="field"><label for="a-give">One thing you can offer the community</label><textarea id="a-give" name="offer" rows="3"></textarea></div>
-        <div class="field"><label for="a-heard">How did you first hear about Mind Shift Collective?</label><input id="a-heard" name="heard_about" type="text" /></div>
-        <div class="stack" style="gap:4px;border-top:1px solid #EDE8DD;padding-top:16px;">
-          <label class="check"><input type="checkbox" name="agree" value="yes" required /> I agree to the collective's privacy, use and disposal statement and its values.</label>
-          <label class="check"><input type="checkbox" name="directory_opt_in" value="yes" checked /> I'd like a card in the member directory once approved. I'll choose what's visible.</label>
+
+        <fieldset>
+          <legend>How did you first hear about Mind Shift Collective?</legend>
+          {heard.map((o) => <label class="check"><input type="checkbox" name="How heard" value={o} /> {o}</label>)}
+        </fieldset>
+
+        <div class="field"><label for="j-ask">What is one thing you'd like to ask from the community?</label><textarea id="j-ask" name="Ask from community" rows="3"></textarea></div>
+        <div class="field"><label for="j-offer">What is one thing you'd like to offer to community?</label><textarea id="j-offer" name="Offer to community" rows="3"></textarea></div>
+
+        <div class="stack" style="gap:6px;border-top:1px solid #EDE8DD;padding-top:16px;">
+          <label class="check"><input type="checkbox" name="Directory" value="yes" /> I would be interested in learning about or being added to a MindShift Collective directory.</label>
+          <label class="check"><input type="checkbox" name="Privacy agreement" value="I agree" required /> <span>I agree to the <a href={privacyUrl} target="_blank" rel="noopener">Privacy, Use, and Disposal Statement</a>.</span></label>
         </div>
-        <button class="btn" type="submit" style="align-self:flex-start;">Send request</button>
+
+        <button class="btn" type="submit" style="align-self:flex-start;">Request an invite</button>
       </form>
     </div>
   </section>

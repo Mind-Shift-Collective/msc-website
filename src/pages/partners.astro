@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import partners from '../data/partners.json';
+const kinds = [
+  ['Program partners', 'Organizations that help us run programs like the fellowship, the Presenter Series and community calls.'],
+  ['Event partners', 'Conferences and gatherings that offer members access, discounts or a shared stage.'],
+  ['Funders', 'Philanthropic partners who resource the collective so it can stay open to builders at every stage.'],
+  ['Ethics and field partners', 'Groups whose standards we share and hold ourselves to.'],
+];
+---
+<Base title="Partners" current="/partners" description="The organizations that help Mind Shift Collective convene, resource and grow the community.">
+  <section style="padding-top:104px;padding-bottom:56px;">
+    <div class="wrap stack-lg">
+      <p class="eyebrow">Partners</p>
+      <h1 style="max-width:900px;font-size:clamp(40px,5.5vw,64px);">We give before we take, and so do our partners.</h1>
+      <p class="lede">Mind Shift Collective is built on relationships, not sponsorship deals. Our partners share our values and help us resource the people building this field.</p>
+    </div>
+  </section>
+
+  <section style="padding-bottom:72px;">
+    <div class="wrap grid">
+      {partners.map((p) => (
+        <article class="card">
+          <div class="row" style="justify-content:space-between;gap:8px;">
+            <span class="chip">{p.kind}</span>
+            {p.draft && <span class="chip gold">Draft</span>}
+          </div>
+          <h2 style="font-size:26px;margin:0;">{p.url ? <a href={p.url} rel="noopener">{p.name}</a> : p.name}</h2>
+          <p style="margin:0;color:var(--ink-2);">{p.about}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="band" style="padding:72px 0;">
+    <div class="wrap stack-lg">
+      <h2 style="font-size:clamp(30px,4vw,42px);">Ways to partner</h2>
+      <div class="grid">
+        {kinds.map(([t, d]) => <div class="card"><h3 style="margin:0;font-size:21px;">{t}</h3><p style="margin:0;color:var(--ink-2);">{d}</p></div>)}
+      </div>
+      <p style="color:var(--ink-2);max-width:720px;">Every partnership is stated openly, and partners never get access to member data. Contributions to Mind Shift Health, Inc. are not tax-deductible.</p>
+      <p><a class="btn" href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Partner%5D%20Partnership%20inquiry">Talk with us about partnering</a></p>
+    </div>
+  </section>
+</Base>

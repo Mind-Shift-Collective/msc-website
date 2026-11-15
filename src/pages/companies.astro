@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import companies from '../data/companies.json';
+// Only companies Nick has approved, and whose member opted in, are listed here.
+const sorted = [...companies].sort((a, b) => a.name.localeCompare(b.name));
+---
+<Base title="Companies represented" current="/companies" description="The clinics, research groups, startups, funders and nonprofits where Mind Shift Collective members do their work.">
+  <section style="padding-top:104px;padding-bottom:56px;">
+    <div class="wrap stack-lg">
+      <p class="eyebrow">Companies represented</p>
+      <h1 style="max-width:900px;font-size:clamp(40px,5.5vw,64px);">Where our members build</h1>
+      <p class="lede">Our members are people first. These are the clinics, research groups, startups, funders, schools and nonprofits where they do their work today.</p>
+    </div>
+  </section>
+
+  <section style="padding-bottom:80px;">
+    <div class="wrap">
+      {sorted.length === 0 ? (
+        <div class="panel" style="text-align:center;">
+          <p style="margin:0;color:var(--ink-2);">We're confirming with members before listing their organizations. Check back soon.</p>
+        </div>
+      ) : (
+        <div class="grid">
+          {sorted.map((c) => (
+            <article class="card">
+              <h2 style="font-size:22px;margin:0;">{c.url ? <a href={c.url} rel="noopener">{c.name}</a> : c.name}</h2>
+              {c.about && <p style="margin:0;color:var(--ink-2);">{c.about}</p>}
+              {c.members && c.members.length > 0 && (
+                <p style="margin:0;font-size:14px;">Members: {c.members.map((m, i) => <>{i > 0 && ', '}<a href={`/members/${m.slug}`}>{m.name}</a></>)}</p>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+      <p style="margin-top:32px;color:var(--ink-2);">Is your organization missing or listed wrong? <a href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Companies%5D%20Listing%20update">Tell us</a>.</p>
+    </div>
+  </section>
+</Base>

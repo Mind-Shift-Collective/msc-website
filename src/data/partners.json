@@ -1,0 +1,16 @@
+[
+  {
+    "name": "SnapDev",
+    "kind": "Program partner",
+    "about": "[Placeholder: one or two sentences on the fellowship AI partnership. Confirm with SnapDev before launch.]",
+    "url": "",
+    "draft": true
+  },
+  {
+    "name": "North Star",
+    "kind": "Ethics",
+    "about": "Mind Shift Collective is a signatory of the North Star Ethics Pledge.",
+    "url": "https://northstar.guide/ethicspledge",
+    "draft": false
+  }
+]
