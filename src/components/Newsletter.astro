@@ -1,0 +1,20 @@
+---
+// Phase 1: Netlify form, emailed to hello@. Swap for the Kit form once the MSC Kit account exists.
+---
+<form class="panel" name="newsletter" method="POST" action="/thank-you?f=newsletter" data-netlify="true" netlify-honeypot="company_website" style="color:var(--ink);">
+  <input type="hidden" name="form-name" value="newsletter" />
+  <input type="hidden" name="subject" value="[MSC Newsletter] New subscriber" />
+  <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+  <div class="row" style="gap:12px;align-items:flex-start;">
+    <div class="field" style="flex:1 1 160px;"><label for="nl-name">First name</label><input id="nl-name" name="first_name" type="text" autocomplete="given-name" /></div>
+    <div class="field" style="flex:2 1 220px;"><label for="nl-email">Email</label><input id="nl-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" /></div>
+  </div>
+  <fieldset>
+    <legend>Send me</legend>
+    <label class="check"><input type="checkbox" name="topics" value="Newsletter" checked /> The collective's newsletter (monthly)</label>
+    <label class="check"><input type="checkbox" name="topics" value="Industry updates" checked /> Industry updates: policy, research, funding</label>
+    <label class="check"><input type="checkbox" name="topics" value="Event deadlines" /> Event and submission deadlines</label>
+  </fieldset>
+  <button class="btn" type="submit">Subscribe</button>
+  <p class="muted" style="font-size:13px;">One click to unsubscribe. We never share your email.</p>
+</form>

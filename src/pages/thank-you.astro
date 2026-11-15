@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Thank you">
+  <section style="padding:120px 0;">
+    <div class="wrap narrow stack-lg" style="text-align:center;margin:0 auto;align-items:center;">
+      <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="#C9A227"></path></svg>
+      <h1 id="ty-title" style="font-size:clamp(36px,5vw,48px);">Thank you.</h1>
+      <p id="ty-body" class="lede">We've got it. Someone from the collective will be in touch.</p>
+      <a class="btn" href="/">Back to the home page</a>
+    </div>
+  </section>
+  <script>
+    const msgs = {
+      newsletter: ['You’re on the list.', 'Watch your inbox for news from the field.'],
+      reminder: ['Reminder set.', 'We’ll email you before this event’s deadlines.'],
+      join: ['Thank you. Your request is in.', 'We’ll confirm with your sponsor and review your request. If it’s a fit, you’ll get a welcome email with your Slack invite.'],
+      brief: ['Thank you. We have your brief.', 'Someone from the collective will reach out to talk it through.'],
+      pitch: ['Thank you for your pitch.', 'We’ll be in touch about an upcoming session.'],
+      contribution: ['Thank you for supporting the collective.', 'A receipt is on its way to your inbox.'],
+    };
+    const f = new URLSearchParams(location.search).get('f');
+    if (msgs[f]) {
+      document.getElementById('ty-title').textContent = msgs[f][0];
+      document.getElementById('ty-body').textContent = msgs[f][1];
+    }
+  </script>
+</Base>

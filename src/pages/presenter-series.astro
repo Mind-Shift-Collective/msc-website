@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+// Talks get added here as they're published to youtube.com/@mindshifthealth
+const talks = [];
+const acts = [
+  ['Hook', 'Slides 1–2', '0:00–1:20', 'Why this, why now.'],
+  ['Context', 'Slides 3–5', '1:20–3:20', 'What the audience needs to know.'],
+  ['Evidence', 'Slides 6–10', '3:20–6:40', 'What you found or built.'],
+  ['Opportunity', 'Slides 11–13', '6:40–8:40', 'What it opens up.'],
+  ['Close', 'Slides 14–15', '8:40–10:00', 'End with a door, not a wall.'],
+];
+const beliefs = [
+  ['Constraint is a catalyst', 'A clock you cannot pause forces you to find what matters. What survives forty seconds was worth saying.'],
+  ['Your face on every slide', 'Trust in this field is earned person to person, not business to business.'],
+  ['Fewer words, more meaning', 'The slide holds the image. Your voice holds the argument.'],
+  ['Every discipline is a lens', 'The researcher, the clinician, the regulator and the investor each see part of the same thing.'],
+  ['Rigor and wonder together', 'Speak with evidence. Leave room for awe.'],
+  ['Honesty over hype', 'Name the risks, the headwinds and the open questions.'],
+];
+---
+<Base title="Presenter Series" current="/presenter-series" description="Ten-minute talks from members of Mind Shift Collective: one idea, fifteen slides, forty seconds each.">
+  <section style="padding-top:96px;padding-bottom:72px;">
+    <div class="wrap row" style="gap:48px;align-items:center;">
+      <div class="stack-lg" style="flex:1 1 520px;min-width:0;">
+        <p class="eyebrow">Presenter Series</p>
+        <h1 style="font-size:clamp(42px,6vw,68px);">Ten minutes to start a conversation.</h1>
+        <p class="lede">Our field's best ideas are buried in journals, dockets and sixty-slide decks. Each talk here is one idea from one member, in fifteen slides of forty seconds each. Not to finish the conversation. To start it.</p>
+        <div class="row">
+          <a class="btn" href="#watch">Watch the talks</a>
+          <a class="btn ghost" href="#present">Apply to present</a>
+        </div>
+      </div>
+      <div class="row" style="flex:1 1 380px;justify-content:center;gap:8px 22px;font-family:var(--serif);color:var(--forest);" aria-label="15 slides times 40 seconds equals 10 minutes">
+        <div style="text-align:center;"><div style="font-size:96px;line-height:1;">15</div><div class="muted" style="font-family:var(--sans);">slides</div></div>
+        <span style="font-size:56px;color:var(--gold);" aria-hidden="true">×</span>
+        <div style="text-align:center;"><div style="font-size:96px;line-height:1;">40</div><div class="muted" style="font-family:var(--sans);">seconds</div></div>
+        <span style="font-size:56px;color:var(--gold);" aria-hidden="true">=</span>
+        <div style="text-align:center;"><div style="font-size:96px;line-height:1;">10</div><div class="muted" style="font-family:var(--sans);">minutes</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="watch" class="white">
+    <div class="wrap stack-lg">
+      <div class="row between">
+        <div><p class="eyebrow">The talks</p><h2>Watch, then lean in</h2></div>
+        <p style="max-width:460px;color:var(--ink-2);font-size:15px;">Every talk ends with an ask. If one speaks to you, tell us and we'll connect you with the presenter.</p>
+      </div>
+      {talks.length === 0
+        ? <div class="card" style="text-align:center;padding:48px;background:var(--ground);">
+            <h3>The first session is being recorded.</h3>
+            <p style="color:var(--ink-2);">Subscribe on <a href="https://www.youtube.com/@mindshifthealth">YouTube</a> or <a href="/#stay-close">join the newsletter</a> to see it first.</p>
+          </div>
+        : <div class="grid">{talks.map((t) => <div class="card">{t.title}</div>)}</div>}
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack-lg">
+      <div class="narrow"><p class="eyebrow">The format</p><h2>Five acts, every time</h2>
+        <p class="lede" style="margin-top:14px;">Every talk follows the same shape, so audiences know what's coming and presenters have room to land one idea well. Slides advance on their own.</p></div>
+      <div class="row" style="gap:10px;align-items:stretch;">
+        {acts.map(([n, s, t, b]) => (
+          <div class="stack" style="flex:1 1 170px;gap:6px;border:1px solid var(--line);border-top:4px solid var(--forest);border-radius:12px;background:#fff;padding:18px;">
+            <span style="font-family:var(--serif);font-size:24px;">{n}</span>
+            <span class="muted" style="font-size:13px;">{s} · {t}</span>
+            <span style="font-size:14px;color:var(--ink-2);">{b}</span>
+          </div>
+        ))}
+      </div>
+      <div class="rule-list" style="margin-top:24px;">
+        {beliefs.map(([t, b]) => (<div><h3 style="font-size:22px;">{t}</h3><p style="color:var(--ink-2);font-size:15px;">{b}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section id="present" class="band">
+    <div class="wrap row" style="gap:48px;align-items:flex-start;">
+      <div class="stack" style="flex:1 1 420px;min-width:0;gap:18px;">
+        <p class="eyebrow" style="margin:0;">Present at a session</p>
+        <h2>Bring the thing you can't stop thinking about</h2>
+        <p style="color:var(--ink-2);">The result that surprised you. The policy question nobody is asking. The funding you need seen. Say it in ten minutes and see who leans in. Open to members of the collective.</p>
+        <p style="font-weight:600;">What you'll deliver</p>
+        <ul style="margin:0;padding-left:20px;color:var(--ink-2);font-size:15px;display:flex;flex-direction:column;gap:6px;">
+          <li>One 10-minute video: 15 slides, 40 seconds each, advancing on their own</li>
+          <li>You on camera in the bottom-right corner of every slide</li>
+          <li>Exported as a 1080p .mp4</li>
+          <li>Required disclosures (investigational status, conflicts of interest) on the first or last slide, and said aloud</li>
+        </ul>
+        <p class="muted">The slide template and presenter guide are coming soon.</p>
+      </div>
+      <form class="panel" style="flex:1 1 420px;min-width:0;" name="presenter-pitch" method="POST" action="/thank-you?f=pitch" data-netlify="true" netlify-honeypot="company_website" enctype="multipart/form-data">
+        <input type="hidden" name="form-name" value="presenter-pitch" />
+        <input type="hidden" name="subject" value="[MSC Pitch] New Presenter Series pitch" />
+        <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+        <h3>Pitch your talk</h3>
+        <div class="row" style="gap:14px;align-items:flex-start;">
+          <div class="field"><label for="p-name">Your name</label><input id="p-name" name="name" type="text" required autocomplete="name" /></div>
+          <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" required autocomplete="email" /></div>
+        </div>
+        <div class="field"><label for="p-title">Working title</label><input id="p-title" name="title" type="text" required /></div>
+        <div class="field"><label for="p-idea">The one idea, in a sentence</label><textarea id="p-idea" name="idea" rows="3" required></textarea></div>
+        <div class="field"><label for="p-ask">Your ask at the end</label><input id="p-ask" name="ask" type="text" placeholder="A question, a next study, a person to call, a funding need" /></div>
+        <div class="field"><label for="p-file">Video or slides (optional now)</label><input id="p-file" name="attachment" type="file" /></div>
+        <button class="btn" type="submit" style="align-self:flex-start;">Send pitch</button>
+      </form>
+    </div>
+  </section>
+</Base>

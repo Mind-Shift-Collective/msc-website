@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import events from '../data/events.json';
+import { fmtRange } from '../lib/dates.js';
+
+const today = new Date().toISOString().slice(0, 10);
+const list = events.filter((e) => e.end >= today).sort((a, b) => a.start.localeCompare(b.start));
+const cats = ['All', ...new Set(list.map((e) => e.category))];
+---
+<Base title="Events" current="/events" description="Conferences worth a founder's time, the deadlines that matter, and which Mind Shift Collective members will be there.">
+  <section style="padding-top:64px;padding-bottom:24px;">
+    <div class="wrap stack">
+      <p class="eyebrow">Events calendar</p>
+      <h1 style="font-size:clamp(40px,6vw,56px);">Where the field gathers</h1>
+      <p class="lede">Conferences worth your time, the deadlines that matter, and which members will be there. Add any event to your calendar, or ask us to remind you before it.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:8px;padding-bottom:24px;">
+    <div class="wrap pills" data-group="cat">
+      {cats.map((c, i) => <button type="button" class="filter-btn" data-value={c} aria-pressed={i === 0 ? 'true' : 'false'}>{c}</button>)}
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="wrap stack" style="gap:24px;" id="events">
+      {list.map((e) => (
+        <article class="card row" data-cat={e.category} style="padding:32px;gap:28px;align-items:flex-start;">
+          <div class="stack" style="flex:999 1 520px;min-width:0;gap:12px;">
+            <div class="row" style="gap:10px;">
+              <span style="font-family:var(--serif);font-size:22px;color:var(--forest);">{fmtRange(e.start, e.end)}</span>
+              <span class="chip">{e.category}</span>
+              {e.pick && <span class="chip gold">MSC pick</span>}
+            </div>
+            <h2 style="font-size:30px;font-weight:500;">{e.name}</h2>
+            <p style="color:var(--ink-2);">{e.city} · {e.format}</p>
+            <div class="row" style="gap:6px 28px;font-size:15px;color:var(--ink-2);">
+              <span><span class="muted">Price </span>{e.price}</span>
+              <span><span class="muted">Who goes </span>{e.audience}</span>
+            </div>
+            {e.deadlines.length > 0 && (
+              <div style="border-top:1px solid #EDE8DD;">
+                <p class="eyebrow" style="margin:14px 0 4px;">Deadlines</p>
+                {e.deadlines.map((d) => (
+                  <div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px solid #EDE8DD;">
+                    <span style="font-weight:500;">{d.label}</span><span class="muted">{d.date}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div class="row" style="gap:10px;">
+              <button type="button" class="btn ghost ics" data-name={e.name} data-start={e.start} data-end={e.end} data-loc={e.city} data-url={e.website}>Add to calendar</button>
+              <button type="button" class="btn ghost remind" data-id={e.id} data-name={e.name}>Email me reminders</button>
+              {e.website && <a href={e.website} style="font-weight:500;">Event website</a>}
+            </div>
+          </div>
+          <div class="stack" style="flex:1 1 260px;min-width:0;background:var(--ground);border-radius:14px;padding:22px;gap:10px;">
+            <p class="eyebrow" style="margin:0;">MSC members going</p>
+            {e.going.length > 0
+              ? e.going.map((g) => <span>{g}</span>)
+              : <p class="muted">Members will be able to mark that they're going. Going? Tell us in Slack.</p>}
+          </div>
+        </article>
+      ))}
+      <p class="muted">Event details come from the event organizers. Check the event website before booking.</p>
+    </div>
+  </section>
+
+  <dialog id="remind-dialog" style="border:0;border-radius:20px;padding:0;max-width:480px;width:calc(100% - 32px);">
+    <form class="panel" name="deadline-reminder" method="POST" action="/thank-you?f=reminder" data-netlify="true" netlify-honeypot="company_website" style="border:0;">
+      <input type="hidden" name="form-name" value="deadline-reminder" />
+      <input type="hidden" name="subject" value="[MSC Reminder] Event reminder request" />
+      <input type="hidden" name="event_id" id="r-id" />
+      <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+      <h2 style="font-size:28px;" id="r-title">Reminders</h2>
+      <p class="muted">We'll email you before registration and submission deadlines for this event.</p>
+      <div class="field"><label for="r-email">Email</label><input id="r-email" name="email" type="email" required autocomplete="email" /></div>
+      <input type="hidden" name="event_name" id="r-name" />
+      <div class="row">
+        <button class="btn" type="submit">Remind me</button>
+        <button class="btn ghost" type="button" id="r-cancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    // Category filter
+    const group = document.querySelector('[data-group="cat"]');
+    group?.addEventListener('click', (ev) => {
+      const b = ev.target.closest('button'); if (!b) return;
+      for (const x of group.querySelectorAll('button')) x.setAttribute('aria-pressed', String(x === b));
+      for (const a of document.querySelectorAll('#events article')) a.classList.toggle('hidden', b.dataset.value !== 'All' && a.dataset.cat !== b.dataset.value);
+    });
+
+    // Add to calendar: build an .ics file in the browser
+    const pad = (s) => s.replaceAll('-', '');
+    const nextDay = (iso) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + 1); return d.toISOString().slice(0, 10); };
+    for (const b of document.querySelectorAll('.ics')) {
+      b.addEventListener('click', () => {
+        const { name, start, end, loc, url } = b.dataset;
+        const ics = [
+          'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Mind Shift Collective//Events//EN', 'BEGIN:VEVENT',
+          `UID:${pad(start)}-${name.replace(/\W+/g, '')}@mindshiftcollective.net`,
+          `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`,
+          `DTSTART;VALUE=DATE:${pad(start)}`, `DTEND;VALUE=DATE:${pad(nextDay(end))}`,
+          `SUMMARY:${name}`, `LOCATION:${loc}`, url ? `URL:${url}` : '', 'END:VEVENT', 'END:VCALENDAR',
+        ].filter(Boolean).join('\r\n');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+        a.download = `${name.replace(/\W+/g, '-')}.ics`;
+        a.click();
+      });
+    }
+
+    // Reminder dialog
+    const dlg = document.getElementById('remind-dialog');
+    for (const b of document.querySelectorAll('.remind')) {
+      b.addEventListener('click', () => {
+        document.getElementById('r-id').value = b.dataset.id;
+        document.getElementById('r-name').value = b.dataset.name;
+        document.getElementById('r-title').textContent = `Reminders for ${b.dataset.name}`;
+        dlg.showModal();
+      });
+    }
+    document.getElementById('r-cancel').addEventListener('click', () => dlg.close());
+  </script>
+</Base>

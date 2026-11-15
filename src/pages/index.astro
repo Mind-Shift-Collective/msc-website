@@ -1,0 +1,158 @@
+---
+import Base from '../layouts/Base.astro';
+import members from '../data/members.json';
+import events from '../data/events.json';
+import Newsletter from '../components/Newsletter.astro';
+import { fmtRange } from '../lib/dates.js';
+
+const preview = members.slice(0, 4);
+const upcoming = events.filter((e) => e.end >= new Date().toISOString().slice(0, 10)).slice(0, 3);
+
+const values = [
+  ['I', 'Stewardship over extraction', 'Heart-driven, high-integrity leaders who care for the ecosystem and put long-term human impact above short-term profit.'],
+  ['II', 'Radical collaboration', 'Insights and resources shared freely, so innovation gets better and safer, faster.'],
+  ['III', 'Intergenerational humanism', 'Every innovation anchored in the safety, agency and healing of the person, honoring the Indigenous knowledge keepers, activists and scientists who came before. We build on their legacy, not apart from it.'],
+  ['IV', 'Generative economics', 'Builders, not spectators. As our ventures grow, we reinvest our networks, wisdom and capital so the whole field advances.'],
+  ['V', 'Authentic alignment', 'We build with people who genuinely want to be here, whose commitment is rooted in the work itself. Signal over noise.'],
+];
+const proof = [
+  ['Crossed the country for a conversation', 'Members have traveled cross-country to sit down and work through a business question together.'],
+  ['Wrote the book, together', 'Members have co-authored book chapters after meeting in the collective.'],
+  ['Moved fast when policy moved', 'When a regulatory moment came, members mobilized in days, not months.'],
+  ['Walked into the room together', 'Members have gone into high-level meetings side by side, each vouching for the other.'],
+];
+const programs = [
+  ['Community Call', 'A monthly call for the whole collective. Updates, introductions and asks.'],
+  ['Builder Series', 'Member-led panels on how they built what they built, including what went wrong.'],
+  ['Ibogaine circle', 'A focused group for people working on ibogaine research, care and policy.'],
+  ['Founders circle', 'Peer support for people running companies in the field.'],
+];
+---
+<Base title="Home" current="/">
+  <section style="padding-top:104px;padding-bottom:72px;">
+    <div class="wrap stack-lg">
+      <p class="eyebrow">A community of practice</p>
+      <h1 style="max-width:960px;">To go far, go together.</h1>
+      <p class="lede">We are founders, clinicians, researchers, educators and funders building an ethical future for mental health and emerging medicine, with psychedelics as its leading edge. We show up for each other between the conferences.</p>
+      <div class="row">
+        <a class="btn" href="/directory">Meet the members</a>
+        <a class="btn ghost" href="#stay-close">Get our updates</a>
+      </div>
+      <a href="https://northstar.guide/ethicspledge" class="row small" style="gap:10px;align-self:flex-start;text-decoration:none;color:var(--ink-2);border:1px solid var(--line);background:#fff;padding:10px 16px;border-radius:999px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="#C9A227"></path></svg>
+        Signatory of the North Star Ethics Pledge
+      </a>
+    </div>
+  </section>
+
+  <section id="stay-close" class="dark" style="padding:72px 0;">
+    <div class="wrap row" style="gap:40px;align-items:center;">
+      <div class="stack" style="flex:1 1 380px;min-width:0;">
+        <p class="eyebrow">Not a member? Stay close.</p>
+        <h2>News from the field, from the people in it</h2>
+        <p>Member work, policy and research updates, and deadlines worth knowing. Pick what you want. Open to anyone.</p>
+      </div>
+      <div style="flex:1 1 440px;min-width:0;">
+        <Newsletter />
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack-lg">
+      <div class="narrow">
+        <p class="eyebrow">The space between events</p>
+        <h2>What happens when people trust each other</h2>
+        <p class="lede" style="margin-top:14px;">Conferences come and go. The relationships are what last. A few things members have done together:</p>
+      </div>
+      <div class="rule-list">
+        {proof.map(([t, b]) => (<div><h3>{t}</h3><p style="color:var(--ink-2);">{b}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="white">
+    <div class="wrap stack-lg">
+      <div class="row between">
+        <div><p class="eyebrow">The directory</p><h2>The people doing the work</h2></div>
+        <a href="/directory" style="font-weight:500;">Browse all members</a>
+      </div>
+      <div class="grid">
+        {preview.map((m) => (
+          <a class="card" href={`/members/${m.slug}`} style="background:var(--ground);">
+            <div class="row" style="gap:14px;flex-wrap:nowrap;">
+              <div class="avatar" aria-hidden="true">{m.initials}</div>
+              <div><div style="font-weight:600;">{m.name}</div><div class="muted">{m.city}</div></div>
+            </div>
+            <p style="font-size:15px;color:var(--ink-2);">{m.headline}</p>
+            <span class="chip" style="align-self:flex-start;">{m.roles[0] === 'Other' ? m.otherRole : m.roles[0]}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack-lg">
+      <div class="narrow">
+        <p class="eyebrow">Inside the collective</p>
+        <h2>Where we gather</h2>
+        <p class="lede" style="margin-top:14px;">Members meet in a private Slack and on live calls, many of them led by members.</p>
+      </div>
+      <div class="grid">
+        {programs.map(([t, b]) => (<div class="card"><h3>{t}</h3><p style="font-size:15px;color:var(--ink-2);">{b}</p></div>))}
+      </div>
+      <a href="/presenter-series" style="font-weight:500;">Watch the Presenter Series</a>
+    </div>
+  </section>
+
+  <section id="values" class="dark">
+    <div class="wrap stack-lg">
+      <div class="narrow"><p class="eyebrow">What we hold to</p><h2>Five values every member agrees to</h2></div>
+      <div class="rule-list">
+        {values.map(([n, t, b]) => (<div><span style="font-family:var(--serif);color:var(--gold-light);">{n}</span><h3>{t}</h3><p>{b}</p></div>))}
+      </div>
+      <div class="row" style="border:1px solid #4F6B60;border-radius:16px;padding:20px 24px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="#C9A227"></path></svg>
+        <p style="flex:1 1 420px;">We also signed the North Star Ethics Pledge, seven principles for integrity in the psychedelic field, shaped by elders, clinicians, investors and community. We treat it as a commitment we practice, not a badge.</p>
+        <a href="https://northstar.guide/ethicspledge" style="color:var(--gold-light);font-weight:500;">Read the pledge</a>
+      </div>
+    </div>
+  </section>
+
+  {upcoming.length > 0 && (
+    <section>
+      <div class="wrap stack-lg">
+        <div class="row between">
+          <div><p class="eyebrow">See you there</p><h2>Where the field gathers next</h2></div>
+          <a href="/events" style="font-weight:500;">Full calendar and deadline reminders</a>
+        </div>
+        <div style="border-top:1px solid var(--line);">
+          {upcoming.map((e) => (
+            <div class="row" style="padding:22px 0;border-bottom:1px solid var(--line);gap:12px 32px;">
+              <div style="flex:0 0 170px;font-family:var(--serif);font-size:21px;color:var(--forest);">{fmtRange(e.start, e.end)}</div>
+              <div style="flex:1 1 320px;"><div style="font-weight:600;font-size:18px;">{e.name}</div><div class="muted">{e.city} · {e.format}</div></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="band">
+    <div class="wrap row" style="gap:32px;align-items:stretch;">
+      <div class="card" style="flex:1 1 440px;padding:40px;">
+        <p class="eyebrow" style="margin:0;">New to the field?</p>
+        <h2 style="font-size:36px;">Work with the people who built it</h2>
+        <p style="color:var(--ink-2);">Organizations entering mental health and psychedelic medicine can bring a team from the collective to their table.</p>
+        <a class="btn" href="/advisory" style="align-self:flex-start;">How advisory works</a>
+      </div>
+      <div class="card" style="flex:1 1 440px;padding:40px;">
+        <p class="eyebrow" style="margin:0;">Building in the field?</p>
+        <h2 style="font-size:36px;">Join through someone you trust</h2>
+        <p style="color:var(--ink-2);">Membership is by referral. Ask a member to sponsor you, then send a short request.</p>
+        <a class="btn" href="/join" style="align-self:flex-start;">Request to join</a>
+      </div>
+    </div>
+  </section>
+</Base>

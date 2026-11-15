@@ -1,0 +1,128 @@
+---
+import Base from '../layouts/Base.astro';
+const clients = [
+  ['Health systems and clinic groups', 'Deciding whether and how to offer ketamine, Spravato or future psychedelic therapies.'],
+  ['Payers and employers', 'Designing coverage, benefits and networks that are safe and fair.'],
+  ['Pharma and biotech', 'Understanding the care settings, clinicians and patients behind a new therapy.'],
+  ['Investors', 'Diligence from people who have run the clinics, filed the paperwork and seen what fails.'],
+  ['Technology companies', 'Building tools for clinicians and patients with input from the people who will use them.'],
+  ['Government and policy teams', 'Grounding rules and programs in how care actually works.'],
+];
+const formats = [
+  ['Field briefing', 'Half day', 'Three to five members brief your leadership team on the landscape: care models, regulation, payers, risks, and who is doing what.'],
+  ['Roundtable', 'Half day', 'A curated, cross-disciplinary group works through your specific question with you, then sends a short written summary.'],
+  ['Diligence sprint', '2 to 4 weeks', 'A small team led by an MSC engagement lead reviews a company, market or plan and delivers a written read.'],
+  ['Advisory council', 'Quarterly, ongoing', 'A standing group of members meets with you each quarter and is reachable between sessions. Terms and any equity are stated up front.'],
+  ['Build team', 'Monthly', 'Members who have done the work embed part-time to help you launch a program, clinic or product.'],
+];
+const steps = [
+  ['Share your brief', 'Tell us what you are trying to do, or upload what you already have.'],
+  ['Scoping session', 'An MSC lead works with you to find the real question.'],
+  ['We assemble the team', 'Members who opted in, chosen for the mix of perspectives your question needs. You see who and why.'],
+  ['One agreement', 'You contract with Mind Shift Health, Inc. One scope, one invoice, one lead accountable for the work.'],
+  ['Delivery and review', 'The team delivers, the lead checks quality, and both sides give feedback.'],
+];
+const standards = [
+  ['Members choose to take part', 'Only members who opt in to advisory work are matched, and they can say no to any request.'],
+  ['We vet clients too', 'We decline work that conflicts with our values or the North Star Ethics Pledge.'],
+  ['Confidential by default', 'Briefs and member conversations stay private. NDAs are available.'],
+  ['Fair pay for real expertise', 'Members are paid for their time. No free picking of brains.'],
+  ['Transparent terms', 'Fees, equity and any conflicts of interest are stated in writing up front.'],
+  ['Every engagement gives back', 'Members receive most of each fee. A share funds the collective’s programs, and we say so openly.'],
+];
+const areas = ['Clinic operations', 'Ketamine and Spravato care', 'Psilocybin and MDMA research', 'Ibogaine', 'Compounding and pharmacy', 'Payers and reimbursement', 'State licensing and regulation', 'Clinical trial design', 'Facilitator training', 'Integration care', 'Ethics and Indigenous reciprocity', 'Tech and AI in care', 'Veterans and first responders'];
+---
+<Base title="Work with experts" current="/advisory" description="MSC Advisory assembles cross-disciplinary teams of vetted experts for organizations entering mental health and psychedelic medicine.">
+  <section style="padding-top:104px;padding-bottom:80px;">
+    <div class="wrap stack-lg">
+      <p class="eyebrow">MSC Advisory</p>
+      <h1 style="max-width:980px;font-size:clamp(42px,6vw,72px);">New to the field? Bring the collective to your table.</h1>
+      <p class="lede">Mental health and psychedelic medicine reward people who know the ground. MSC Advisory assembles small, cross-disciplinary teams of vetted members around your question: a clinician, an operator, a policy expert, a researcher, whoever it takes. You get one team, one lead, and one agreement.</p>
+      <div class="row"><a class="btn" href="#brief">Share your brief</a><a class="btn ghost" href="#how">How it works</a></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding:80px 0;">
+    <div class="wrap stack-lg">
+      <h2>Who comes to us</h2>
+      <div class="grid">{clients.map(([t, b]) => (<div class="card"><h3 style="font-family:var(--sans);font-size:18px;font-weight:600;">{t}</h3><p style="font-size:15px;color:var(--ink-2);">{b}</p></div>))}</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack-lg">
+      <div><p class="eyebrow">Ways to work together</p><h2>Group engagements, scoped up front</h2></div>
+      <div style="border-top:1px solid var(--line);">
+        {formats.map(([t, l, b]) => (
+          <div class="row" style="gap:10px 40px;padding:26px 0;border-bottom:1px solid var(--line);align-items:flex-start;">
+            <div style="flex:1 1 240px;"><h3>{t}</h3><span class="muted">{l}</span></div>
+            <p style="flex:2 1 420px;color:var(--ink-2);">{b}</p>
+          </div>
+        ))}
+      </div>
+      <p class="muted">Pricing is shared during scoping.</p>
+    </div>
+  </section>
+
+  <section class="white">
+    <div class="wrap stack-lg">
+      <div><p class="eyebrow">Where members go deep</p><h2>Areas of expertise</h2></div>
+      <div class="row" style="gap:10px;">{areas.map((a) => <span class="chip" style="font-size:15px;padding:10px 16px;">{a}</span>)}</div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap stack-lg">
+      <div><p class="eyebrow">How it works</p><h2>From brief to the right team</h2></div>
+      <div class="rule-list" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0 32px;">
+        {steps.map(([t, b], i) => (<div><span style="font-family:var(--serif);font-size:30px;color:var(--gold-text);">{i + 1}</span><h3 style="font-family:var(--sans);font-size:18px;font-weight:600;">{t}</h3><p style="font-size:15px;color:var(--ink-2);">{b}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="dark">
+    <div class="wrap stack-lg">
+      <div class="narrow"><p class="eyebrow">Our standards</p><h2>Trust runs both ways</h2></div>
+      <div class="rule-list">{standards.map(([t, b]) => (<div><h3 style="font-size:23px;">{t}</h3><p style="font-size:15px;">{b}</p></div>))}</div>
+    </div>
+  </section>
+
+  <section id="brief">
+    <div class="wrap row" style="gap:56px;align-items:flex-start;">
+      <div class="stack" style="flex:1 1 300px;min-width:0;">
+        <p class="eyebrow" style="margin:0;">Start here</p>
+        <h2>Share your brief</h2>
+        <p style="color:var(--ink-2);">A few lines is enough, or upload what you already have. We'll follow up to scope it with you. Everything you share stays confidential.</p>
+      </div>
+      <form class="panel" style="flex:999 1 560px;min-width:0;" name="advisory-brief" method="POST" action="/thank-you?f=brief" data-netlify="true" netlify-honeypot="company_website" enctype="multipart/form-data">
+        <input type="hidden" name="form-name" value="advisory-brief" />
+        <input type="hidden" name="subject" value="[MSC Brief] New advisory brief" />
+        <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+        <div class="row" style="gap:16px;align-items:flex-start;">
+          <div class="field"><label for="b-name">Your name</label><input id="b-name" name="name" type="text" required autocomplete="name" /></div>
+          <div class="field"><label for="b-email">Work email</label><input id="b-email" name="email" type="email" required autocomplete="email" /></div>
+        </div>
+        <div class="row" style="gap:16px;align-items:flex-start;">
+          <div class="field"><label for="b-org">Organization</label><input id="b-org" name="organization" type="text" required autocomplete="organization" /></div>
+          <div class="field"><label for="b-type">What kind of organization</label>
+            <select id="b-type" name="org_type">
+              <option>Health system or clinic group</option><option>Payer or employer</option><option>Pharma or biotech</option><option>Investor</option><option>Technology company</option><option>Government or policy</option><option>Nonprofit or foundation</option><option>Other</option>
+            </select></div>
+        </div>
+        <div class="dropzone">
+          <label for="b-file">Already have something written? Upload it</label>
+          <span class="muted">A deck, RFP, one-pager or notes. If you upload, the description below is optional.</span>
+          <input id="b-file" name="attachment" type="file" />
+        </div>
+        <div class="field"><label for="b-goal">What are you trying to do? (optional if you uploaded a file)</label><textarea id="b-goal" name="goal" rows="5" placeholder="For example: we're a regional health system weighing whether to offer ketamine-assisted therapy and want to understand staffing, safety and reimbursement."></textarea></div>
+        <div class="row" style="gap:16px;align-items:flex-start;">
+          <div class="field"><label for="b-fmt">Format you have in mind</label>
+            <select id="b-fmt" name="format"><option>Not sure yet</option><option>Field briefing</option><option>Roundtable</option><option>Diligence sprint</option><option>Advisory council</option><option>Build team</option></select></div>
+          <div class="field"><label for="b-when">Timeline</label>
+            <select id="b-when" name="timeline"><option>Within 2 weeks</option><option>This quarter</option><option>Exploring</option></select></div>
+        </div>
+        <button class="btn" type="submit" style="align-self:flex-start;">Send brief</button>
+      </form>
+    </div>
+  </section>
+</Base>

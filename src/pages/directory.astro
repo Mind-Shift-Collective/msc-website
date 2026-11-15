@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import members from '../data/members.json';
+
+const roles = ['Founder', 'Builder', 'Clinician', 'Researcher', 'Funder', 'Consultant', 'Educator', 'Operator', 'Policy & legal', 'Other'];
+const focus = [...new Set(members.flatMap((m) => m.focus))].sort();
+const anySample = members.some((m) => m.sample);
+---
+<Base title="Member directory" current="/directory" description="Meet the members of Mind Shift Collective: founders, clinicians, researchers, funders and builders in mental health and psychedelic medicine.">
+  {anySample && <div class="notice">Preview: these are sample members. Real cards appear as members are approved.</div>}
+  <section style="padding-top:64px;padding-bottom:24px;">
+    <div class="wrap stack">
+      <p class="eyebrow">The directory</p>
+      <h1 style="font-size:clamp(40px,6vw,56px);">Members of the collective</h1>
+      <p class="lede">Every person here was referred by a member and reviewed. Members choose what shows on their card.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:8px;padding-bottom:32px;">
+    <div class="wrap stack">
+      <div class="field" style="max-width:520px;">
+        <label for="q">Search by name, company or topic</label>
+        <input id="q" type="search" placeholder="Try ketamine, policy, Denver" />
+      </div>
+      <div class="stack" style="gap:8px;">
+        <span style="font-size:14px;font-weight:600;">Role</span>
+        <div class="pills" data-group="role">
+          <button type="button" class="filter-btn" data-value="All" aria-pressed="true">All</button>
+          {roles.map((r) => <button type="button" class="filter-btn" data-value={r} aria-pressed="false">{r}</button>)}
+        </div>
+      </div>
+      <div class="stack" style="gap:8px;">
+        <span style="font-size:14px;font-weight:600;">Focus</span>
+        <div class="pills" data-group="focus">
+          <button type="button" class="filter-btn" data-value="All" aria-pressed="true">All</button>
+          {focus.map((f) => <button type="button" class="filter-btn" data-value={f} aria-pressed="false">{f}</button>)}
+        </div>
+      </div>
+      <div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:14px;">
+        <span id="count" class="muted" aria-live="polite">{members.length} members</span>
+        <button type="button" id="clear" class="filter-btn" style="border:0;background:none;text-decoration:underline;color:var(--forest);">Clear filters</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <p id="empty" class="card hidden" style="text-align:center;">No members match those filters yet.</p>
+      <div class="grid" id="cards">
+        {members.map((m) => (
+          <a class="card" href={`/members/${m.slug}`}
+             data-roles={m.roles.join('|')}
+             data-focus={m.focus.join('|')}
+             data-text={`${m.name} ${m.city} ${m.headline} ${m.focus.join(' ')} ${m.companies.map((c) => c.name).join(' ')} ${m.otherRole || ''}`.toLowerCase()}>
+            <div class="row" style="gap:14px;flex-wrap:nowrap;">
+              <div class="avatar" aria-hidden="true">{m.initials}</div>
+              <div style="min-width:0;"><div style="font-weight:600;font-size:18px;">{m.name}</div><div class="muted">{m.city}</div></div>
+            </div>
+            <p style="font-size:15px;color:var(--ink-2);">{m.headline}</p>
+            <div class="row" style="gap:6px;">
+              {m.roles.map((r) => <span class="chip solid">{r === 'Other' ? m.otherRole : r}</span>)}
+              {m.focus.map((f) => <span class="chip">{f}</span>)}
+            </div>
+            <div style="border-top:1px solid #EDE8DD;padding-top:12px;font-size:14px;color:var(--ink-2);">
+              <div><span class="muted">Company </span>{m.companies.map((c) => c.name).join(', ')}</div>
+              <div><span class="muted">Open to </span>{m.openTo.join(', ')}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const state = { role: 'All', focus: 'All', q: '' };
+    const cards = [...document.querySelectorAll('#cards > a')];
+    const count = document.getElementById('count');
+    const empty = document.getElementById('empty');
+    function apply() {
+      let n = 0;
+      for (const c of cards) {
+        const roles = c.dataset.roles.split('|');
+        const focus = c.dataset.focus.split('|');
+        const ok = (state.role === 'All' || roles.includes(state.role)) &&
+          (state.focus === 'All' || focus.includes(state.focus)) &&
+          (!state.q || c.dataset.text.includes(state.q));
+        c.classList.toggle('hidden', !ok);
+        if (ok) n++;
+      }
+      count.textContent = n === 1 ? '1 member' : `${n} members`;
+      empty.classList.toggle('hidden', n !== 0);
+    }
+    for (const group of document.querySelectorAll('[data-group]')) {
+      group.addEventListener('click', (e) => {
+        const b = e.target.closest('button');
+        if (!b) return;
+        state[group.dataset.group] = b.dataset.value;
+        for (const x of group.querySelectorAll('button')) x.setAttribute('aria-pressed', String(x === b));
+        apply();
+      });
+    }
+    document.getElementById('q').addEventListener('input', (e) => { state.q = e.target.value.trim().toLowerCase(); apply(); });
+    document.getElementById('clear').addEventListener('click', () => {
+      state.role = 'All'; state.focus = 'All'; state.q = '';
+      document.getElementById('q').value = '';
+      for (const g of document.querySelectorAll('[data-group]')) for (const x of g.querySelectorAll('button')) x.setAttribute('aria-pressed', String(x.dataset.value === 'All'));
+      apply();
+    });
+  </script>
+</Base>
