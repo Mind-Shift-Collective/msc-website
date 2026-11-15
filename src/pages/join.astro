@@ -22,19 +22,19 @@ const capacities = [
   'Other',
 ];
 const privacyUrl = '/privacy';
+const chathamUrl = 'https://docs.google.com/document/d/13mwQXoi_2c64-La304dbyoxoYKRzfFhaqMOOxhq6mAo/edit?tab=t.0';
 ---
 <Base title="Request an invite" current="/join" description="Mind Shift Collective grows by referral. Request an invite to join the community.">
   <section style="padding-top:64px;">
     <div class="wrap row" style="gap:56px;align-items:flex-start;">
       <div class="stack" style="flex:1 1 300px;min-width:0;gap:18px;">
         <p class="eyebrow" style="margin:0;">Request an invite</p>
-        <h1 style="font-size:clamp(38px,5vw,48px);">Come in through someone you trust</h1>
-        <p style="color:var(--ink-2);">Mind Shift Collective is a referral-based community of builders in mental health and psychedelic medicine. Tell us about yourself and who referred you. Every request is reviewed by a person.</p>
-        <ol style="margin:8px 0 0;padding-left:20px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px;">
-          <li>You send this request.</li>
-          <li>We confirm with your sponsor, if you have one.</li>
-          <li>We review it and, if it's a fit, send your welcome and Slack invite.</li>
-        </ol>
+        <h1 style="font-size:clamp(38px,5vw,48px);">Request an Invite: Mind Shift Collective</h1>
+        <p style="color:var(--ink-2);">The Mind Shift Collective is a global Slack community where builders of the psychedelic ecosystem connect to amplify one another's impact. By pooling our diverse talents (researchers, founders, educators, investors, clinicians and more) we turn small, strategic actions into outsized, positive change for humanity through meaningful conversation and collaboration.</p>
+        <p style="color:var(--ink-2);">We are in the early days of this experiment, so we are growing slowly, with intention. We are seeking those ready to engage and participate fully. If that is you, please fill out this form to receive your invitation to this free Slack community.</p>
+        <p style="color:var(--ink-2);">All members agree to abide by the Chatham House Rule in regards to confidentiality around interactions and conversations within our Slack community and our live online events. For more information please review <a href={chathamUrl} target="_blank" rel="noopener">this document</a>.</p>
+        <p style="color:var(--ink-2);">Your data is for internal purposes only and will not be used, unless with explicit consent.</p>
+        <p style="margin:0;">Your MindShift Harbingers,<br /><strong>Nick Nowak, Renée Franzwa, David Drapkin</strong></p>
       </div>
 
       <form class="panel" style="flex:999 1 560px;min-width:0;" name="join-request" method="POST" action="/thank-you?f=join" data-netlify="true" netlify-honeypot="company_website">
@@ -49,8 +49,8 @@ const privacyUrl = '/privacy';
         <div class="field"><label for="j-email">Email</label><input id="j-email" name="Email" type="email" required autocomplete="email" /></div>
 
         <fieldset>
-          <legend>Are you actively or recently engaged in building the psychedelics ecosystem, or interested in getting started?</legend>
-          {engagement.map((o) => <label class="check"><input type="checkbox" name="Engagement" value={o} /> {o}</label>)}
+          <legend>Are you actively or recently engaged in building the psychedelics ecosystem, or interested in getting started? <small>(Select as many as you like)</small></legend>
+          {engagement.map((o) => <label class="check"><input type="checkbox" name="Engagement[]" value={o} /> {o}</label>)}
         </fieldset>
 
         <div class="field"><label for="j-city">Closest major city (list all, if in multiple cities)</label><input id="j-city" name="Closest major city" type="text" /></div>
@@ -63,9 +63,9 @@ const privacyUrl = '/privacy';
         <div class="field"><label for="j-li">LinkedIn Profile</label><input id="j-li" name="LinkedIn Profile" type="url" placeholder="https://www.linkedin.com/in/..." /></div>
 
         <fieldset>
-          <legend>In which of the following capacities have you worked (professionally, within the past five years)?</legend>
+          <legend>In which of the following capacities have you worked (professionally, within the past five years)? <small>(Select as many as you like)</small></legend>
           <div class="pills">
-            {capacities.map((c) => <label><input type="checkbox" name="Capacities" value={c} /><span>{c}</span></label>)}
+            {capacities.map((c) => <label><input type="checkbox" name="Capacities[]" value={c} /><span>{c}</span></label>)}
           </div>
         </fieldset>
         <div class="field"><label for="j-other">If Other please describe your engagement in the field:</label><textarea id="j-other" name="Other engagement" rows="3"></textarea></div>
@@ -77,15 +77,15 @@ const privacyUrl = '/privacy';
         </div>
 
         <fieldset>
-          <legend>How did you first hear about Mind Shift Collective?</legend>
-          {heard.map((o) => <label class="check"><input type="checkbox" name="How heard" value={o} /> {o}</label>)}
+          <legend>How did you first hear about Mind Shift Collective? <small>(Select as many as you like)</small></legend>
+          {heard.map((o) => <label class="check"><input type="checkbox" name="How heard[]" value={o} /> {o}</label>)}
         </fieldset>
 
-        <div class="field"><label for="j-ask">What is one thing you'd like to ask from the community?</label><textarea id="j-ask" name="Ask from community" rows="3"></textarea></div>
-        <div class="field"><label for="j-offer">What is one thing you'd like to offer to community?</label><textarea id="j-offer" name="Offer to community" rows="3"></textarea></div>
+        <div class="field"><label for="j-ask">What is one thing you'd like to ask from the community?</label><small style="color:var(--ink-2);">Examples: I am looking for a collaborator on a project; Help me understand where we are at with Ibogaine.</small><textarea id="j-ask" name="Ask from community" rows="3"></textarea></div>
+        <div class="field"><label for="j-offer">What is one thing you'd like to offer to community?</label><small style="color:var(--ink-2);">Examples: I love mentoring folks earlier in their career; I'm researching end of life care and have research/insights to share.</small><textarea id="j-offer" name="Offer to community" rows="3"></textarea></div>
 
         <div class="stack" style="gap:6px;border-top:1px solid #EDE8DD;padding-top:16px;">
-          <label class="check"><input type="checkbox" name="Directory" value="yes" /> I would be interested in learning about or being added to a MindShift Collective directory.</label>
+          <label class="check"><input type="checkbox" name="Directory" value="yes" /> <span>I would be interested in learning about or being added to a MindShift Collective directory.<br /><small style="color:var(--ink-2);">Nothing is listed publicly without your explicit consent.</small></span></label>
           <label class="check"><input type="checkbox" name="Privacy agreement" value="I agree" required /> <span>I agree to the <a href={privacyUrl} target="_blank" rel="noopener">Privacy, Use, and Disposal Statement</a>.</span></label>
         </div>
 

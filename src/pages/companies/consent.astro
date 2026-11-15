@@ -44,7 +44,7 @@ const show = [
 
         <fieldset>
           <legend>What may we show? (Select all that apply)</legend>
-          {show.map(([label, v]) => <label class="check"><input type="checkbox" name="May show" value={label} checked={v === 'name'} /> {label}</label>)}
+          {show.map(([label, v]) => <label class="check"><input type="checkbox" name="May show[]" value={label} checked={v === 'name'} /> {label}</label>)}
         </fieldset>
 
         <h2 style="font-size:20px;margin:8px 0 0;">You</h2>
