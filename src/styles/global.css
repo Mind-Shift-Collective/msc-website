@@ -76,7 +76,7 @@ a.card:hover { border-color: var(--forest); color: var(--ink); }
 form.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 36px; display: flex; flex-direction: column; gap: 18px; }
 label { font-size: 15px; font-weight: 600; }
 .field { display: flex; flex-direction: column; gap: 8px; flex: 1 1 220px; }
-input[type=text], input[type=email], input[type=url], input[type=search], textarea, select { font: inherit; font-size: 16px; padding: 13px 15px; border: 1px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); width: 100%; }
+input[type=text], input[type=email], input[type=url], input[type=search], input[type=date], textarea, select { font: inherit; font-size: 16px; padding: 13px 15px; border: 1px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); width: 100%; }
 textarea { line-height: 1.5; resize: vertical; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; min-height: 40px; }
 .check input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--forest); flex: 0 0 auto; }
@@ -108,7 +108,7 @@ form.panel.compact { gap: 12px; padding: 28px; }
 .compact label, .compact legend { font-size: 14px; }
 .compact legend { padding: 0 0 4px; }
 .compact fieldset { gap: 2px; }
-.compact input[type=text], .compact input[type=email], .compact input[type=url], .compact textarea { padding: 9px 12px; font-size: 15px; border-radius: 8px; }
+.compact input[type=text], .compact input[type=email], .compact input[type=url], .compact input[type=date], .compact textarea { padding: 9px 12px; font-size: 15px; border-radius: 8px; }
 .compact .check { min-height: 30px; gap: 8px; }
 .compact .check input { width: 18px; height: 18px; margin-top: 2px; }
 .compact .pills { gap: 6px; }
