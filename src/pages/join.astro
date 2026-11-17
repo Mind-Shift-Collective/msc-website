@@ -25,9 +25,9 @@ const privacyUrl = '/privacy';
 const chathamUrl = 'https://docs.google.com/document/d/13mwQXoi_2c64-La304dbyoxoYKRzfFhaqMOOxhq6mAo/edit?tab=t.0';
 ---
 <Base title="Request an invite" current="/join" description="Mind Shift Collective grows by referral. Request an invite to join the community.">
-  <section style="padding-top:64px;">
-    <div class="wrap row" style="gap:56px;align-items:flex-start;">
-      <div class="stack" style="flex:1 1 300px;min-width:0;gap:18px;">
+  <section style="padding-top:40px;padding-bottom:56px;">
+    <div class="wrap row" style="gap:40px;align-items:flex-start;">
+      <div class="stack" style="flex:1 1 300px;min-width:0;gap:12px;font-size:15px;">
         <p class="eyebrow" style="margin:0;">Request an invite</p>
         <h1 style="font-size:clamp(38px,5vw,48px);">Request an Invite: Mind Shift Collective</h1>
         <p style="color:var(--ink-2);">The Mind Shift Collective is a global Slack community where builders of the psychedelic ecosystem connect to amplify one another's impact. By pooling our diverse talents (researchers, founders, educators, investors, clinicians and more) we turn small, strategic actions into outsized, positive change for humanity through meaningful conversation and collaboration.</p>
@@ -37,7 +37,7 @@ const chathamUrl = 'https://docs.google.com/document/d/13mwQXoi_2c64-La304dbyoxo
         <p style="margin:0;">Your MindShift Harbingers,<br /><strong>Nick Nowak, Renée Franzwa, David Drapkin</strong></p>
       </div>
 
-      <form class="panel" style="flex:999 1 560px;min-width:0;" name="join-request" method="POST" action="/thank-you?f=join" data-netlify="true" netlify-honeypot="company_website">
+      <form class="panel compact" style="flex:999 1 560px;min-width:0;" name="join-request" method="POST" action="/thank-you?f=join" data-netlify="true" netlify-honeypot="company_website">
         <input type="hidden" name="form-name" value="join-request" />
         <input type="hidden" name="subject" value="[MSC Join] New invite request" />
         <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
@@ -68,12 +68,12 @@ const chathamUrl = 'https://docs.google.com/document/d/13mwQXoi_2c64-La304dbyoxo
             {capacities.map((c) => <label><input type="checkbox" name="Capacities[]" value={c} /><span>{c}</span></label>)}
           </div>
         </fieldset>
-        <div class="field"><label for="j-other">If Other please describe your engagement in the field:</label><textarea id="j-other" name="Other engagement" rows="3"></textarea></div>
+        <div class="field"><label for="j-other">If Other please describe your engagement in the field:</label><textarea id="j-other" name="Other engagement" rows="2"></textarea></div>
 
-        <div class="stack" style="background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:22px;gap:14px;">
+        <div class="stack" style="background:var(--ground);border:1px solid var(--line);border-radius:12px;padding:16px;gap:10px;">
           <div class="field"><label for="j-sponsor">Please name a current member who is your sponsor/referral</label><input id="j-sponsor" name="Sponsor" type="text" /></div>
           <div class="field"><label for="j-sponsor-email">Your sponsor's email (optional, helps us confirm quickly)</label><input id="j-sponsor-email" name="Sponsor email" type="email" /></div>
-          <div class="field"><label for="j-nosponsor">If you do not have a sponsor/referral, please tell us about your interest in the Collective?</label><textarea id="j-nosponsor" name="Interest without sponsor" rows="4"></textarea></div>
+          <div class="field"><label for="j-nosponsor">If you do not have a sponsor/referral, please tell us about your interest in the Collective?</label><textarea id="j-nosponsor" name="Interest without sponsor" rows="2"></textarea></div>
         </div>
 
         <fieldset>
@@ -81,10 +81,10 @@ const chathamUrl = 'https://docs.google.com/document/d/13mwQXoi_2c64-La304dbyoxo
           {heard.map((o) => <label class="check"><input type="checkbox" name="How heard[]" value={o} /> {o}</label>)}
         </fieldset>
 
-        <div class="field"><label for="j-ask">What is one thing you'd like to ask from the community?</label><small style="color:var(--ink-2);">Examples: I am looking for a collaborator on a project; Help me understand where we are at with Ibogaine.</small><textarea id="j-ask" name="Ask from community" rows="3"></textarea></div>
-        <div class="field"><label for="j-offer">What is one thing you'd like to offer to community?</label><small style="color:var(--ink-2);">Examples: I love mentoring folks earlier in their career; I'm researching end of life care and have research/insights to share.</small><textarea id="j-offer" name="Offer to community" rows="3"></textarea></div>
+        <div class="field"><label for="j-ask">What is one thing you'd like to ask from the community?</label><small style="color:var(--ink-2);">Examples: I am looking for a collaborator on a project; Help me understand where we are at with Ibogaine.</small><textarea id="j-ask" name="Ask from community" rows="2"></textarea></div>
+        <div class="field"><label for="j-offer">What is one thing you'd like to offer to community?</label><small style="color:var(--ink-2);">Examples: I love mentoring folks earlier in their career; I'm researching end of life care and have research/insights to share.</small><textarea id="j-offer" name="Offer to community" rows="2"></textarea></div>
 
-        <div class="stack" style="gap:6px;border-top:1px solid #EDE8DD;padding-top:16px;">
+        <div class="stack" style="gap:6px;border-top:1px solid #EDE8DD;padding-top:10px;">
           <label class="check"><input type="checkbox" name="Directory" value="yes" /> <span>I would be interested in learning about or being added to a MindShift Collective directory.<br /><small style="color:var(--ink-2);">Nothing is listed publicly without your explicit consent.</small></span></label>
           <label class="check"><input type="checkbox" name="Privacy agreement" value="I agree" required /> <span>I agree to the <a href={privacyUrl} target="_blank" rel="noopener">Privacy, Use, and Disposal Statement</a>.</span></label>
         </div>

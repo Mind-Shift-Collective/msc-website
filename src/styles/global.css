@@ -101,3 +101,17 @@ legend { font-size: 15px; font-weight: 600; padding: 0 0 8px; }
   section { padding: 64px 0; }
   form.panel { padding: 24px; }
 }
+
+/* Compact forms (join request) */
+form.panel.compact { gap: 12px; padding: 28px; }
+.compact .field { gap: 4px; }
+.compact label, .compact legend { font-size: 14px; }
+.compact legend { padding: 0 0 4px; }
+.compact fieldset { gap: 2px; }
+.compact input[type=text], .compact input[type=email], .compact input[type=url], .compact textarea { padding: 9px 12px; font-size: 15px; border-radius: 8px; }
+.compact .check { min-height: 30px; gap: 8px; }
+.compact .check input { width: 18px; height: 18px; margin-top: 2px; }
+.compact .pills { gap: 6px; }
+.compact .pills span { min-height: 34px; padding: 6px 12px; font-size: 13px; }
+.compact .row { gap: 12px; }
+.compact small { font-weight: 400; }
