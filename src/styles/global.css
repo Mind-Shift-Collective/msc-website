@@ -115,3 +115,7 @@ form.panel.compact { gap: 12px; padding: 28px; }
 .compact .pills span { min-height: 34px; padding: 6px 12px; font-size: 13px; }
 .compact .row { gap: 12px; }
 .compact small { font-weight: 400; }
+
+/* A .field only grows sideways inside a row; stacked fields take their natural height. */
+form .field, .stack > .field { flex: 0 0 auto; }
+.row > .field { flex: 1 1 220px; }
