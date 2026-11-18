@@ -20,7 +20,7 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
 
   <section style="padding-bottom:80px;">
     <div class="wrap stack-lg">
-      <h2 style="font-size:clamp(28px,3.5vw,38px);">Past sessions</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;"><h2 style="font-size:clamp(28px,3.5vw,38px);">Past sessions</h2><a href="/archive">See the full MSC Live Events Archive</a></div>
       <div class="grid">
         {sorted.map((s) => (
           <article class="card" id={s.slug}>

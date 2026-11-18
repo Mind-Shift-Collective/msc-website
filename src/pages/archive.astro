@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import sessions from '../data/builder-series.json';
+import archive from '../data/archive.json';
+
+const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+const builder = sessions.map((s) => ({
+  slug: s.slug,
+  type: 'Builder Series',
+  date: s.date,
+  title: s.title,
+  summary: s.summary,
+  speakers: s.speakers,
+  moderator: s.moderator,
+  topics: archive.topics[s.slug] || [],
+}));
+const items = [...builder, ...archive.items].sort((a, b) => b.date.localeCompare(a.date));
+const types = ['All', ...new Set(items.map((i) => i.type))];
+const topics = ['All topics', ...[...new Set(items.flatMap((i) => i.topics))].sort()];
+const years = [...new Set(items.map((i) => i.date.slice(0, 4)))].sort().reverse();
+
+const formatNote = {
+  'Builder Series': 'Off the record, never recorded. Members get a written recap: themes and resources, no attribution.',
+  'Community Call': 'Members only, not recorded. Highlights are shared in Slack.',
+  'Presenter Series': 'Recorded talk. Watch it any time and contact the presenter through us.',
+};
+---
+<Base title="MSC Live Events Archive" current="/events" description="Every Mind Shift Collective gathering in one place: Builder Series panels, Community Calls and Presenter Series talks, with recaps, resources and introductions.">
+  <section style="padding-top:64px;padding-bottom:24px;">
+    <div class="wrap stack">
+      <p class="eyebrow">MSC Live Events Archive</p>
+      <h1 style="font-size:clamp(40px,6vw,56px);">Every gathering, in one place</h1>
+      <p class="lede">Builder Series panels, Community Calls and Presenter Series talks. Our live rooms stay off the record, so instead of recordings you’ll find what we covered, who joined us, the resources that came up, and a way to follow up with any speaker.</p>
+      <div class="row" style="gap:12px;flex-wrap:wrap;">
+        <a class="btn" href="/events">See upcoming events</a>
+        <a class="btn ghost" href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Topic%5D%20Session%20idea">Suggest a topic</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:8px;padding-bottom:16px;">
+    <div class="wrap stack" style="gap:14px;">
+      <div class="pills" data-group="type" role="group" aria-label="Filter by format">
+        {types.map((t, i) => <button type="button" class="filter-btn" data-value={t} aria-pressed={i === 0 ? 'true' : 'false'}>{t}</button>)}
+      </div>
+      <div class="row" style="gap:12px;flex-wrap:wrap;align-items:center;">
+        <label class="field" style="flex:1 1 260px;margin:0;">
+          <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Search the archive</span>
+          <input type="search" id="archive-search" placeholder="Search titles, speakers and organizations" />
+        </label>
+        <label class="field" style="flex:0 1 220px;margin:0;">
+          <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Topic</span>
+          <select id="archive-topic">
+            {topics.map((t) => <option value={t}>{t}</option>)}
+          </select>
+        </label>
+        <label class="field" style="flex:0 1 160px;margin:0;">
+          <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Year</span>
+          <select id="archive-year">
+            <option value="All years">All years</option>
+            {years.map((y) => <option value={y}>{y}</option>)}
+          </select>
+        </label>
+      </div>
+      <p id="archive-count" style="margin:0;font-size:14px;color:var(--ink-2);">{items.length} gatherings</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0;padding-bottom:72px;">
+    <div class="wrap stack" style="gap:20px;" id="archive-list">
+      {items.map((i) => (
+        <article class="card" id={i.slug} data-type={i.type} data-topics={i.topics.join('|')} data-year={i.date.slice(0, 4)} data-search={[i.title, i.summary, ...(i.speakers || []).map((s) => s.name + ' ' + s.org), i.moderator || ''].join(' ').toLowerCase()} style="padding:28px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;">
+          <div style="flex:0 0 140px;display:flex;flex-direction:column;gap:6px;">
+            <span style="font-family:'Newsreader',serif;font-size:28px;line-height:1;color:var(--deep);">{new Date(i.date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}</span>
+            <span style="font-size:14px;color:var(--ink-2);">{i.date.slice(0, 4)}</span>
+          </div>
+          <div class="stack" style="flex:999 1 480px;min-width:0;gap:10px;">
+            <div class="row" style="gap:8px;flex-wrap:wrap;">
+              <span class="chip" style="background:#F3E7C2;color:#5A4310;">{i.type}</span>
+              {i.topics.map((t) => <span class="chip">{t}</span>)}
+            </div>
+            <h2 style="margin:0;font-size:26px;line-height:1.2;"><a href={`#${i.slug}`} style="color:inherit;text-decoration:none;">{i.title}</a></h2>
+            <p style="margin:0;color:var(--ink-2);">{i.summary}</p>
+            {i.speakers && i.speakers.length > 0 && (
+              <ul style="margin:0;padding-left:18px;font-size:15px;">
+                {i.speakers.map((p) => <li><strong>{p.name}</strong>{p.org && <span style="color:var(--ink-2);">, {p.org}</span>}</li>)}
+              </ul>
+            )}
+            {i.moderator && <p style="margin:0;font-size:14px;color:var(--ink-2);">Moderated by {i.moderator}</p>}
+            <p style="margin:0;font-size:14px;color:var(--ink-2);background:var(--ground);border-radius:10px;padding:10px 12px;">{formatNote[i.type] || ''}</p>
+            <div class="row" style="gap:10px;flex-wrap:wrap;">
+              {i.recap
+                ? <a class="btn" href={i.recap}>Read the members’ recap</a>
+                : <span style="font-size:14px;color:var(--ink-2);align-self:center;">Members: recap and resources are in Slack.</span>}
+              {i.speakers && i.speakers.length > 0 && (
+                <a class="btn ghost" href={`mailto:hello@mindshiftcollective.net?subject=${encodeURIComponent('[MSC Intro] Follow up from ' + i.title)}`}>Ask for an intro to a speaker</a>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+      <p id="archive-empty" class="hidden" style="margin:0;padding:32px;text-align:center;background:#fff;border-radius:16px;color:var(--ink-2);">Nothing matches yet. Try another filter, or <a href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Topic%5D%20Session%20idea">suggest the session you’re looking for</a>.</p>
+    </div>
+  </section>
+
+  <section class="band" style="padding:64px 0;">
+    <div class="wrap row" style="gap:32px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+      <div class="stack" style="flex:999 1 480px;min-width:0;gap:10px;">
+        <h2 style="font-size:clamp(28px,3.5vw,38px);">Want to be in the room next time?</h2>
+        <p style="margin:0;color:var(--ink-2);">Builder Series and Community Calls are for members. Request an invite through a member who knows your work.</p>
+      </div>
+      <a class="btn" href="/join">Request an invite</a>
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const cards = [...document.querySelectorAll('#archive-list article')];
+      const q = document.getElementById('archive-search');
+      const topic = document.getElementById('archive-topic');
+      const year = document.getElementById('archive-year');
+      const count = document.getElementById('archive-count');
+      const empty = document.getElementById('archive-empty');
+      let type = 'All';
+      document.querySelectorAll('[data-group="type"] .filter-btn').forEach((b) => b.addEventListener('click', () => {
+        type = b.dataset.value;
+        document.querySelectorAll('[data-group="type"] .filter-btn').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+        apply();
+      }));
+      [q, topic, year].forEach((el) => el.addEventListener('input', apply));
+      function apply() {
+        const term = q.value.trim().toLowerCase();
+        let n = 0;
+        cards.forEach((c) => {
+          const ok = (type === 'All' || c.dataset.type === type)
+            && (topic.value === 'All topics' || c.dataset.topics.split('|').includes(topic.value))
+            && (year.value === 'All years' || c.dataset.year === year.value)
+            && (!term || c.dataset.search.includes(term));
+          c.classList.toggle('hidden', !ok);
+          if (ok) n++;
+        });
+        count.textContent = n + (n === 1 ? ' gathering' : ' gatherings');
+        empty.classList.toggle('hidden', n !== 0);
+      }
+    })();
+  </script>
+</Base>
