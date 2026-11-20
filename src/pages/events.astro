@@ -55,6 +55,9 @@ const updated = 'Nov 19, 2026';
         <button type="button" class="mtile all" data-month="all" aria-pressed="true">
           <span class="m">All</span><span class="y">upcoming</span><span class="n"></span>
         </button>
+        <button type="button" class="mtile pastall" data-month="past" aria-pressed="false">
+          <span class="m">Past</span><span class="y">all history</span><span class="n"></span>
+        </button>
         {months.map((mo) => (
           <button type="button" class="mtile" data-month={mo.key} aria-pressed="false">
             <span class="m">{mo.short}</span><span class="y">{mo.year}</span>
@@ -242,6 +245,14 @@ const updated = 'Nov 19, 2026';
     .mtile[aria-pressed=true] { background: var(--forest); border-color: var(--forest); color: #fff; }
     .mtile[aria-pressed=true] .y, .mtile[aria-pressed=true] .n { color: #fff; }
     .mtile.zero { opacity: .45; }
+    .mtile.past { background: var(--ground-2); border-style: dashed; }
+    .mtile.past .m { color: var(--ink-2); }
+    .mtile.past[aria-pressed=true], .mtile.pastall[aria-pressed=true] { background: var(--ink-2); border-color: var(--ink-2); border-style: solid; color: #fff; }
+    .mtile.pastall { background: var(--ground-2); }
+    .mtile.pastall .m { font-size: 20px; color: var(--ink-2); }
+    .mtile.pastall[aria-pressed=true] .m { color: #fff; }
+    .strip-div { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 0 2px; }
+    .strip-div i { width: 2px; height: 46px; background: var(--gold); border-radius: 2px; }
     .mtile.now::after { content: 'Now'; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #3a2c05; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; }
     .ev-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
 
@@ -323,7 +334,12 @@ const updated = 'Nov 19, 2026';
     const filtering = () => state.q || state.cat || state.format || state.region || state.group || state.free;
     const matches = (c, ignoreMonth = false) => {
       const d = c.dataset;
-      if (!state.past && d.end && d.end < today) return false;
+      const isPast = d.end && d.end < today;
+      // Picking a past month, or the Past tile, shows history without needing the switch.
+      const pastView = state.month === 'past' || (state.month !== 'all' && state.month !== 'tba' && state.month < thisMonth);
+      if (ignoreMonth === 'tile') { /* tile counts: decided by caller */ }
+      else if (!state.past && !pastView && isPast) return false;
+      if (state.month === 'past' && !ignoreMonth && !isPast) return false;
       if (state.cat && d.cat !== state.cat) return false;
       if (state.format && d.format !== state.format) return false;
       if (state.region && d.region !== state.region) return false;
@@ -341,19 +357,23 @@ const updated = 'Nov 19, 2026';
         const key = m.dataset.month;
         const hasVisible = $$('.ev-card:not(.hidden)', m).length > 0;
         const isPastMonth = key !== 'tba' && key < thisMonth;
-        const inScope = state.month === 'all' || key === state.month;
+        const inScope = state.month === 'all' || key === state.month || (state.month === 'past' && isPastMonth);
         const showEmpty = !filtering() && inScope && !isPastMonth && key !== 'tba';
-        m.classList.toggle('hidden', !(hasVisible || showEmpty) || !inScope || (isPastMonth && !state.past));
+        const pastAllowed = state.past || state.month === 'past' || key === state.month;
+        m.classList.toggle('hidden', !(hasVisible || showEmpty) || !inScope || (isPastMonth && !pastAllowed));
       }
-      let all = 0;
+      let all = 0, pastCount = 0;
+      const saved = state.month;
       for (const t of tiles) {
         const key = t.dataset.month;
-        if (key === 'all') continue;
-        const list = cards.filter((c) => c.dataset.month === key && matches(c, true));
-        all += list.length;
+        if (key === 'all' || key === 'past') continue;
+        const isPastTile = key !== 'tba' && key < thisMonth;
+        // Past tiles count past events; upcoming tiles count only events that haven't ended.
+        const list = cards.filter((c) => c.dataset.month === key && matches(c, 'tile') && (isPastTile || !(c.dataset.end && c.dataset.end < today)));
+        if (isPastTile) pastCount += list.length; else all += list.length;
+        t.classList.toggle('past', isPastTile);
         t.querySelector('.n').textContent = list.length ? `${list.length} event${list.length > 1 ? 's' : ''}` : '—';
         t.classList.toggle('zero', list.length === 0);
-        t.classList.toggle('hidden', key !== 'tba' && key < thisMonth && !state.past);
         const dots = t.querySelector('.dots');
         if (dots) dots.innerHTML = list.slice(0, 12).map((c) => `<i class="${[...c.classList].find((x) => x.startsWith('c-'))}"></i>`).join('');
         t.setAttribute('aria-pressed', String(state.month === key));
@@ -361,11 +381,14 @@ const updated = 'Nov 19, 2026';
       const allTile = $('.mtile[data-month="all"]');
       allTile.setAttribute('aria-pressed', String(state.month === 'all'));
       allTile.querySelector('.n').textContent = `${all} events`;
-      allTile.querySelector('.y').textContent = state.past ? 'incl. past' : 'upcoming';
+      const pastTile = $('.mtile[data-month="past"]');
+      pastTile.setAttribute('aria-pressed', String(state.month === 'past'));
+      pastTile.querySelector('.n').textContent = `${pastCount} events`;
       for (const b of $$('#f-cat button')) b.setAttribute('aria-pressed', String(b.dataset.value === state.cat));
 
       let where = '';
       if (state.month === 'tba') where = ' with dates to be announced';
+      else if (state.month === 'past') where = ' that have already happened';
       else if (state.month !== 'all') { const t = $(`.mtile[data-month="${state.month}"]`); where = ` in ${t.querySelector('.m').textContent} ${t.querySelector('.y').textContent}`; }
       $('#count').textContent = `Showing ${shown} event${shown === 1 ? '' : 's'}${where}.`;
       $('#clear').classList.toggle('hidden', !(filtering() || state.past || state.month !== 'all'));
@@ -402,6 +425,9 @@ const updated = 'Nov 19, 2026';
     };
     $('#clear').addEventListener('click', clear);
     $('#clear2').addEventListener('click', clear);
+    // Divider between past months and upcoming months in the strip.
+    const firstUpcoming = tiles.find((t) => t.dataset.month !== 'all' && t.dataset.month !== 'past' && (t.dataset.month === 'tba' || t.dataset.month >= thisMonth));
+    if (firstUpcoming) firstUpcoming.insertAdjacentHTML('beforebegin', '<span class="strip-div" aria-hidden="true"><span>Past</span><i></i><span>Upcoming</span></span>');
     render();
     const strip = $('#strip'); const nowTile = $('.mtile.now');
     if (nowTile) strip.scrollLeft = nowTile.offsetLeft - strip.offsetLeft - 104;
