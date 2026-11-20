@@ -1,0 +1,41 @@
+---
+// Lightweight YouTube embed: shows the thumbnail and only loads YouTube's player when someone presses play.
+// Accepts a full YouTube link (watch, youtu.be, shorts, embed, live) or a bare 11-character video id.
+interface Props { video: string; title: string; start?: number }
+const { video, title, start = 0 } = Astro.props;
+const m = String(video).match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([\w-]{11})/) || String(video).match(/^([\w-]{11})$/);
+const id = m ? m[1] : '';
+const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1${start ? `&start=${start}` : ''}`;
+---
+{id ? (
+  <div class="yt" data-src={src} data-title={title}>
+    <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" />
+    <button type="button" class="yt-play" aria-label={`Play video: ${title}`}>
+      <svg width="68" height="48" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3z" fill="#1F3A31" fill-opacity=".9"/><path d="M45 24 27 14v20z" fill="#fff"/></svg>
+    </button>
+    <noscript><a href={`https://www.youtube.com/watch?v=${id}`}>Watch on YouTube</a></noscript>
+  </div>
+) : (
+  <div class="yt yt-missing"><span>Video coming soon</span></div>
+)}
+
+<style>
+  .yt { position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #1F3A31; }
+  .yt img, .yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
+  .yt-play { position: absolute; inset: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.25)); border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .yt-play:hover svg path:first-child { fill: #C9A227; fill-opacity: 1; }
+  .yt-missing { display: flex; align-items: center; justify-content: center; color: #E2C566; font-size: 15px; }
+</style>
+
+<script>
+  for (const el of document.querySelectorAll('.yt[data-src]')) {
+    el.querySelector('.yt-play')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = el.dataset.src;
+      f.title = el.dataset.title || 'YouTube video';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.allowFullscreen = true;
+      el.replaceChildren(f);
+    }, { once: true });
+  }
+</script>

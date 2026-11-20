@@ -1,7 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-// Talks get added here as they're published to youtube.com/@mindshifthealth
-const talks = [];
+import YouTube from '../components/YouTube.astro';
+import data from '../data/presenter-talks.json';
+// Talks live in src/data/presenter-talks.json as they're published to youtube.com/@mindshifthealth
+const talks = data.talks;
+const fmtDate = (d) => (d ? new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : '');
 const acts = [
   ['Hook', 'Slides 1–2', '0:00–1:20', 'Why this, why now.'],
   ['Context', 'Slides 3–5', '1:20–3:20', 'What the audience needs to know.'],
@@ -51,7 +54,24 @@ const beliefs = [
             <h3>The first session is being recorded.</h3>
             <p style="color:var(--ink-2);">Subscribe on <a href="https://www.youtube.com/@mindshifthealth">YouTube</a> or <a href="/#stay-close">join the newsletter</a> to see it first.</p>
           </div>
-        : <div class="grid">{talks.map((t) => <div class="card">{t.title}</div>)}</div>}
+        : <div class="talks">
+            {talks.map((t) => (
+              <article class="card talk" id={t.slug}>
+                <YouTube video={t.youtube} title={`${t.title}, ${t.presenter}`} />
+                <div class="stack" style="gap:6px;">
+                  {(t.date || t.topic) && <p class="eyebrow" style="margin:0;">{[fmtDate(t.date), t.topic].filter(Boolean).join(' · ')}</p>}
+                  <h3 style="font-size:22px;margin:0;">{t.title}</h3>
+                  <p style="margin:0;font-weight:500;">{t.presenter}{t.org && <span class="muted" style="font-weight:400;">, {t.org}</span>}</p>
+                  {t.summary && <p style="margin:0;color:var(--ink-2);font-size:15px;">{t.summary}</p>}
+                  {t.ask && <p style="margin:4px 0 0;font-size:15px;"><span class="chip gold">The ask</span> {t.ask}</p>}
+                </div>
+                <div class="row" style="gap:10px;margin-top:auto;">
+                  <a class="btn" href={`mailto:hello@mindshiftcollective.net?subject=${encodeURIComponent('Intro request: ' + t.presenter + ' (Presenter Series)')}&body=${encodeURIComponent('I watched "' + t.title + '" and would like an introduction to ' + t.presenter + '.\n\nA little about me and why:\n')}`}>Ask for an intro</a>
+                  <a class="btn ghost" href={t.youtube} target="_blank" rel="noopener">Watch on YouTube</a>
+                </div>
+              </article>
+            ))}
+          </div>}
     </div>
   </section>
 
@@ -106,4 +126,8 @@ const beliefs = [
       </form>
     </div>
   </section>
+  <style>
+    .talks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 24px; }
+    .talk { gap: 16px; padding: 18px; }
+  </style>
 </Base>
