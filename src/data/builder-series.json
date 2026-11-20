@@ -169,5 +169,31 @@
       }
     ],
     "image": ""
+  },
+  {
+    "slug": "2026-02-josh-hardman",
+    "date": "2026-02-17",
+    "title": "Builder Series with Josh Hardman",
+    "summary": "An off-the-record conversation with Josh Hardman, founder of Psychedelic Alpha, on where the psychedelic industry stands and where it is heading.",
+    "speakers": [
+      {
+        "name": "Josh Hardman",
+        "org": "Founder, Psychedelic Alpha"
+      }
+    ],
+    "image": ""
+  },
+  {
+    "slug": "2026-01-liana-gillooly",
+    "date": "2026-01-20",
+    "title": "Builder Series with Liana Gillooly",
+    "summary": "The first Builder Series of 2026: an off-the-record conversation with Liana Gillooly.",
+    "speakers": [
+      {
+        "name": "Liana Gillooly",
+        "org": ""
+      }
+    ],
+    "image": ""
   }
 ]
