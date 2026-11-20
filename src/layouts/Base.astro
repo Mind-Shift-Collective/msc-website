@@ -55,7 +55,14 @@ const isPreview = import.meta.env.PUBLIC_SITE_LIVE !== 'true';
     <slot />
   </main>
   <footer style="border-top:1px solid var(--gold);">
-    <div class="wrap row" style="justify-content:space-between;padding-top:40px;padding-bottom:40px;font-size:14px;color:var(--muted);">
+    <div class="wrap row contribute" style="justify-content:space-between;align-items:center;gap:16px 32px;padding-top:36px;padding-bottom:28px;border-bottom:1px solid var(--line);">
+      <div style="max-width:560px;">
+        <p style="margin:0;font-family:var(--serif);font-size:24px;color:var(--ink);">Help keep this community going.</p>
+        <p style="margin:4px 0 0;font-size:14px;color:var(--muted);">Mind Shift Collective is community-run. Contributions of any amount support the Slack, Builder Series, Community Calls and directory. Contributions to Mind Shift Health, Inc. are not tax-deductible.</p>
+      </div>
+      <a class="btn" href="https://buy.stripe.com/14A4gBgvK0fB2I9d9T8N201" target="_blank" rel="noopener">Contribute</a>
+    </div>
+    <div class="wrap row" style="justify-content:space-between;padding-top:28px;padding-bottom:40px;font-size:14px;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="#C9A227"></path></svg>
         Rooted in relationship. <a href="https://northstar.guide/ethicspledge">North Star Ethics Pledge</a> signatory.
