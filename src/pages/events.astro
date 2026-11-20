@@ -3,67 +3,205 @@ import Base from '../layouts/Base.astro';
 import events from '../data/events.json';
 import { fmtRange } from '../lib/dates.js';
 
-const today = new Date().toISOString().slice(0, 10);
-const list = events.filter((e) => e.end >= today).sort((a, b) => a.start.localeCompare(b.start));
-const cats = ['All', ...new Set(list.map((e) => e.category))];
+const M = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const dated = events.filter((e) => e.start);
+const tba = events.filter((e) => !e.start);
+
+// Every month between the first and last event, so gaps in the year show.
+const keys = [...new Set(dated.map((e) => e.start.slice(0, 7)))].sort();
+const months = [];
+if (keys.length) {
+  let [y, m] = keys[0].split('-').map(Number);
+  const [ly, lm] = keys[keys.length - 1].split('-').map(Number);
+  while (y < ly || (y === ly && m <= lm)) {
+    const key = `${y}-${String(m).padStart(2, '0')}`;
+    months.push({ key, name: M[m - 1], short: MS[m - 1], year: y, list: dated.filter((e) => e.start.startsWith(key)) });
+    m++; if (m > 12) { m = 1; y++; }
+  }
+}
+
+const CATS = ['Psychedelic', 'Psychedelic + mental health', 'Mental & behavioral health'];
+const catClass = (c) => ({ 'Psychedelic': 'c-psy', 'Psychedelic + mental health': 'c-mix', 'Mental & behavioral health': 'c-mh' }[c] || 'c-mh');
+const REGIONS = ['United States', 'Canada', 'Europe', 'Latin America', 'Asia-Pacific', 'Africa', 'Online'].filter((r) => events.some((e) => e.region === r));
+const shortDate = (e) => {
+  const [, sm, sd] = e.start.split('-').map(Number);
+  const [, em, ed] = e.end.split('-').map(Number);
+  if (sm === em && sd === ed) return `${MS[sm - 1]} ${sd}`;
+  if (sm === em) return `${MS[sm - 1]} ${sd}–${ed}`;
+  return `${MS[sm - 1]} ${sd} – ${MS[em - 1]} ${ed}`;
+};
+const searchText = (e) => [e.name, e.org, e.city, e.region, e.topic, e.focus, e.audience, e.category, e.group, e.format].join(' ').toLowerCase();
+const updated = 'Nov 19, 2026';
 ---
-<Base title="Events" current="/events" description="Conferences worth a founder's time, the deadlines that matter, and which Mind Shift Collective members will be there.">
-  <section style="padding-top:64px;padding-bottom:24px;">
+<Base title="Events" current="/events" description="Psychedelic and mental health conferences, month by month. Filter by type, format and region, search, and add any event to your calendar.">
+  <section class="ev-hero">
     <div class="wrap stack">
       <p class="eyebrow">Events calendar</p>
-      <h1 style="font-size:clamp(40px,6vw,56px);">Where the field gathers</h1>
-      <p class="lede">Conferences worth your time, the deadlines that matter, and which members will be there. Add any event to your calendar, or ask us to remind you before it.</p>
-      <p style="margin:0;"><a href="/archive">Browse the MSC Live Events Archive</a> for past Builder Series panels and Community Calls.</p>
+      <h1 style="font-size:clamp(40px,6vw,58px);">Where the field gathers, <em style="color:var(--forest);">month by month.</em></h1>
+      <p class="lede">Psychedelic science, clinical and industry conferences, plus the mental and behavioral health meetings our members show up to. One place to plan the year instead of twenty browser tabs.</p>
+      <p class="muted" style="margin:0;font-size:15px;"><strong style="color:var(--ink);">{events.length} events</strong> across {REGIONS.length} regions · Updated {updated} · <a href="/archive">MSC Live Events Archive</a> for past Builder Series and Community Calls</p>
     </div>
   </section>
 
-  <section style="padding-top:8px;padding-bottom:24px;">
-    <div class="wrap pills" data-group="cat">
-      {cats.map((c, i) => <button type="button" class="filter-btn" data-value={c} aria-pressed={i === 0 ? 'true' : 'false'}>{c}</button>)}
+  <section class="ev-strip-wrap" aria-label="Month by month">
+    <div class="wrap">
+      <div class="row between" style="align-items:baseline;margin-bottom:12px;">
+        <h2 style="font-size:26px;">Month by month</h2>
+        <span class="muted" style="font-size:14px;">Tap a month to jump to it. Counts follow your filters.</span>
+      </div>
+      <div class="ev-strip" id="strip">
+        <button type="button" class="mtile all" data-month="all" aria-pressed="true">
+          <span class="m">All</span><span class="y">upcoming</span><span class="n"></span>
+        </button>
+        {months.map((mo) => (
+          <button type="button" class="mtile" data-month={mo.key} aria-pressed="false">
+            <span class="m">{mo.short}</span><span class="y">{mo.year}</span>
+            <span class="n"></span>
+            <span class="dots"></span>
+          </button>
+        ))}
+        {tba.length > 0 && (
+          <button type="button" class="mtile" data-month="tba" aria-pressed="false">
+            <span class="m">TBA</span><span class="y">dates</span><span class="n"></span>
+          </button>
+        )}
+      </div>
+      <div class="ev-legend">
+        <span><i class="dot c-psy"></i>Psychedelic</span>
+        <span><i class="dot c-mix"></i>Psychedelic + mental health</span>
+        <span><i class="dot c-mh"></i>Mental &amp; behavioral health</span>
+      </div>
     </div>
   </section>
 
-  <section style="padding-top:0;">
-    <div class="wrap stack" style="gap:24px;" id="events">
-      {list.map((e) => (
-        <article class="card row" data-cat={e.category} style="padding:32px;gap:28px;align-items:flex-start;">
-          <div class="stack" style="flex:999 1 520px;min-width:0;gap:12px;">
-            <div class="row" style="gap:10px;">
-              <span style="font-family:var(--serif);font-size:22px;color:var(--forest);">{fmtRange(e.start, e.end)}</span>
-              <span class="chip">{e.category}</span>
-              {e.pick && <span class="chip gold">MSC pick</span>}
-            </div>
-            <h2 style="font-size:30px;font-weight:500;">{e.name}</h2>
-            <p style="color:var(--ink-2);">{e.city} · {e.format}</p>
-            <div class="row" style="gap:6px 28px;font-size:15px;color:var(--ink-2);">
-              <span><span class="muted">Price </span>{e.price}</span>
-              <span><span class="muted">Who goes </span>{e.audience}</span>
-            </div>
-            {e.deadlines.length > 0 && (
-              <div style="border-top:1px solid #EDE8DD;">
-                <p class="eyebrow" style="margin:14px 0 4px;">Deadlines</p>
-                {e.deadlines.map((d) => (
-                  <div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px solid #EDE8DD;">
-                    <span style="font-weight:500;">{d.label}</span><span class="muted">{d.date}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div class="row" style="gap:10px;">
-              <button type="button" class="btn ghost ics" data-name={e.name} data-start={e.start} data-end={e.end} data-loc={e.city} data-url={e.website}>Add to calendar</button>
-              <button type="button" class="btn ghost remind" data-id={e.id} data-name={e.name}>Email me reminders</button>
-              {e.website && <a href={e.website} style="font-weight:500;">Event website</a>}
-            </div>
+  <section class="ev-filters" aria-label="Filter events">
+    <div class="wrap">
+      <div class="ev-bar">
+        <label class="ev-search">
+          <span class="sr">Search events</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="search" id="q" placeholder="Search name, city, topic (ketamine, ibogaine, veterans…)" autocomplete="off" />
+        </label>
+        <select id="f-format" aria-label="Format">
+          <option value="">Any format</option><option>In person</option><option>Online</option><option>Hybrid</option>
+        </select>
+        <select id="f-region" aria-label="Region">
+          <option value="">Anywhere</option>
+          {REGIONS.map((r) => <option>{r}</option>)}
+        </select>
+        <select id="f-group" aria-label="Audience">
+          <option value="">Any audience</option><option>Veterans</option><option>First responders</option>
+        </select>
+      </div>
+      <div class="row between" style="gap:10px 18px;margin-top:12px;">
+        <div class="pills" id="f-cat" role="group" aria-label="Type">
+          <button type="button" class="filter-btn" data-value="" aria-pressed="true">All types</button>
+          {CATS.map((c) => <button type="button" class={`filter-btn cat ${catClass(c)}`} data-value={c} aria-pressed="false"><i class={`dot ${catClass(c)}`}></i>{c}</button>)}
+        </div>
+        <div class="row" style="gap:8px 18px;">
+          <label class="ev-check"><input type="checkbox" id="f-free" /> Free only</label>
+          <label class="ev-check"><input type="checkbox" id="f-past" /> Show past events</label>
+        </div>
+      </div>
+      <p class="ev-status" aria-live="polite"><span id="count"></span> <button type="button" id="clear" class="linkish hidden">Clear filters</button></p>
+    </div>
+  </section>
+
+  <section style="padding-top:8px;">
+    <div class="wrap" id="timeline">
+      {months.map((mo) => (
+        <div class="ev-month" data-month={mo.key} id={`m-${mo.key}`}>
+          <div class="ev-mlabel">
+            <span class="ev-mname">{mo.name}</span>
+            <span class="ev-myear">{mo.year}</span>
+            <span class="ev-now hidden">This month</span>
           </div>
-          <div class="stack" style="flex:1 1 260px;min-width:0;background:var(--ground);border-radius:14px;padding:22px;gap:10px;">
-            <p class="eyebrow" style="margin:0;">MSC members going</p>
-            {e.going.length > 0
-              ? e.going.map((g) => <span>{g}</span>)
-              : <p class="muted">Members will be able to mark that they're going. Going? Tell us in Slack.</p>}
+          <div class="ev-list">
+            {mo.list.length === 0 && <p class="muted" style="margin:6px 0;">No conferences listed this month yet.</p>}
+            {mo.list.map((e) => (
+              <article class={`ev-card ${catClass(e.category)}`} data-cat={e.category} data-format={e.format} data-region={e.region} data-group={e.group} data-free={e.free ? '1' : ''} data-end={e.end} data-month={mo.key} data-search={searchText(e)}>
+                <div class="ev-date"><span>{shortDate(e)}</span>{e.start.slice(0, 4) !== e.end.slice(0, 4) && <small>{e.end.slice(0, 4)}</small>}</div>
+                <div class="ev-body">
+                  <h3>{e.name}</h3>
+                  <p class="ev-meta">{e.city}{e.org && <> · {e.org}</>}</p>
+                  {e.focus && <p class="ev-focus">{e.focus}</p>}
+                  <details>
+                    <summary>Details, price and calendar</summary>
+                    <dl class="ev-dl">
+                      <div><dt>When</dt><dd>{fmtRange(e.start, e.end)}</dd></div>
+                      <div><dt>Where</dt><dd>{e.city}{e.venue && <>, {e.venue}</>}</dd></div>
+                      {e.topic && <div><dt>Topics</dt><dd>{e.topic}</dd></div>}
+                      <div><dt>Who goes</dt><dd>{e.audience}</dd></div>
+                      <div><dt>Price</dt><dd>{e.price}</dd></div>
+                      {e.about && <div><dt>About</dt><dd>{e.about}</dd></div>}
+                      {e.deadlines.map((d) => <div><dt>{d.label}</dt><dd>{d.date}</dd></div>)}
+                    </dl>
+                    <div class="row" style="gap:10px;margin-top:6px;">
+                      {e.website && <a class="btn" href={e.website} target="_blank" rel="noopener">Event website</a>}
+                      <button type="button" class="btn ghost ics" data-name={e.name} data-start={e.start} data-end={e.end} data-loc={e.city} data-url={e.website}>Add to calendar</button>
+                      <button type="button" class="btn ghost remind" data-id={e.id} data-name={e.name}>Email me reminders</button>
+                    </div>
+                    <p class="muted" style="font-size:14px;margin:8px 0 0;">Going? Tell us in Slack and we'll connect you with other members attending.</p>
+                  </details>
+                </div>
+                <div class="ev-tags">
+                  <span class={`tag ${catClass(e.category)}`}>{e.category}</span>
+                  <span class="tag plain">{e.format}</span>
+                  {e.group && <span class="tag gold">{e.group}</span>}
+                  {e.free && <span class="tag plain">Free</span>}
+                  <span class="tag past hidden">Past</span>
+                </div>
+              </article>
+            ))}
           </div>
-        </article>
+        </div>
       ))}
-      <p class="muted">Event details come from the event organizers. Check the event website before booking.</p>
+
+      {tba.length > 0 && (
+        <div class="ev-month" data-month="tba" id="m-tba">
+          <div class="ev-mlabel"><span class="ev-mname">Dates</span><span class="ev-myear">to be announced</span></div>
+          <div class="ev-list">
+            {tba.map((e) => (
+              <article class={`ev-card ${catClass(e.category)}`} data-cat={e.category} data-format={e.format} data-region={e.region} data-group={e.group} data-free={e.free ? '1' : ''} data-end="" data-month="tba" data-search={searchText(e)}>
+                <div class="ev-date"><span>TBA</span></div>
+                <div class="ev-body">
+                  <h3>{e.name}</h3>
+                  <p class="ev-meta">{e.city}{e.org && <> · {e.org}</>}</p>
+                  <p class="ev-focus">{e.dateNote}{e.focus && <>. {e.focus}</>}</p>
+                  <details>
+                    <summary>Details and price</summary>
+                    <dl class="ev-dl">
+                      {e.topic && <div><dt>Topics</dt><dd>{e.topic}</dd></div>}
+                      <div><dt>Who goes</dt><dd>{e.audience}</dd></div>
+                      <div><dt>Price</dt><dd>{e.price}</dd></div>
+                      {e.about && <div><dt>About</dt><dd>{e.about}</dd></div>}
+                    </dl>
+                    {e.website && <a class="btn" href={e.website} target="_blank" rel="noopener">Event website</a>}
+                  </details>
+                </div>
+                <div class="ev-tags">
+                  <span class={`tag ${catClass(e.category)}`}>{e.category}</span>
+                  <span class="tag plain">{e.format}</span>
+                  {e.group && <span class="tag gold">{e.group}</span>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div id="none" class="card hidden" style="align-items:flex-start;margin-top:16px;">
+        <h3 style="font-size:24px;">No events match those filters</h3>
+        <p class="muted">Try a broader search, another region, or turn on past events.</p>
+        <button type="button" class="btn ghost" id="clear2">Clear filters</button>
+      </div>
+
+      <div class="ev-foot">
+        <p><strong>Know an event that belongs here?</strong> <a href="mailto:hello@mindshiftcollective.net?subject=Event%20for%20the%20MSC%20calendar">Send it to hello@mindshiftcollective.net</a> and we'll add it.</p>
+        <p class="muted">Details come from event organizers. Always confirm dates and prices on the event website before booking.</p>
+      </div>
     </div>
   </section>
 
@@ -84,19 +222,194 @@ const cats = ['All', ...new Set(list.map((e) => e.category))];
     </form>
   </dialog>
 
+  <style>
+    .ev-hero { padding-top: 64px; padding-bottom: 20px; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .c-psy { --c: #8E7CC3; --cbg: #EEEAF7; --cink: #4A3D78; }
+    .c-mix { --c: #3E8E8A; --cbg: #E2F0EF; --cink: #1F5552; }
+    .c-mh  { --c: #2E5E4E; --cbg: #E3ECE7; --cink: #1E4337; }
+    .dot { display: inline-block; width: 9px; height: 9px; border-radius: 999px; background: var(--c); margin-right: 7px; vertical-align: 1px; }
+
+    .ev-strip-wrap { padding: 8px 0 18px; }
+    .ev-strip { display: flex; gap: 10px; overflow-x: auto; padding: 12px 2px 12px; scroll-snap-type: x proximity; }
+    .mtile { flex: 0 0 auto; scroll-snap-align: start; width: 92px; min-height: 108px; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 12px 10px 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; font: inherit; color: var(--ink); cursor: pointer; position: relative; }
+    .mtile:hover { border-color: var(--forest); }
+    .mtile .m { font-family: var(--serif); font-size: 24px; line-height: 1.1; }
+    .mtile .y { font-size: 12px; color: var(--muted); }
+    .mtile .n { font-size: 13px; font-weight: 600; color: var(--forest); margin-top: 4px; }
+    .mtile .dots { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; max-width: 70px; margin-top: 2px; }
+    .mtile .dots i { width: 6px; height: 6px; border-radius: 999px; background: var(--c); }
+    .mtile[aria-pressed=true] { background: var(--forest); border-color: var(--forest); color: #fff; }
+    .mtile[aria-pressed=true] .y, .mtile[aria-pressed=true] .n { color: #fff; }
+    .mtile.zero { opacity: .45; }
+    .mtile.now::after { content: 'Now'; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #3a2c05; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; }
+    .ev-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+
+    .ev-filters { position: sticky; top: 0; z-index: 5; background: rgba(246,243,236,.96); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); padding: 14px 0 6px; }
+    .ev-bar { display: flex; flex-wrap: wrap; gap: 10px; }
+    .ev-search { flex: 1 1 320px; position: relative; display: flex; align-items: center; }
+    .ev-search svg { position: absolute; left: 14px; color: var(--muted); }
+    .ev-search input { padding-left: 42px; border-radius: 999px; }
+    .ev-bar select { flex: 0 1 180px; width: auto; border-radius: 999px; }
+    .filter-btn.cat { display: inline-flex; align-items: center; }
+    .filter-btn.cat[aria-pressed=true] { background: var(--cbg); border-color: var(--c); color: var(--cink); }
+    .ev-check { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
+    .ev-check input { width: 18px; height: 18px; accent-color: var(--forest); }
+    .ev-status { font-size: 14px; color: var(--muted); margin: 10px 0 4px; }
+    .linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--forest); text-decoration: underline; cursor: pointer; margin-left: 8px; }
+
+    .ev-month { display: grid; grid-template-columns: 170px 1fr; gap: 20px 32px; padding: 28px 0; border-top: 1px solid var(--line); scroll-margin-top: 170px; }
+    .ev-mlabel { display: flex; flex-direction: column; position: sticky; top: 180px; align-self: start; }
+    .ev-mname { font-family: var(--serif); font-size: 32px; color: var(--forest); line-height: 1.05; }
+    .ev-myear { color: var(--muted); font-size: 15px; }
+    .ev-now { margin-top: 8px; align-self: flex-start; background: var(--gold); color: #3a2c05; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+    .ev-list { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .ev-card { display: grid; grid-template-columns: 112px 1fr auto; gap: 6px 20px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 14px; padding: 18px 20px; }
+    .ev-card:hover { border-color: var(--c); }
+    .ev-card.is-past { opacity: .62; }
+    .ev-date span { font-family: var(--serif); font-size: 19px; color: var(--ink); line-height: 1.2; }
+    .ev-date small { display: block; color: var(--muted); }
+    .ev-body { min-width: 0; }
+    .ev-body h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 1.35; }
+    .ev-meta { color: var(--muted); font-size: 15px; margin: 2px 0 0; }
+    .ev-focus { font-size: 15px; color: var(--ink-2); margin: 6px 0 0; }
+    .ev-card details { margin-top: 8px; }
+    .ev-card summary { cursor: pointer; color: var(--forest); font-weight: 500; font-size: 15px; }
+    .ev-dl { margin: 10px 0; display: grid; gap: 8px; }
+    .ev-dl div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; font-size: 15px; }
+    .ev-dl dt { color: var(--muted); }
+    .ev-dl dd { margin: 0; }
+    .ev-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .tag { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--cbg); color: var(--cink); white-space: nowrap; }
+    .tag.plain { background: var(--ground-2); color: var(--ink-2); font-weight: 500; }
+    .tag.gold { background: #F3E7C2; color: #5C4508; }
+    .tag.past { background: #EDE8DD; color: var(--muted); }
+    .ev-foot { border-top: 1px solid var(--line); padding-top: 24px; margin-top: 8px; }
+    .ev-foot p { margin: 0 0 6px; }
+    @media (max-width: 760px) {
+      .ev-month { grid-template-columns: 1fr; gap: 12px; padding: 22px 0; }
+      .ev-mlabel { position: static; flex-direction: row; align-items: baseline; gap: 10px; }
+      .ev-mname { font-size: 26px; }
+      .ev-now { margin-top: 0; }
+      .ev-card { grid-template-columns: 1fr; padding: 16px; }
+      .ev-tags { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+      .ev-bar select { flex: 1 1 140px; }
+      .ev-filters { position: static; }
+      .ev-dl div { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+
   <script>
-    // Category filter
-    const group = document.querySelector('[data-group="cat"]');
-    group?.addEventListener('click', (ev) => {
-      const b = ev.target.closest('button'); if (!b) return;
-      for (const x of group.querySelectorAll('button')) x.setAttribute('aria-pressed', String(x === b));
-      for (const a of document.querySelectorAll('#events article')) a.classList.toggle('hidden', b.dataset.value !== 'All' && a.dataset.cat !== b.dataset.value);
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const today = new Date().toISOString().slice(0, 10);
+    const thisMonth = today.slice(0, 7);
+    const cards = $$('.ev-card');
+    const monthsEls = $$('.ev-month');
+    const tiles = $$('.mtile');
+    const state = { q: '', cat: '', format: '', region: '', group: '', free: false, past: false, month: 'all' };
+
+    for (const c of cards) if (c.dataset.end && c.dataset.end < today) { c.classList.add('is-past'); c.querySelector('.tag.past')?.classList.remove('hidden'); }
+    $(`.ev-month[data-month="${thisMonth}"] .ev-now`)?.classList.remove('hidden');
+    $(`.mtile[data-month="${thisMonth}"]`)?.classList.add('now');
+
+    // Filters live in the URL so a filtered view can be shared.
+    const params = new URLSearchParams(location.search);
+    for (const k of ['q', 'cat', 'format', 'region', 'group', 'month']) if (params.get(k)) state[k] = params.get(k);
+    state.free = params.get('free') === '1'; state.past = params.get('past') === '1';
+    $('#q').value = state.q; $('#f-format').value = state.format; $('#f-region').value = state.region; $('#f-group').value = state.group;
+    $('#f-free').checked = state.free; $('#f-past').checked = state.past;
+
+    const filtering = () => state.q || state.cat || state.format || state.region || state.group || state.free;
+    const matches = (c, ignoreMonth = false) => {
+      const d = c.dataset;
+      if (!state.past && d.end && d.end < today) return false;
+      if (state.cat && d.cat !== state.cat) return false;
+      if (state.format && d.format !== state.format) return false;
+      if (state.region && d.region !== state.region) return false;
+      if (state.group && d.group !== state.group) return false;
+      if (state.free && !d.free) return false;
+      if (state.q) { for (const w of state.q.toLowerCase().split(/\s+/).filter(Boolean)) if (!d.search.includes(w)) return false; }
+      if (!ignoreMonth && state.month !== 'all' && d.month !== state.month) return false;
+      return true;
+    };
+
+    function render() {
+      let shown = 0;
+      for (const c of cards) { const ok = matches(c); c.classList.toggle('hidden', !ok); if (ok) shown++; }
+      for (const m of monthsEls) {
+        const key = m.dataset.month;
+        const hasVisible = $$('.ev-card:not(.hidden)', m).length > 0;
+        const isPastMonth = key !== 'tba' && key < thisMonth;
+        const inScope = state.month === 'all' || key === state.month;
+        const showEmpty = !filtering() && inScope && !isPastMonth && key !== 'tba';
+        m.classList.toggle('hidden', !(hasVisible || showEmpty) || !inScope || (isPastMonth && !state.past));
+      }
+      let all = 0;
+      for (const t of tiles) {
+        const key = t.dataset.month;
+        if (key === 'all') continue;
+        const list = cards.filter((c) => c.dataset.month === key && matches(c, true));
+        all += list.length;
+        t.querySelector('.n').textContent = list.length ? `${list.length} event${list.length > 1 ? 's' : ''}` : '—';
+        t.classList.toggle('zero', list.length === 0);
+        t.classList.toggle('hidden', key !== 'tba' && key < thisMonth && !state.past);
+        const dots = t.querySelector('.dots');
+        if (dots) dots.innerHTML = list.slice(0, 12).map((c) => `<i class="${[...c.classList].find((x) => x.startsWith('c-'))}"></i>`).join('');
+        t.setAttribute('aria-pressed', String(state.month === key));
+      }
+      const allTile = $('.mtile[data-month="all"]');
+      allTile.setAttribute('aria-pressed', String(state.month === 'all'));
+      allTile.querySelector('.n').textContent = `${all} events`;
+      allTile.querySelector('.y').textContent = state.past ? 'incl. past' : 'upcoming';
+      for (const b of $$('#f-cat button')) b.setAttribute('aria-pressed', String(b.dataset.value === state.cat));
+
+      let where = '';
+      if (state.month === 'tba') where = ' with dates to be announced';
+      else if (state.month !== 'all') { const t = $(`.mtile[data-month="${state.month}"]`); where = ` in ${t.querySelector('.m').textContent} ${t.querySelector('.y').textContent}`; }
+      $('#count').textContent = `Showing ${shown} event${shown === 1 ? '' : 's'}${where}.`;
+      $('#clear').classList.toggle('hidden', !(filtering() || state.past || state.month !== 'all'));
+      $('#none').classList.toggle('hidden', shown > 0);
+
+      const p = new URLSearchParams();
+      for (const k of ['q', 'cat', 'format', 'region', 'group']) if (state[k]) p.set(k, state[k]);
+      if (state.month !== 'all') p.set('month', state.month);
+      if (state.free) p.set('free', '1');
+      if (state.past) p.set('past', '1');
+      history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
+    }
+
+    let timer;
+    $('#q').addEventListener('input', (e) => { clearTimeout(timer); timer = setTimeout(() => { state.q = e.target.value.trim(); render(); }, 120); });
+    $('#f-format').addEventListener('change', (e) => { state.format = e.target.value; render(); });
+    $('#f-region').addEventListener('change', (e) => { state.region = e.target.value; render(); });
+    $('#f-group').addEventListener('change', (e) => { state.group = e.target.value; render(); });
+    $('#f-free').addEventListener('change', (e) => { state.free = e.target.checked; render(); });
+    $('#f-past').addEventListener('change', (e) => { state.past = e.target.checked; render(); });
+    $('#f-cat').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; state.cat = b.dataset.value; render(); });
+    $('#strip').addEventListener('click', (e) => {
+      const b = e.target.closest('.mtile'); if (!b) return;
+      const key = b.dataset.month;
+      state.month = state.month === key ? 'all' : key;
+      render();
+      const target = state.month === 'all' ? $('#timeline') : $(`#m-${state.month}`);
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+    const clear = () => {
+      Object.assign(state, { q: '', cat: '', format: '', region: '', group: '', free: false, past: false, month: 'all' });
+      $('#q').value = ''; $('#f-format').value = ''; $('#f-region').value = ''; $('#f-group').value = '';
+      $('#f-free').checked = false; $('#f-past').checked = false; render();
+    };
+    $('#clear').addEventListener('click', clear);
+    $('#clear2').addEventListener('click', clear);
+    render();
+    const strip = $('#strip'); const nowTile = $('.mtile.now');
+    if (nowTile) strip.scrollLeft = nowTile.offsetLeft - strip.offsetLeft - 104;
 
     // Add to calendar: build an .ics file in the browser
     const pad = (s) => s.replaceAll('-', '');
     const nextDay = (iso) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + 1); return d.toISOString().slice(0, 10); };
-    for (const b of document.querySelectorAll('.ics')) {
+    for (const b of $$('.ics')) {
       b.addEventListener('click', () => {
         const { name, start, end, loc, url } = b.dataset;
         const ics = [
@@ -115,7 +428,7 @@ const cats = ['All', ...new Set(list.map((e) => e.category))];
 
     // Reminder dialog
     const dlg = document.getElementById('remind-dialog');
-    for (const b of document.querySelectorAll('.remind')) {
+    for (const b of $$('.remind')) {
       b.addEventListener('click', () => {
         document.getElementById('r-id').value = b.dataset.id;
         document.getElementById('r-name').value = b.dataset.name;
