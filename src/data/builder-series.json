@@ -5,11 +5,21 @@
     "title": "The Final Mile of Psychedelic Implementation and Access",
     "summary": "Approval is only half the battle. How clinical infrastructure, workforce, reimbursement, coverage and health technology assessment turn an approved therapy into real-world care in the NHS and U.S. systems.",
     "speakers": [
-      { "name": "Sarahjane (SJ) Tierney", "org": "Drug Science" },
-      { "name": "Melissa Lavasani", "org": "Psychedelic Medicine Coalition" },
-      { "name": "Floris Wolswijk", "org": "Blossom" }
+      {
+        "name": "Sarahjane (SJ) Tierney",
+        "org": "Strategic Policy Lead, Drug Science"
+      },
+      {
+        "name": "Melissa Lavasani",
+        "org": "Founder and CEO, Psychedelic Medicine Coalition"
+      },
+      {
+        "name": "Floris Wolswijk",
+        "org": "Researcher and Founder, Blossom"
+      }
     ],
-    "image": ""
+    "image": "/builder-series/2026-10-final-mile.jpg",
+    "linkedin": "https://www.linkedin.com/company/mind-shift-collective/posts/"
   },
   {
     "slug": "2026-09-gatherings",
@@ -17,11 +27,21 @@
     "title": "Psychedelic Gatherings: Purpose, Strategy and Impact",
     "summary": "The playbook behind transformative conferences, online summits and mainstream programming: curation, ticket pricing and access, sponsorship, volunteers, and in-person versus online.",
     "speakers": [
-      { "name": "Dana Bar-Zvi", "org": "Expanding Consciousness: Women in Psychedelics" },
-      { "name": "Greg Rosenbaum", "org": "SXSW" },
-      { "name": "Dennis Walker", "org": "Mycopreneur and Global Psychedelic Week" }
+      {
+        "name": "Dana Bar-Zvi",
+        "org": "Expanding Consciousness: Women in Psychedelics"
+      },
+      {
+        "name": "Greg Rosenbaum",
+        "org": "SVP of Programming, SXSW"
+      },
+      {
+        "name": "Dennis Walker",
+        "org": "Mycopreneur and Global Psychedelic Week"
+      }
     ],
-    "image": ""
+    "image": "/builder-series/2026-09-gatherings.jpg",
+    "linkedin": "https://www.linkedin.com/company/mind-shift-collective/posts/"
   },
   {
     "slug": "2026-08-clinics-of-the-future",
@@ -29,9 +49,18 @@
     "title": "Psychedelic Clinics of the Future",
     "summary": "Founders building the clinic model from the ground up on what a psychedelic clinic needs to work clinically, operationally and financially.",
     "speakers": [
-      { "name": "Dr. Pamela Kryskow", "org": "Roots to Thrive" },
-      { "name": "George Stuby", "org": "Spinoza" },
-      { "name": "Dr. Raymond Turpin", "org": "Pearl Institute" }
+      {
+        "name": "Dr. Pamela Kryskow",
+        "org": "Roots to Thrive"
+      },
+      {
+        "name": "George Stuby",
+        "org": "Spinoza"
+      },
+      {
+        "name": "Dr. Raymond Turpin",
+        "org": "Pearl Institute"
+      }
     ],
     "image": ""
   },
@@ -41,9 +70,18 @@
     "title": "Infrastructure Bridging: Connecting Psychedelic Models to Legacy Systems",
     "summary": "Three founders who turned the gaps between psychedelic care and legacy healthcare, research, regulators and insurers into sustainable ventures.",
     "speakers": [
-      { "name": "Grace Blest Hopley", "org": "Hystelica and Heroic Hearts UK" },
-      { "name": "Yuriy Blokhin", "org": "Homecoming" },
-      { "name": "Henry Fisher", "org": "Clerkenwell Health" }
+      {
+        "name": "Grace Blest Hopley",
+        "org": "Hystelica and Heroic Hearts UK"
+      },
+      {
+        "name": "Yuriy Blokhin",
+        "org": "Homecoming"
+      },
+      {
+        "name": "Henry Fisher",
+        "org": "Clerkenwell Health"
+      }
     ],
     "image": ""
   },
@@ -53,9 +91,18 @@
     "title": "OGs to GenZs",
     "summary": "Three generations, one movement: what got won, what got lost, who did the work, and what each generation wishes the others knew.",
     "speakers": [
-      { "name": "Jim Fadiman, PhD", "org": "" },
-      { "name": "Amy Emerson", "org": "Former founding CEO, MAPS PBC / Lykos Therapeutics" },
-      { "name": "Renuka Narain", "org": "" }
+      {
+        "name": "Jim Fadiman, PhD",
+        "org": ""
+      },
+      {
+        "name": "Amy Emerson",
+        "org": "Former founding CEO, MAPS PBC / Lykos Therapeutics"
+      },
+      {
+        "name": "Renuka Narain",
+        "org": ""
+      }
     ],
     "image": ""
   },
@@ -65,9 +112,18 @@
     "title": "The Art and the Science of Funding Mission-Driven Work",
     "summary": "The philanthropic funding landscape for builders: reading a grantmaker, where grant capital fits beside equity and revenue, and how the community supports each other instead of competing.",
     "speakers": [
-      { "name": "Taylor West", "org": "Healing Advocacy Fund" },
-      { "name": "Lindsay Robinson", "org": "MAPS" },
-      { "name": "Ben Collins", "org": "Psychedelic Science Funders Collaborative" }
+      {
+        "name": "Taylor West",
+        "org": "Healing Advocacy Fund"
+      },
+      {
+        "name": "Lindsay Robinson",
+        "org": "MAPS"
+      },
+      {
+        "name": "Ben Collins",
+        "org": "Psychedelic Science Funders Collaborative"
+      }
     ],
     "moderator": "Paul Markham",
     "image": ""
@@ -78,9 +134,18 @@
     "title": "Founders Panel",
     "summary": "The ups and downs of building, launching, scaling and pivoting a psychedelic venture: the founder's mind, radical focus, red lines and the pivot.",
     "speakers": [
-      { "name": "Payton Nyquvest", "org": "Numinus" },
-      { "name": "Anne Philippi", "org": "New Health Club" },
-      { "name": "Doug Drysdale", "org": "Former CEO, Cybin" }
+      {
+        "name": "Payton Nyquvest",
+        "org": "Numinus"
+      },
+      {
+        "name": "Anne Philippi",
+        "org": "New Health Club"
+      },
+      {
+        "name": "Doug Drysdale",
+        "org": "Former CEO, Cybin"
+      }
     ],
     "image": ""
   },
@@ -90,9 +155,18 @@
     "title": "Investors Panel",
     "summary": "What capital rewarded in 2025, how underwriting has tightened, where founders misread the market, and what 2026 is likely to reward or punish.",
     "speakers": [
-      { "name": "Michael Brotherton", "org": "Dragonfly 44" },
-      { "name": "Jeremy Gardner", "org": "Mystic Ventures" },
-      { "name": "Kevin Lanzo", "org": "LionHeart Ventures" }
+      {
+        "name": "Michael Brotherton",
+        "org": "Dragonfly 44"
+      },
+      {
+        "name": "Jeremy Gardner",
+        "org": "Mystic Ventures"
+      },
+      {
+        "name": "Kevin Lanzo",
+        "org": "LionHeart Ventures"
+      }
     ],
     "image": ""
   }

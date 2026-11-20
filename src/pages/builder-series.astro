@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import sessions from '../data/builder-series.json';
 const sorted = [...sessions].sort((a, b) => b.date.localeCompare(a.date));
+const posters = sorted.filter((s) => s.image);
 const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base title="Builder Series" current="/builder-series" description="Mind Shift Collective's monthly, members-only, off-the-record panel with the people building mental health and psychedelic medicine.">
@@ -24,7 +25,6 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
       <div class="grid">
         {sorted.map((s) => (
           <article class="card" id={s.slug}>
-            {s.image && <img src={s.image} alt={`Builder Series poster: ${s.title}`} loading="lazy" style="width:100%;border-radius:10px;aspect-ratio:4/5;object-fit:cover;" />}
             <p class="eyebrow" style="margin:0;">{fmt(s.date)}</p>
             <h3 style="margin:0;font-size:22px;">{s.title}</h3>
             <p style="margin:0;color:var(--ink-2);">{s.summary}</p>
@@ -32,11 +32,49 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
               {s.speakers.map((p) => <li><strong>{p.name}</strong>{p.org && <span style="color:var(--ink-2);">, {p.org}</span>}</li>)}
             </ul>
             {s.moderator && <p style="margin:0;font-size:14px;color:var(--ink-2);">Moderated by {s.moderator}</p>}
+            {s.linkedin && <a href={s.linkedin} target="_blank" rel="noopener" style="font-size:15px;font-weight:500;margin-top:auto;">View on LinkedIn</a>}
           </article>
         ))}
       </div>
     </div>
   </section>
+
+  {posters.length > 0 && (
+    <section class="white" style="padding:72px 0;">
+      <div class="wrap stack-lg">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;">
+          <div>
+            <p class="eyebrow">From the Builder Series</p>
+            <h2 style="font-size:clamp(28px,3.5vw,38px);">Past gatherings</h2>
+          </div>
+          <a href="https://www.linkedin.com/company/mind-shift-collective/" target="_blank" rel="noopener" style="font-weight:500;">Follow Mind Shift Collective on LinkedIn</a>
+        </div>
+        <div class="bs-tiles">
+          {posters.map((s) => (
+            <a class="bs-tile" href={s.linkedin || 'https://www.linkedin.com/company/mind-shift-collective/'} target="_blank" rel="noopener" aria-label={`${s.title}, ${fmt(s.date)}. View on LinkedIn`}>
+              <img src={s.image} alt={`Builder Series poster: ${s.title}, ${fmt(s.date)}, with ${s.speakers.map((p) => p.name).join(', ')}`} loading="lazy" width="900" height="1125" />
+              <span class="bs-cap">
+                <span class="bs-date">{fmt(s.date)}</span>
+                <span class="bs-title">{s.title}</span>
+                <span class="bs-li">View on LinkedIn <span aria-hidden="true">↗</span></span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <style>
+    .bs-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .bs-tile { display: flex; flex-direction: column; background: var(--ground); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; text-decoration: none; color: var(--ink); transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+    .bs-tile:hover { transform: translateY(-3px); border-color: var(--forest); box-shadow: 0 10px 28px rgba(31,58,49,.12); color: var(--ink); }
+    .bs-tile img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #E3E2DA; }
+    .bs-cap { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; }
+    .bs-date { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-text); font-weight: 600; }
+    .bs-title { font-weight: 600; line-height: 1.35; }
+    .bs-li { font-size: 14px; color: var(--forest); font-weight: 500; margin-top: 2px; }
+  </style>
 
   <section class="band" style="padding:72px 0;">
     <div class="wrap stack-lg" style="max-width:760px;">
