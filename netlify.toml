@@ -66,9 +66,10 @@
   status = 200
   force = true
 
+# Temporary home: the existing Notion page shown inside the site (src/pages/notion.astro).
 [[redirects]]
   from = "https://www.mindshiftcollective.net/"
-  to = "/join/"
+  to = "/notion/"
   status = 200
   force = true
 
@@ -126,9 +127,10 @@
   status = 200
   force = true
 
+# Temporary home: the existing Notion page shown inside the site (src/pages/notion.astro).
 [[redirects]]
   from = "https://mindshiftcollective.net/"
-  to = "/join/"
+  to = "/notion/"
   status = 200
   force = true
 
