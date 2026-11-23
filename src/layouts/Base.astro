@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
-interface Props { title: string; description?: string; current?: string; }
-const { title, description = 'Mind Shift Collective is a referral-based community of practice for the people building the future of mental health and psychedelic medicine.', current = '' } = Astro.props;
+interface Props { title: string; description?: string; current?: string; index?: boolean; canonical?: string; }
+const { title, description = 'Mind Shift Collective is a referral-based community of practice for the people building the future of mental health and psychedelic medicine.', current = '', index = false, canonical } = Astro.props;
 const nav = [
   { href: '/directory', label: 'Directory' },
   { href: '/builder-series', label: 'Builder Series' },
@@ -21,7 +21,10 @@ const JOIN_ONLY = true;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
-  {isPreview && <meta name="robots" content="noindex, nofollow" />}
+  {/* Only pages that opt in with index={true} can be indexed, and only on the real domain (robots-preview.txt blocks netlify.app). */}
+  {(isPreview && !index) && <meta name="robots" content="noindex, nofollow" />}
+  {canonical && <link rel="canonical" href={canonical} />}
+  {canonical && <meta property="og:url" content={canonical} />}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

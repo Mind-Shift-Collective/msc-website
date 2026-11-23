@@ -8,12 +8,19 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Keep the preview out of search engines until launch.
-# At launch: set PUBLIC_SITE_LIVE=true in Netlify and delete this block.
+# Search engines: the real domain serves robots.txt and sitemap.xml (join + privacy only).
+# The netlify.app preview serves robots-preview.txt, which blocks everything.
+# Pages are noindex unless they opt in with index={true} in Base.astro.
 [[headers]]
-  for = "/*"
+  for = "/thank-you/*"
   [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
+    X-Robots-Tag = "noindex"
+
+[[redirects]]
+  from = "https://mind-shift-collective.netlify.app/robots.txt"
+  to = "/robots-preview.txt"
+  status = 200
+  force = true
 
 # Join-only: the home page shows the join form on every address (including netlify.app).
 # Delete this rule to bring back the full home page.
@@ -65,6 +72,18 @@
 [[redirects]]
   from = "https://www.mindshiftcollective.net/_astro/*"
   to = "/_astro/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/robots.txt"
+  to = "/robots.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://www.mindshiftcollective.net/sitemap.xml"
+  to = "/sitemap.xml"
   status = 200
   force = true
 
@@ -125,6 +144,18 @@
 [[redirects]]
   from = "https://mindshiftcollective.net/_astro/*"
   to = "/_astro/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/robots.txt"
+  to = "/robots.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://mindshiftcollective.net/sitemap.xml"
+  to = "/sitemap.xml"
   status = 200
   force = true
 

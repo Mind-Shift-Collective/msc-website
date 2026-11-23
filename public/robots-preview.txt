@@ -1,0 +1,3 @@
+# Preview site. The real site is https://www.mindshiftcollective.net
+User-agent: *
+Disallow: /
