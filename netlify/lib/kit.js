@@ -25,6 +25,24 @@ export const PERSONA_MAP = {
 };
 export const PERSONAS = [...new Set(Object.values(PERSONA_MAP))];
 
+// The 14 audiences (same list as the events page filter, src/lib/audiences.js) -> "Audience: ..." tags.
+// The reminder and newsletter forms ask "I am a..." from this list; join-form capacities map to it too.
+export const AUDIENCE_MAP = {
+  'Founder / co-founder': 'Founders & Operators',
+  'Consultant / solopreneur': 'Founders & Operators',
+  'Researcher': 'Researchers & Academics',
+  'Medical professional / clinician': 'Clinicians & Facilitators',
+  'Licensed Therapist': 'Clinicians & Facilitators',
+  'Pharmaceutical industry': 'Founders & Operators',
+  'Investor (for-profit focus)': 'Investors & Funders',
+  'Philanthropic Executive / Funder (non-profit focus)': 'Investors & Funders',
+  'Government / policy / lawyer / legal support': 'Policy & Regulatory',
+  'Professional educator or learning designer': 'Educators & Trainers',
+  'Indigenous / cultural leader': 'Indigenous & Traditional Practitioners',
+  'Student (pursuing a career in psychedelics)': 'Students & Trainees',
+};
+const audienceTag = (a) => (a ? `Audience: ${a}` : '');
+
 export const INTERESTS = [
   'Interest: Newsletter',
   'Interest: Industry updates',
@@ -157,20 +175,22 @@ export function fromSubmission(sub) {
   if (form === 'join-request') {
     // Applicants are only added to Kit when they opt in to updates on the join form.
     if (!/yes/i.test(String(d['Email updates'] || ''))) return null;
-    const personas = arr(d['Capacities[]'] || d.Capacities).map((c) => PERSONA_MAP[c]).filter(Boolean);
+    const caps = arr(d['Capacities[]'] || d.Capacities);
+    const personas = caps.map((c) => PERSONA_MAP[c]).filter(Boolean);
+    const audiences = [...new Set(caps.map((c) => AUDIENCE_MAP[c]).filter(Boolean))];
     return {
       email: d.Email, firstName: d['First Name'],
       fields: {
         'Last name': d['Last Name'], 'Company': d['Company / Organization'], 'Job title': d['Job Title'],
         'City': d['Closest major city'], 'LinkedIn': d['LinkedIn Profile'], 'Member status': 'Applicant',
-        'Primary persona': (personas[0] || '').replace('Persona: ', ''), 'First source': 'Join form', 'Signup date': today(),
+        'Primary persona': audiences[0] || (personas[0] || '').replace('Persona: ', ''), 'First source': 'Join form', 'Signup date': today(),
       },
-      tags: ['Status: Applicant', 'Source: Join form', 'Interest: Newsletter', ...personas],
+      tags: ['Status: Applicant', 'Source: Join form', 'Interest: Newsletter', ...personas, ...audiences.map(audienceTag)],
     };
   }
   if (form === 'deadline-reminder') {
     const cats = arr(d['categories[]'] || d.categories).map((c) => CATEGORY_INTEREST[c]).filter(Boolean);
-    const persona = d.persona ? `Persona: ${d.persona}` : '';
+    const persona = audienceTag(d.persona);
     return {
       email: d.email, firstName: d.first_name,
       fields: { 'Primary persona': d.persona, 'First source': 'Event reminder', 'Signup date': today() },
@@ -179,7 +199,7 @@ export function fromSubmission(sub) {
   }
   if (form === 'newsletter') {
     const topics = arr(d['topics[]'] || d.topics).map((t) => `Interest: ${t}`);
-    const persona = d.persona ? `Persona: ${d.persona}` : '';
+    const persona = audienceTag(d.persona);
     return {
       email: d.email, firstName: d.first_name,
       fields: { 'Primary persona': d.persona, 'First source': 'Newsletter form', 'Signup date': today() },

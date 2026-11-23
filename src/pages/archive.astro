@@ -70,7 +70,7 @@ const formatNote = {
   <section style="padding-top:0;padding-bottom:72px;">
     <div class="wrap stack" style="gap:20px;" id="archive-list">
       {items.map((i) => (
-        <article class="card" id={i.slug} data-type={i.type} data-topics={i.topics.join('|')} data-year={i.date.slice(0, 4)} data-search={[i.title, i.summary, ...(i.speakers || []).map((s) => s.name + ' ' + s.org), i.moderator || ''].join(' ').toLowerCase()} style="padding:28px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;">
+        <article class="card" id={i.slug} data-type={i.type} data-topics={i.topics.join('|')} data-year={i.date.slice(0, 4)} data-search={[i.title, i.summary, ...(i.speakers || []).map((s) => s.name + ' ' + s.org), i.moderator || ''].join(' ').toLowerCase()} style="padding:28px;display:flex;flex-direction:row;flex-wrap:wrap;gap:12px 28px;align-items:flex-start;">
           <div style="flex:0 0 140px;display:flex;flex-direction:column;gap:6px;">
             <span style="font-family:'Newsreader',serif;font-size:28px;line-height:1;color:var(--deep);">{new Date(i.date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}</span>
             <span style="font-size:14px;color:var(--ink-2);">{i.date.slice(0, 4)}</span>

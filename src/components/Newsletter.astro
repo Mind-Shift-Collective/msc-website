@@ -1,4 +1,5 @@
 ---
+import { AUDIENCES } from '../lib/audiences.js';
 // Netlify form. The sheet-relay function adds each signup to the MSC Kit account with tags.
 ---
 <form class="panel" name="newsletter" method="POST" action="/thank-you?f=newsletter" data-netlify="true" netlify-honeypot="company_website" style="color:var(--ink);">
@@ -9,7 +10,7 @@
     <div class="field" style="flex:1 1 160px;"><label for="nl-name">First name</label><input id="nl-name" name="first_name" type="text" autocomplete="given-name" /></div>
     <div class="field" style="flex:2 1 220px;"><label for="nl-email">Email</label><input id="nl-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" /></div>
   </div>
-  <div class="field"><label for="nl-persona">I am a <small class="muted">(optional)</small></label><select id="nl-persona" name="persona"><option value="">Choose one</option><option>Founder or operator</option><option>Consultant</option><option>Researcher</option><option>Clinician</option><option>Therapist</option><option>Industry or pharma</option><option>Investor</option><option>Funder or philanthropy</option><option>Policy or legal</option><option>Educator</option><option>Media</option><option>Indigenous or cultural leader</option><option>Student</option><option>Other</option></select></div>
+  <div class="field"><label for="nl-persona">I am a <small class="muted">(optional)</small></label><select id="nl-persona" name="persona"><option value="">Choose one</option>{AUDIENCES.map(([a]) => <option>{a}</option>)}</select></div>
   <fieldset>
     <legend>Send me</legend>
     <label class="check"><input type="checkbox" name="topics[]" value="Newsletter" checked /> The collective's newsletter (monthly)</label>
