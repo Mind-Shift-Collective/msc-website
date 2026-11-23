@@ -25,7 +25,7 @@ if (keys.length) {
 
 const CATS = ['Psychedelic', 'Psychedelic + mental health', 'Mental & behavioral health'];
 // Display names for the type pills and tags (the sheet values stay the same).
-const catLabel = (c) => ({ 'Psychedelic + mental health': 'Psychedelics + mental / behavioral health' }[c] || c);
+const catLabel = (c) => ({ 'Psychedelic + mental health': 'Psychedelic & mental health' }[c] || c);
 const audKey = (e) => audiencesFor(e).join('|');
 const catClass = (c) => ({ 'Psychedelic': 'c-psy', 'Psychedelic + mental health': 'c-mix', 'Mental & behavioral health': 'c-mh' }[c] || 'c-mh');
 const REGIONS = ['United States', 'Canada', 'Europe', 'Latin America', 'Asia-Pacific', 'Africa', 'Online'].filter((r) => events.some((e) => e.region === r));
@@ -77,7 +77,7 @@ const updated = 'Nov 19, 2026';
       </div>
       <div class="ev-legend">
         <span><i class="dot c-psy"></i>Psychedelic</span>
-        <span><i class="dot c-mix"></i>Psychedelics + mental / behavioral health</span>
+        <span><i class="dot c-mix"></i>Psychedelic &amp; mental health</span>
         <span><i class="dot c-mh"></i>Mental &amp; behavioral health</span>
       </div>
     </div>
@@ -229,7 +229,7 @@ const updated = 'Nov 19, 2026';
       <fieldset style="border:0;padding:0;margin:0;">
         <legend style="font-weight:500;margin-bottom:6px;">Also send me a monthly roundup of <small class="muted">(optional)</small></legend>
         <label class="check"><input type="checkbox" name="categories[]" value="Psychedelic" /> Psychedelic events</label>
-        <label class="check"><input type="checkbox" name="categories[]" value="Psychedelic + mental health" /> Psychedelics + mental / behavioral health events</label>
+        <label class="check"><input type="checkbox" name="categories[]" value="Psychedelic + mental health" /> Psychedelic &amp; mental health events</label>
         <label class="check"><input type="checkbox" name="categories[]" value="Mental &amp; behavioral health" /> Mental &amp; behavioral health events</label>
       </fieldset>
       <p class="muted" style="font-size:13px;margin:0;">Unsubscribe anytime. We never share your email.</p>
