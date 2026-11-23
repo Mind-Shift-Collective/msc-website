@@ -1,0 +1,23 @@
+{
+  "_note": "For the future 'Funders, Foundations and Donors' page. Not shown on the site yet. Descriptions are drafts; confirm with each org before publishing.",
+  "funders": [
+    {
+      "name": "Tiny Blue Dot Foundation",
+      "url": "https://www.tinybluedotfoundation.org/",
+      "type": "Foundation",
+      "description": "Helps people understand that each of us lives in our own Perception Box, whose walls can be expanded to reduce suffering, deepen acceptance of self and others, and turn trauma and other challenges into growth."
+    },
+    {
+      "name": "Unlikely Collaborators",
+      "url": "https://www.unlikelycollaborators.com/",
+      "type": "Organization",
+      "description": "Helps people resolve conflict by becoming aware of, and learning to work with, their Perception Box."
+    },
+    {
+      "name": "Subtle Energy Funders Collective",
+      "url": "https://www.funderscollective.org/",
+      "type": "Funder collective",
+      "description": "A group of funders backing research into subtle energy and biofield healing, working to bring evidence-based biofield therapies into healthcare, wellness and culture."
+    }
+  ]
+}
