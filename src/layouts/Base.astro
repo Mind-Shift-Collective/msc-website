@@ -11,9 +11,11 @@ const nav = [
 ];
 const fullTitle = title === 'Home' ? 'Mind Shift Collective' : `${title} · Mind Shift Collective`;
 const isPreview = import.meta.env.PUBLIC_SITE_LIVE !== 'true';
+// Join-only mode: hide the menu and links to the rest of the site everywhere. Set to false to show the full site.
+const JOIN_ONLY = true;
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" class={JOIN_ONLY ? 'soft-launch' : undefined}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -39,7 +41,7 @@ const isPreview = import.meta.env.PUBLIC_SITE_LIVE !== 'true';
   <a href="#main" class="skip" style="position:absolute;left:-999px;top:0;background:#fff;padding:8px 12px;z-index:10" onfocus="this.style.left='8px'" onblur="this.style.left='-999px'">Skip to content</a>
   <header style="border-bottom:1px solid var(--gold);">
     <div class="wrap row" style="justify-content:space-between;padding-top:18px;padding-bottom:18px;">
-      <a href="/" style="text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:12px;">
+      <a href={JOIN_ONLY ? '/join' : '/'} style="text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:12px;">
         <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="16" fill="none" stroke="#2E5E4E" stroke-width="2"></circle><path d="M6 22 C12 12, 18 12, 18 18 S24 24, 30 14" fill="none" stroke="#C9A227" stroke-width="2"></path></svg>
         <span style="font-family:var(--serif);font-size:22px;font-weight:500;">Mind Shift Collective</span>
       </a>

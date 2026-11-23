@@ -15,6 +15,14 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Join-only: the home page shows the join form on every address (including netlify.app).
+# Delete this rule to bring back the full home page.
+[[redirects]]
+  from = "/"
+  to = "/join/"
+  status = 200
+  force = true
+
 # Soft launch: on the real domain, only the join form and its support pages are reachable.
 # Everything else stays on the netlify.app preview. Delete these rules at full launch.
 
