@@ -69,7 +69,7 @@ const fmt = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { mont
     .bs-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
     .bs-tile { display: flex; flex-direction: column; background: var(--ground); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; text-decoration: none; color: var(--ink); transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
     .bs-tile:hover { transform: translateY(-3px); border-color: var(--forest); box-shadow: 0 10px 28px rgba(31,58,49,.12); color: var(--ink); }
-    .bs-tile img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #E3E2DA; }
+    .bs-tile img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; display: block; background: #1B2238; }
     .bs-cap { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; }
     .bs-date { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-text); font-weight: 600; }
     .bs-title { font-weight: 600; line-height: 1.35; }

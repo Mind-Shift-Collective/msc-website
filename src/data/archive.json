@@ -1,18 +1,101 @@
 {
   "_note": "Builder Series sessions come from builder-series.json. Add Community Calls, Presenter Series talks and other gatherings here. Off-the-record sessions are never recorded: give them a written recap for members (themes, no attribution) instead of a video.",
   "topics": {
-    "2026-10-final-mile": ["Access", "Policy", "Payers"],
-    "2026-09-gatherings": ["Events", "Community"],
-    "2026-08-clinics-of-the-future": ["Clinical", "Operations"],
-    "2026-07-infrastructure-bridging": ["Research", "Payers", "Policy"],
-    "2026-06-ogs-to-genzs": ["History", "Research"],
-    "2026-05-mission-driven-funding": ["Capital", "Philanthropy"],
-    "2026-04-founders": ["Founders", "Capital"],
-    "2026-03-investors": ["Capital", "Founders"]
+    "2026-10-final-mile": [
+      "Access",
+      "Policy",
+      "Payers"
+    ],
+    "2026-09-gatherings": [
+      "Events",
+      "Community"
+    ],
+    "2026-08-clinics-of-the-future": [
+      "Clinical",
+      "Operations"
+    ],
+    "2026-07-infrastructure-bridging": [
+      "Research",
+      "Payers",
+      "Policy"
+    ],
+    "2026-06-ogs-to-genzs": [
+      "History",
+      "Research"
+    ],
+    "2026-05-mission-driven-funding": [
+      "Capital",
+      "Philanthropy"
+    ],
+    "2026-04-founders": [
+      "Founders",
+      "Capital"
+    ],
+    "2026-03-investors": [
+      "Capital",
+      "Founders"
+    ]
   },
   "items": [
-    { "slug": "2026-10-community-call", "type": "Community Call", "date": "2026-10-27", "title": "Monthly Community Call", "summary": "One-to-one breakouts on what members are building and don’t talk about enough, leadership updates, ecosystem news, and an open discussion on market signals: profit and heart.", "topics": ["Community"] },
-    { "slug": "2026-09-community-call", "type": "Community Call", "date": "2026-09-22", "title": "Monthly Community Call", "summary": "One-to-one breakouts, member asks and offers, ecosystem news and an open discussion on market signals.", "topics": ["Community"] },
-    { "slug": "2026-05-community-call", "type": "Community Call", "date": "2026-05-26", "title": "Monthly Community Call", "summary": "Grounding, one-to-one breakouts, member asks and offers, and an open community discussion.", "topics": ["Community"] }
+    {
+      "slug": "2026-10-community-call",
+      "type": "Community Call",
+      "date": "2026-10-27",
+      "title": "Monthly Community Call",
+      "summary": "One-to-one breakouts on what members are building and don’t talk about enough, leadership updates, ecosystem news, and an open discussion on market signals: profit and heart.",
+      "topics": [
+        "Community"
+      ]
+    },
+    {
+      "slug": "2026-09-community-call",
+      "type": "Community Call",
+      "date": "2026-09-22",
+      "title": "Monthly Community Call",
+      "summary": "One-to-one breakouts, member asks and offers, ecosystem news and an open discussion on market signals.",
+      "topics": [
+        "Community"
+      ]
+    },
+    {
+      "slug": "2026-05-community-call",
+      "type": "Community Call",
+      "date": "2026-05-26",
+      "title": "Monthly Community Call",
+      "summary": "Grounding, one-to-one breakouts, member asks and offers, and an open community discussion.",
+      "topics": [
+        "Community"
+      ]
+    },
+    {
+      "slug": "2026-10-ibogaine-5meo",
+      "type": "Community Call",
+      "date": "2026-10-19",
+      "title": "Ibogaine + 5-MeO-DMT: Benefits, Risks and Clinical Perspectives",
+      "summary": "A community meeting co-presented with LYT. Discussion, experience and evidence from practitioners working with ibogaine and 5-MeO-DMT in addiction detox, recovery and integration.",
+      "speakers": [
+        {
+          "name": "The Fishelys",
+          "org": "Founders, Soul Reflections"
+        },
+        {
+          "name": "Katie Laroe-Higgs",
+          "org": "Soul Reflections and Mission Within"
+        },
+        {
+          "name": "Garyth Moxie",
+          "org": "Founder, Inner Realms Center"
+        },
+        {
+          "name": "Asha Caravelli",
+          "org": "Death doula and practitioner"
+        }
+      ],
+      "topics": [
+        "Clinical",
+        "Community"
+      ],
+      "image": "/builder-series/2026-10-ibogaine-5meo.jpg"
+    }
   ]
 }

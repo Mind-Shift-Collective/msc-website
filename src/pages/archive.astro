@@ -14,6 +14,7 @@ const builder = sessions.map((s) => ({
   speakers: s.speakers,
   moderator: s.moderator,
   topics: archive.topics[s.slug] || [],
+  image: s.image,
 }));
 const items = [...builder, ...archive.items].sort((a, b) => b.date.localeCompare(a.date));
 const types = ['All', ...new Set(items.map((i) => i.type))];
@@ -75,7 +76,7 @@ const formatNote = {
             <span style="font-family:'Newsreader',serif;font-size:28px;line-height:1;color:var(--deep);">{new Date(i.date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}</span>
             <span style="font-size:14px;color:var(--ink-2);">{i.date.slice(0, 4)}</span>
           </div>
-          <div class="stack" style="flex:999 1 480px;min-width:0;gap:10px;">
+          <div class="stack" style="flex:999 1 320px;min-width:0;gap:10px;">
             <div class="row" style="gap:8px;flex-wrap:wrap;">
               <span class="chip" style="background:#F3E7C2;color:#5A4310;">{i.type}</span>
               {i.topics.map((t) => <span class="chip">{t}</span>)}
@@ -98,6 +99,11 @@ const formatNote = {
               )}
             </div>
           </div>
+          {i.image && (
+            <a class="flyer" href={i.image} target="_blank" rel="noopener" aria-label={`Open the flyer for ${i.title}`}>
+              <img src={i.image} alt={`Flyer: ${i.title}`} loading="lazy" />
+            </a>
+          )}
         </article>
       ))}
       <p id="archive-empty" class="hidden" style="margin:0;padding:32px;text-align:center;background:#fff;border-radius:16px;color:var(--ink-2);">Nothing matches yet. Try another filter, or <a href="mailto:hello@mindshiftcollective.net?subject=%5BMSC%20Topic%5D%20Session%20idea">suggest the session you’re looking for</a>.</p>
@@ -146,3 +152,9 @@ const formatNote = {
     })();
   </script>
 </Base>
+
+<style>
+  .flyer { flex: 0 0 200px; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); line-height: 0; }
+  .flyer img { width: 100%; height: auto; display: block; }
+  @media (max-width: 760px) { .flyer { flex-basis: 100%; max-width: 320px; } }
+</style>
