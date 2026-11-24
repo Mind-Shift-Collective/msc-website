@@ -1,0 +1,143 @@
+---
+import Base from '../../layouts/Base.astro';
+// "Why present" page, from the Presenter Series design. Benefits marked here are promises:
+// each needs an owner before the series launches (see the project brief, Open questions).
+const groups = [
+  { title: 'Get found', sub: 'Search and discovery that keeps working', color: '#C9A227', items: [
+    ['SEO backlink', 'A followed link from mindshiftcollective.net to your site, on your talk page and your member card.'],
+    ['Searchable transcript', 'The full text of your talk is on the page, so people searching your topic or company land on it.'],
+    ['YouTube reach', 'Published on the Mind Shift Collective channel with your links in the description.'],
+    ['An evergreen page', 'Your talk stays in the library after the premiere, filed by sector and stage.'],
+    ['Rank for your own name', 'A trusted page about you and your company, which helps your name search show your work.'],
+  ] },
+  { title: 'Get seen', sub: 'In front of the people building this field', color: '#3E8E8A', items: [
+    ['Visibility', 'Premiered to about 300 builders: founders, funders, clinicians, researchers and policy people.'],
+    ['Newsletter feature', 'Each new talk goes out to our newsletter and industry update readers.'],
+    ['Presented at MSC badge', 'A mark for your website, deck and LinkedIn that signals a vetted talk.'],
+    ['Credibility by association', 'Listed beside peers who signed the North Star Ethics Pledge. No pay-to-play.'],
+    ['Social posts', 'We post your talk on our channels and tag you, so your network sees it too.'],
+  ] },
+  { title: 'Get connected', sub: 'Inbound that is already warm', color: '#8E7CC3', items: [
+    ['Inbound leads', 'Viewers press Contact on your card. We screen every message, so only real ones reach you.'],
+    ['Warm introductions', 'Each lead arrives as one email from hello@ to both of you, with context on who they are.'],
+    ['Funders and partners', 'Investors, funders and payers browse by sector and by your Looking for list.'],
+    ['Hiring', 'Mission-aligned people see what you are building and why, before they ever see a job post.'],
+    ['Speaking and press', 'Event organizers and journalists can use the library to find speakers and sources.'],
+  ] },
+  { title: 'Get sharper', sub: 'Better at telling your story', color: '#C8754A', items: [
+    ['Sharing collateral', 'A full kit of video, clips, slides and copy, ready to send. See below.'],
+    ['A tighter story', 'Ten slides in five minutes forces the one idea. Reuse it in your pitch and on your homepage.'],
+    ['Coaching', 'Our five-act template and a review from the team before you record.'],
+    ['Peer feedback', 'Questions from clinical, policy and capital people you rarely get in one room.'],
+    ['Low lift', 'Recorded once from your desk. No travel, no stage, no fee.'],
+  ] },
+];
+let n = 0;
+const numbered = groups.map((g) => ({ ...g, items: g.items.map(([t, b]) => ({ n: String(++n).padStart(2, '0'), t, b })) }));
+const kit = [
+  ['The 5-minute video', 'Full quality, plus an embed code for your website.'],
+  ['Three short clips', 'Vertical cuts of about 30 seconds for LinkedIn and Instagram.'],
+  ['Thumbnail', '1280 × 720, in the series style, with your name and company.'],
+  ['Your slides', 'A PDF of the ten slides to attach to emails and applications.'],
+  ['Transcript', 'Clean text you can quote in posts, blogs and grant reports.'],
+  ['Presented at MSC badge', 'For your site footer, deck and email signature.'],
+  ['Share copy', 'A ready LinkedIn post and a two-line email blurb.'],
+  ['Your talk page link', 'One link with the video, your company, your ask and a Contact button.'],
+];
+const people = [
+  ['Founders', 'Investor and payer interest, pilot sites, customers and hires.'],
+  ['Researchers', 'Collaborators, study sites, participants and funding leads.'],
+  ['Clinicians', 'Referral partners, training partners and peer visibility.'],
+  ['Funders', 'Strong applicants and co-funders who share your priorities.'],
+  ['Consultants and advisors', 'Clients who already understand how you think.'],
+];
+---
+<Base title="Why present · Presenter Series" current="/presenter-series" description="What members get from a five-minute Presenter Series talk: discovery, visibility, warm introductions and a ready-to-share kit.">
+  <section class="why-hero">
+    <span class="ring" style="right:-200px;top:-220px;width:720px;height:720px;border-color:#8E7CC3;opacity:.25"></span>
+    <span class="ring" style="right:-100px;top:-120px;width:520px;height:520px;border-color:#3E8E8A;opacity:.3"></span>
+    <span class="ring" style="right:0;top:-20px;width:320px;height:320px;border-color:#C9A227;opacity:.45"></span>
+    <div class="wrap stack-lg" style="position:relative;max-width:900px;margin-left:auto;margin-right:auto;">
+      <p class="eyebrow"><a href="/presenter-series" style="color:inherit;">Presenter Series</a> · Why present</p>
+      <h1 style="font-size:clamp(40px,5.5vw,64px);line-height:1.02;">Five minutes of your time. A year of being found.</h1>
+      <p class="lede">One recorded talk becomes a page, a link, a video, a stack of shareable assets and a steady line of screened introductions. Here is what presenters get.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:24px;">
+    <div class="wrap stack-lg" style="gap:56px;">
+      {numbered.map((g) => (
+        <div class="stack" style="gap:20px;">
+          <div class="row" style="align-items:baseline;gap:14px;">
+            <span style={`flex:none;width:14px;height:14px;border-radius:4px;background:${g.color}`}></span>
+            <h2 style="font-size:36px;margin:0;">{g.title}</h2>
+            <span class="muted" style="font-size:15px;">{g.sub}</span>
+          </div>
+          <div class="benefits">
+            {g.items.map((it) => (
+              <div class="benefit" style={`border-top-color:${g.color}`}>
+                <span class="muted" style="font-size:12px;font-weight:600;">{it.n}</span>
+                <h3>{it.t}</h3>
+                <p>{it.b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div class="kit">
+        <span class="ring" style="left:-160px;bottom:-280px;width:560px;height:560px;border-color:#C9A227;opacity:.3"></span>
+        <div class="stack" style="position:relative;flex:1 1 360px;gap:14px;">
+          <p class="eyebrow" style="color:#F3E7C2;margin:0;">The presenter kit</p>
+          <h2 style="color:#F6F3EC;font-size:40px;line-height:1.08;">Everything you need to share it.</h2>
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#CFD8D2;">Sent to you the day your talk premieres. Use it in investor updates, sales emails, grant applications, your website and LinkedIn.</p>
+        </div>
+        <div class="kit-grid">
+          {kit.map(([t, b]) => (
+            <div class="kit-item"><span class="dot"></span><span class="stack" style="gap:2px;"><strong>{t}</strong><span>{b}</span></span></div>
+          ))}
+        </div>
+      </div>
+
+      <div class="stack" style="gap:20px;">
+        <div class="row" style="align-items:baseline;gap:14px;">
+          <h2 style="font-size:36px;margin:0;">Not just for founders</h2>
+          <span class="muted" style="font-size:15px;">What each kind of member tends to get</span>
+        </div>
+        <div class="benefits">
+          {people.map(([w, g]) => (
+            <div class="person"><span class="iris-sm"><span></span></span><h3>{w}</h3><p>{g}</p></div>
+          ))}
+        </div>
+      </div>
+
+      <div class="row between" style="gap:32px;align-items:center;border-top:1px solid #D9D3C4;padding-top:48px;">
+        <div class="row" style="gap:40px;font-family:var(--serif);color:var(--forest);">
+          <span class="stack" style="gap:0;"><span style="font-size:52px;line-height:1;">5 min</span><span class="muted" style="font-family:var(--sans);font-size:14px;">to record</span></span>
+          <span class="stack" style="gap:0;"><span style="font-size:52px;line-height:1;">10</span><span class="muted" style="font-family:var(--sans);font-size:14px;">slides, 30 seconds each</span></span>
+          <span class="stack" style="gap:0;"><span style="font-size:52px;line-height:1;">$0</span><span class="muted" style="font-family:var(--sans);font-size:14px;">for members</span></span>
+        </div>
+        <a class="btn" href="/presenter-series#present">Pitch your talk</a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .why-hero { position: relative; overflow: hidden; padding-top: 88px; padding-bottom: 48px; }
+    .ring { position: absolute; border-radius: 50%; border: 1px solid; pointer-events: none; }
+    .benefits { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .benefit, .person { display: flex; flex-direction: column; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+    .benefit { border-top: 4px solid; }
+    .benefit h3 { margin: 0; font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 1.25; }
+    .benefit p, .person p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+    .person h3 { margin: 0; font-size: 22px; }
+    .iris-sm { width: 44px; height: 44px; border-radius: 50%; padding: 3px; box-sizing: border-box; background: conic-gradient(from 20deg, #C9A227, #3E8E8A, #8E7CC3, #C8754A, #C9A227); }
+    .iris-sm > span { display: block; width: 100%; height: 100%; border-radius: 50%; background: #E9E4D8; border: 3px solid #fff; box-sizing: border-box; }
+    .kit { position: relative; overflow: hidden; display: flex; flex-wrap: wrap; gap: 40px; background: #1F3A31; color: #F6F3EC; border-radius: 28px; padding: clamp(28px, 5vw, 48px); }
+    .kit-grid { position: relative; flex: 2 1 420px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .kit-item { display: flex; gap: 12px; align-items: flex-start; background: rgba(246,243,236,.07); border: 1px solid rgba(246,243,236,.14); border-radius: 14px; padding: 14px 16px; }
+    .kit-item .dot { flex: none; width: 10px; height: 10px; margin-top: 6px; border-radius: 3px; background: #C9A227; }
+    .kit-item strong { font-size: 15px; font-weight: 600; }
+    .kit-item span span { font-size: 13px; line-height: 1.45; color: #CFD8D2; }
+  </style>
+</Base>

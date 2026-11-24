@@ -2,59 +2,133 @@
 import Base from '../layouts/Base.astro';
 import YouTube from '../components/YouTube.astro';
 import data from '../data/presenter-talks.json';
-// Talks live in src/data/presenter-talks.json as they're published to youtube.com/@mindshifthealth
+// Real talks live in src/data/presenter-talks.json ("talks"). Until the first one is added,
+// the page shows the "examples" from the same file, clearly labeled as examples.
 const talks = data.talks;
+const examples = data.examples || [];
+const showExamples = talks.length === 0;
+const featured = examples.find((t) => t.featured) || examples[0];
+const rest = examples.filter((t) => t !== featured);
 const fmtDate = (d) => (d ? new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : '');
+
 const acts = [
-  ['Hook', 'Slides 1–2', '0:00–1:20', 'Why this, why now.'],
-  ['Context', 'Slides 3–5', '1:20–3:20', 'What the audience needs to know.'],
-  ['Evidence', 'Slides 6–10', '3:20–6:40', 'What you found or built.'],
-  ['Opportunity', 'Slides 11–13', '6:40–8:40', 'What it opens up.'],
-  ['Close', 'Slides 14–15', '8:40–10:00', 'End with a door, not a wall.'],
+  { name: 'Hook', color: '#C9A227', n: 1, slides: 'Slide 1', time: '0:00–0:30', line: 'Why this, why now.' },
+  { name: 'Context', color: '#3E8E8A', n: 2, slides: 'Slides 2–3', time: '0:30–1:30', line: 'What the audience needs to know.' },
+  { name: 'Evidence', color: '#7FB59C', n: 4, slides: 'Slides 4–7', time: '1:30–3:30', line: 'What you found or built.' },
+  { name: 'Opportunity', color: '#8E7CC3', n: 2, slides: 'Slides 8–9', time: '3:30–4:30', line: 'What it opens up.' },
+  { name: 'Close', color: '#C8754A', n: 1, slides: 'Slide 10', time: '4:30–5:00', line: 'End with a door, not a wall.' },
 ];
+const heights = [26, 44, 22, 34, 56, 40, 64, 30, 48, 58];
+const barColors = acts.flatMap((a) => Array(a.n).fill(a.color));
 const beliefs = [
-  ['Constraint is a catalyst', 'A clock you cannot pause forces you to find what matters. What survives forty seconds was worth saying.'],
+  ['Constraint is a catalyst', 'A clock you can’t pause forces you to find what matters. What survives thirty seconds was worth saying.'],
   ['Your face on every slide', 'Trust in this field is earned person to person, not business to business.'],
-  ['Fewer words, more meaning', 'The slide holds the image. Your voice holds the argument.'],
-  ['Every discipline is a lens', 'The researcher, the clinician, the regulator and the investor each see part of the same thing.'],
   ['Rigor and wonder together', 'Speak with evidence. Leave room for awe.'],
   ['Honesty over hype', 'Name the risks, the headwinds and the open questions.'],
 ];
+const steps = [
+  ['Pitch your idea', 'A paragraph and the ask you want to make.'],
+  ['Shape it with us', 'Our template walks you through the five acts.'],
+  ['Record', 'Ten slides advance on their own; you’re on camera in the corner.'],
+  ['Premiere and lean-ins', 'Members watch, and we introduce you to the ones who lean in.'],
+];
+const introHref = (t) => `mailto:hello@mindshiftcollective.net?subject=${encodeURIComponent('Intro request: ' + (t.person || t.presenter) + ' (Presenter Series)')}&body=${encodeURIComponent('I watched "' + t.title + '" and would like an introduction to ' + (t.person || t.presenter) + '.\n\nA little about me and why:\n')}`;
 ---
-<Base title="Presenter Series" current="/presenter-series" description="Ten-minute talks from members of Mind Shift Collective: one idea, fifteen slides, forty seconds each.">
-  <section style="padding-top:96px;padding-bottom:72px;">
-    <div class="wrap row" style="gap:48px;align-items:center;">
-      <div class="stack-lg" style="flex:1 1 520px;min-width:0;">
+<Base title="Presenter Series" current="/presenter-series" description="Five-minute talks from members of Mind Shift Collective: one idea, ten slides, thirty seconds each.">
+  <section class="ps-hero">
+    <span class="ring" style="right:-220px;top:-180px;width:760px;height:760px;border-color:#8E7CC3;opacity:.25"></span>
+    <span class="ring" style="right:-120px;top:-80px;width:560px;height:560px;border-color:#3E8E8A;opacity:.3"></span>
+    <span class="ring" style="right:-20px;top:20px;width:360px;height:360px;border-color:#C9A227;opacity:.45"></span>
+    <div class="wrap row" style="position:relative;gap:56px;align-items:center;">
+      <div class="stack-lg" style="flex:999 1 560px;min-width:0;">
         <p class="eyebrow">Presenter Series</p>
-        <h1 style="font-size:clamp(42px,6vw,68px);">Ten minutes to start a conversation.</h1>
-        <p class="lede">Our field's best ideas are buried in journals, dockets and sixty-slide decks. Each talk here is one idea from one member, in fifteen slides of forty seconds each. Not to finish the conversation. To start it.</p>
+        <h1 style="font-size:clamp(44px,6.5vw,84px);line-height:.98;">Five minutes. One idea. See who leans in.</h1>
+        <p class="lede">Our field’s best ideas are buried in journals, dockets and sixty-slide decks. Each talk here is one member, one idea, ten slides that advance on their own. Not to finish the conversation. To start it.</p>
         <div class="row">
           <a class="btn" href="#watch">Watch the talks</a>
           <a class="btn ghost" href="#present">Apply to present</a>
+          <a href="/presenter-series/why" style="align-self:center;font-weight:600;">Why present?</a>
         </div>
       </div>
-      <div class="row" style="flex:1 1 380px;justify-content:center;gap:8px 22px;font-family:var(--serif);color:var(--forest);" aria-label="15 slides times 40 seconds equals 10 minutes">
-        <div style="text-align:center;"><div style="font-size:96px;line-height:1;">15</div><div class="muted" style="font-family:var(--sans);">slides</div></div>
-        <span style="font-size:56px;color:var(--gold);" aria-hidden="true">×</span>
-        <div style="text-align:center;"><div style="font-size:96px;line-height:1;">40</div><div class="muted" style="font-family:var(--sans);">seconds</div></div>
-        <span style="font-size:56px;color:var(--gold);" aria-hidden="true">=</span>
-        <div style="text-align:center;"><div style="font-size:96px;line-height:1;">10</div><div class="muted" style="font-family:var(--sans);">minutes</div></div>
+      <div class="clock" aria-label="10 slides times 30 seconds equals 5 minutes">
+        <div class="clock-sum" aria-hidden="true"><span>10</span><i>×</i><span>30s</span><i>=</i><span>5</span><small>min</small></div>
+        <div class="bars" aria-hidden="true">
+          {barColors.map((c, i) => <span style={`height:${heights[i]}px;background:${c};animation-duration:${(2.4 + (i % 5) * 0.3).toFixed(1)}s;animation-delay:${(i * 0.12).toFixed(2)}s`}></span>)}
+        </div>
+        <div class="acts-mini" aria-hidden="true"><span>Hook</span><span>Context</span><span>Evidence</span><span>Opportunity</span><span>Close</span></div>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:#CFD8D2;">Slides advance every 30 seconds. You’re on camera in the corner the whole time.</p>
       </div>
     </div>
   </section>
 
   <section id="watch" class="white">
     <div class="wrap stack-lg">
-      <div class="row between">
-        <div><p class="eyebrow">The talks</p><h2>Watch, then lean in</h2></div>
-        <p style="max-width:460px;color:var(--ink-2);font-size:15px;">Every talk ends with an ask. If one speaks to you, tell us and we'll connect you with the presenter.</p>
-      </div>
-      {talks.length === 0
-        ? <div class="card" style="text-align:center;padding:48px;background:var(--ground);">
-            <h3>The first session is being recorded.</h3>
-            <p style="color:var(--ink-2);">Subscribe on <a href="https://www.youtube.com/@mindshifthealth">YouTube</a> or <a href="/#stay-close">join the newsletter</a> to see it first.</p>
+      {showExamples && featured ? (
+        <>
+          <div class="row between" style="align-items:flex-end;">
+            <div><p class="eyebrow">Talk of the month</p><h2>Start here</h2></div>
+            <p class="example-note">Example talks: these show the format. Our first sessions are being recorded now.</p>
           </div>
-        : <div class="talks">
+          <a class="feature" href="#present" aria-label={`Example talk: ${featured.title}`}>
+            <span class="feature-media" style={`background:${featured.bg}`}>
+              <span class="ring" style={`left:50%;top:50%;width:580px;height:580px;margin:-290px 0 0 -290px;border-color:${featured.accent};opacity:.22`}></span>
+              <span class="ring" style={`left:50%;top:50%;width:400px;height:400px;margin:-200px 0 0 -200px;border-color:${featured.accent};opacity:.38`}></span>
+              <span class="ring" style={`left:50%;top:50%;width:240px;height:240px;margin:-120px 0 0 -120px;border-color:${featured.accent};opacity:.55`}></span>
+              <span class="hero-word" style="font-size:clamp(56px,7vw,88px);">{featured.hero}</span>
+              <span class="dur">5:00</span>
+              <span class="example-tag">Example</span>
+              <span class="iris big"><span style={`border-color:${featured.bg}`}>{featured.initials}</span></span>
+            </span>
+            <span class="feature-body">
+              <span style="font-size:13px;color:#CFD8D2;">{featured.lens} lens · {featured.month}</span>
+              <span style="font-family:var(--serif);font-size:36px;line-height:1.1;">{featured.title}</span>
+              <span style="font-size:15px;color:#CFD8D2;">{featured.person} · {featured.role}, {featured.org}</span>
+              <span class="ask"><strong>The ask:</strong> {featured.ask}</span>
+            </span>
+          </a>
+          <div class="talk-grid">
+            {rest.map((t) => (
+              <article class="tcard">
+                <span class="tthumb" style={`background:${t.bg}`}>
+                  <span class="ring" style={`left:50%;top:50%;width:200px;height:200px;margin:-100px 0 0 -100px;border-color:${t.accent};opacity:.45`}></span>
+                  <span class="hero-word" style="font-size:38px;">{t.hero}</span>
+                  <span class="dur small">5:00</span>
+                  <span class="example-tag small">Example</span>
+                  <span class="iris"><span style={`border-color:${t.bg}`}>{t.initials}</span></span>
+                </span>
+                <div class="tbody">
+                  <div class="row" style="gap:12px;align-items:center;flex-wrap:nowrap;">
+                    <span class="mono" style={`background:${t.bg}`}>{t.mono}</span>
+                    <span class="stack" style="gap:2px;min-width:0;">
+                      <span style="font-size:18px;font-weight:600;line-height:1.2;">{t.org}</span>
+                      <span class="muted" style="font-size:13px;">{t.location}</span>
+                    </span>
+                  </div>
+                  <p style="margin:0;font-size:15px;line-height:1.45;">{t.tagline}</p>
+                  <div class="row" style="gap:6px;font-size:12px;font-weight:600;">
+                    <span class="tag gold">S01</span><span class="tag green">{t.lens}</span><span class="tag sand">{t.stage}</span>
+                  </div>
+                  <div style="font-size:13px;color:var(--ink-2);"><strong style="color:var(--ink);font-weight:600;">{t.person}</strong> · {t.role}</div>
+                  <div class="stack" style="gap:6px;">
+                    <span class="mini-label">Looking for</span>
+                    <div class="row" style="gap:6px;">{t.asks.map((a) => <span class="pill">{a}</span>)}</div>
+                  </div>
+                  <div class="tfoot">
+                    <span class="bars small" aria-hidden="true">{barColors.map((c, i) => <span style={`height:${Math.round(heights[i] * 0.38)}px;background:${c === '#7FB59C' ? '#2E5E4E' : c}`}></span>)}</span>
+                    <a class="contact" href="#present" title="Example talk: Contact works on real talks">Contact</a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div class="row between">
+            <div><p class="eyebrow">The talks</p><h2>Watch, then lean in</h2></div>
+            <p style="max-width:460px;color:var(--ink-2);font-size:15px;">Every talk ends with an ask. If one speaks to you, tell us and we'll connect you with the presenter.</p>
+          </div>
+          <div class="talks">
             {talks.map((t) => (
               <article class="card talk" id={t.slug}>
                 <YouTube video={t.youtube} title={`${t.title}, ${t.presenter}`} />
@@ -66,67 +140,129 @@ const beliefs = [
                   {t.ask && <p style="margin:4px 0 0;font-size:15px;"><span class="chip gold">The ask</span> {t.ask}</p>}
                 </div>
                 <div class="row" style="gap:10px;margin-top:auto;">
-                  <a class="btn" href={`mailto:hello@mindshiftcollective.net?subject=${encodeURIComponent('Intro request: ' + t.presenter + ' (Presenter Series)')}&body=${encodeURIComponent('I watched "' + t.title + '" and would like an introduction to ' + t.presenter + '.\n\nA little about me and why:\n')}`}>Ask for an intro</a>
+                  <a class="btn" href={introHref(t)}>Contact</a>
                   <a class="btn ghost" href={t.youtube} target="_blank" rel="noopener">Watch on YouTube</a>
                 </div>
               </article>
             ))}
-          </div>}
+          </div>
+        </>
+      )}
     </div>
   </section>
 
   <section>
     <div class="wrap stack-lg">
-      <div class="narrow"><p class="eyebrow">The format</p><h2>Five acts, every time</h2>
-        <p class="lede" style="margin-top:14px;">Every talk follows the same shape, so audiences know what's coming and presenters have room to land one idea well. Slides advance on their own.</p></div>
-      <div class="row" style="gap:10px;align-items:stretch;">
-        {acts.map(([n, s, t, b]) => (
-          <div class="stack" style="flex:1 1 170px;gap:6px;border:1px solid var(--line);border-top:4px solid var(--forest);border-radius:12px;background:#fff;padding:18px;">
-            <span style="font-family:var(--serif);font-size:24px;">{n}</span>
-            <span class="muted" style="font-size:13px;">{s} · {t}</span>
-            <span style="font-size:14px;color:var(--ink-2);">{b}</span>
+      <div class="narrow"><p class="eyebrow">The format</p><h2>Five acts, every time.</h2>
+        <p class="lede" style="margin-top:14px;">The same shape for every talk, so audiences know what’s coming and presenters have room to land one idea well.</p></div>
+      <div class="act-grid">
+        {acts.map((a) => (
+          <div class="act" style={`border-top-color:${a.color}`}>
+            <span style="font-family:var(--serif);font-size:26px;">{a.name}</span>
+            <span class="muted" style="font-size:13px;">{a.slides} · {a.time}</span>
+            <span style="font-size:15px;line-height:1.45;color:var(--ink-2);">{a.line}</span>
           </div>
         ))}
-      </div>
-      <div class="rule-list" style="margin-top:24px;">
-        {beliefs.map(([t, b]) => (<div><h3 style="font-size:22px;">{t}</h3><p style="color:var(--ink-2);font-size:15px;">{b}</p></div>))}
       </div>
     </div>
   </section>
 
-  <section id="present" class="band">
-    <div class="wrap row" style="gap:48px;align-items:flex-start;">
-      <div class="stack" style="flex:1 1 420px;min-width:0;gap:18px;">
-        <p class="eyebrow" style="margin:0;">Present at a session</p>
-        <h2>Bring the thing you can't stop thinking about</h2>
-        <p style="color:var(--ink-2);">The result that surprised you. The policy question nobody is asking. The funding you need seen. Say it in ten minutes and see who leans in. Open to members of the collective.</p>
-        <p style="font-weight:600;">What you'll deliver</p>
-        <ul style="margin:0;padding-left:20px;color:var(--ink-2);font-size:15px;display:flex;flex-direction:column;gap:6px;">
-          <li>One 10-minute video: 15 slides, 40 seconds each, advancing on their own</li>
-          <li>You on camera in the bottom-right corner of every slide</li>
-          <li>Exported as a 1080p .mp4</li>
-          <li>Required disclosures (investigational status, conflicts of interest) on the first or last slide, and said aloud</li>
-        </ul>
-        <p class="muted">The slide template and presenter guide are coming soon.</p>
-      </div>
-      <form class="panel" style="flex:1 1 420px;min-width:0;" name="presenter-pitch" method="POST" action="/thank-you?f=pitch" data-netlify="true" netlify-honeypot="company_website" enctype="multipart/form-data">
-        <input type="hidden" name="form-name" value="presenter-pitch" />
-        <input type="hidden" name="subject" value="[MSC Pitch] New Presenter Series pitch" />
-        <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
-        <h3>Pitch your talk</h3>
-        <div class="row" style="gap:14px;align-items:flex-start;">
-          <div class="field"><label for="p-name">Your name</label><input id="p-name" name="name" type="text" required autocomplete="name" /></div>
-          <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" required autocomplete="email" /></div>
-        </div>
-        <div class="field"><label for="p-title">Working title</label><input id="p-title" name="title" type="text" required /></div>
-        <div class="field"><label for="p-idea">The one idea, in a sentence</label><textarea id="p-idea" name="idea" rows="3" required></textarea></div>
-        <div class="field"><label for="p-ask">Your ask at the end</label><input id="p-ask" name="ask" type="text" placeholder="A question, a next study, a person to call, a funding need" /></div>
-        <div class="field"><label for="p-file">Video or slides (optional now)</label><input id="p-file" name="attachment" type="file" /></div>
-        <button class="btn" type="submit" style="align-self:flex-start;">Send pitch</button>
-      </form>
+  <section style="background:#E9E4D8;">
+    <div class="wrap belief-grid">
+      {beliefs.map(([t, b]) => (
+        <div class="belief"><h3>{t}</h3><p>{b}</p></div>
+      ))}
     </div>
   </section>
+
+  <section id="present">
+    <div class="wrap">
+      <div class="apply">
+        <span class="ring" style="left:-160px;bottom:-260px;width:520px;height:520px;border-color:#C9A227;opacity:.3"></span>
+        <div class="stack" style="position:relative;flex:999 1 460px;min-width:0;gap:16px;">
+          <p class="eyebrow" style="color:#F3E7C2;margin:0;">Present at a session</p>
+          <h2 style="color:#F6F3EC;">Bring the thing you can’t stop thinking about.</h2>
+          <p style="margin:0;font-size:17px;line-height:1.55;color:#CFD8D2;max-width:540px;">The result that surprised you. The policy question nobody is asking. The bet you would make if you could. Say it in five minutes. Open to members of the collective, free.</p>
+          <ol class="steps">
+            {steps.map(([t, b], i) => (
+              <li><span class="num">{i + 1}</span><span class="stack" style="gap:2px;"><strong>{t}</strong><span style="font-size:14px;color:#CFD8D2;">{b}</span></span></li>
+            ))}
+          </ol>
+          <a href="/presenter-series/why" style="color:#F3E7C2;font-weight:600;">What presenters get →</a>
+        </div>
+        <form class="panel" style="position:relative;flex:1 1 380px;min-width:0;color:var(--ink);" name="presenter-pitch" method="POST" action="/thank-you?f=pitch" data-netlify="true" netlify-honeypot="company_website" enctype="multipart/form-data">
+          <input type="hidden" name="form-name" value="presenter-pitch" />
+          <input type="hidden" name="subject" value="[MSC Pitch] New Presenter Series pitch" />
+          <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+          <h3>Pitch your talk</h3>
+          <div class="row" style="gap:14px;align-items:flex-start;">
+            <div class="field"><label for="p-name">Your name</label><input id="p-name" name="name" type="text" required autocomplete="name" /></div>
+            <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" required autocomplete="email" /></div>
+          </div>
+          <div class="field"><label for="p-title">Working title</label><input id="p-title" name="title" type="text" required /></div>
+          <div class="field"><label for="p-idea">The one idea, in a sentence</label><textarea id="p-idea" name="idea" rows="3" required></textarea></div>
+          <div class="field"><label for="p-ask">Your ask at the end</label><input id="p-ask" name="ask" type="text" placeholder="A question, a next study, a person to call, a funding need" /></div>
+          <div class="field"><label for="p-file">Video or slides (optional now)</label><input id="p-file" name="attachment" type="file" /></div>
+          <button class="btn" type="submit" style="align-self:flex-start;">Send pitch</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <style>
+    .ps-hero { position: relative; overflow: hidden; padding-top: 96px; padding-bottom: 88px; }
+    .ring { position: absolute; border-radius: 50%; border: 1px solid; pointer-events: none; }
+    .clock { flex: 1 1 360px; display: flex; flex-direction: column; gap: 22px; background: #1F3A31; color: #F6F3EC; border-radius: 26px; padding: 36px; position: relative; }
+    .clock-sum { display: flex; align-items: baseline; gap: 12px; font-family: var(--serif); flex-wrap: wrap; }
+    .clock-sum { flex-wrap: nowrap; gap: 8px; }
+    .clock-sum span { font-size: clamp(40px, 4.4vw, 60px); line-height: 1; }
+    .clock-sum i { font-style: normal; font-size: 28px; color: #C9A227; }
+    .clock-sum small { font-family: var(--sans); font-size: 15px; color: #CFD8D2; }
+    .bars { display: flex; align-items: flex-end; gap: 5px; height: 64px; }
+    .bars span { flex: 1; border-radius: 4px; transform-origin: bottom; animation-name: beat; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+    .bars.small { flex: 1; gap: 2px; height: 22px; }
+    .bars.small span { border-radius: 2px; animation: none; }
+    @keyframes beat { 0%,100% { transform: scaleY(.55); } 50% { transform: scaleY(1); } }
+    @keyframes iris { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .bars span, .iris.big { animation: none !important; } }
+    .acts-mini { display: grid; grid-template-columns: 1fr 2fr 4fr 2fr 1fr; gap: 5px; font-size: 11px; font-weight: 600; color: #CFD8D2; }
+    .example-note { margin: 0; max-width: 420px; font-size: 14px; color: var(--ink-2); background: #F3E7C2; border-radius: 10px; padding: 10px 14px; }
+    .feature { display: flex; flex-wrap: wrap; background: #1F3A31; border-radius: 24px; overflow: hidden; color: #F6F3EC; text-decoration: none; }
+    .feature:hover { color: #F6F3EC; }
+    .feature-media { flex: 999 1 520px; min-width: 0; position: relative; min-height: 360px; align-self: stretch; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .feature-body { flex: 1 1 360px; padding: 40px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+    .feature .ask { font-size: 15px; line-height: 1.5; background: rgba(246,243,236,.08); border-radius: 12px; padding: 14px 16px; }
+    .feature .ask strong { font-weight: 600; }
+    .hero-word { position: relative; font-family: var(--serif); color: #fff; }
+    .dur { position: absolute; left: 22px; top: 20px; font-size: 13px; font-weight: 600; color: #fff; background: rgba(0,0,0,.35); padding: 5px 11px; border-radius: 999px; }
+    .dur.small { left: 12px; top: 12px; font-size: 12px; padding: 4px 9px; }
+    .example-tag { position: absolute; right: 22px; top: 20px; font-size: 12px; font-weight: 600; color: #1F3A31; background: #F3E7C2; padding: 4px 10px; border-radius: 999px; }
+    .example-tag.small { right: 12px; top: 12px; font-size: 11px; padding: 3px 8px; }
+    .iris { position: absolute; right: 12px; bottom: 12px; width: 54px; height: 54px; border-radius: 50%; padding: 3px; box-sizing: border-box; background: conic-gradient(from 20deg, #C9A227, #3E8E8A, #8E7CC3, #C8754A, #C9A227); }
+    .iris > span { display: flex; width: 100%; height: 100%; border-radius: 50%; background: #E9E4D8; border: 3px solid; box-sizing: border-box; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #1F3A31; }
+    .iris.big { right: 24px; bottom: 24px; width: 108px; height: 108px; padding: 4px; animation: iris 16s linear infinite; }
+    .iris.big > span { border-width: 4px; font-size: 26px; }
+    .talk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .tcard { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+    .tthumb { position: relative; display: flex; align-items: center; justify-content: center; height: 190px; overflow: hidden; }
+    .tbody { padding: 18px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .mono { flex: none; width: 48px; height: 48px; border-radius: 12px; color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 21px; }
+    .tag { padding: 3px 9px; border-radius: 6px; }
+    .tag.gold { color: #5A4310; background: #F3E7C2; } .tag.green { color: #1F3A31; background: #E3EDE7; } .tag.sand { color: #3A403C; background: #EFEADF; }
+    .mini-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .pill { font-size: 13px; color: #1F3A31; border: 1px solid #C9D9CF; padding: 4px 10px; border-radius: 999px; }
+    .tfoot { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 12px; border-top: 1px solid #EFEADF; }
+    .contact { flex: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 16px; border-radius: 999px; border: 1px solid var(--forest); color: var(--forest); font-weight: 600; font-size: 14px; text-decoration: none; }
+    .act-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .act { display: flex; flex-direction: column; gap: 8px; background: #fff; border: 1px solid var(--line); border-top: 4px solid; border-radius: 14px; padding: 20px; }
+    .belief-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px; }
+    .belief { border-top: 2px solid #1F3A31; padding-top: 18px; }
+    .belief h3 { margin: 0 0 10px; font-size: 24px; line-height: 1.15; }
+    .belief p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+    .apply { position: relative; overflow: hidden; display: flex; flex-wrap: wrap; gap: 48px; background: #1F3A31; color: #F6F3EC; border-radius: 28px; padding: clamp(28px, 5vw, 56px); }
+    .steps { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .steps li { display: flex; gap: 14px; align-items: flex-start; }
+    .steps .num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #F6F3EC; color: #1F3A31; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; }
     .talks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 24px; }
     .talk { gap: 16px; padding: 18px; }
   </style>
