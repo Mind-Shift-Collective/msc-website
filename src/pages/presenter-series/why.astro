@@ -1,30 +1,30 @@
 ---
-import Base from '../../layouts/Base.astro';
-// "Why present" page, from the Presenter Series design. Benefits marked here are promises:
-// each needs an owner before the series launches (see the project brief, Open questions).
+// "Why present" page: branded to match the Presenter Series landing page (same design, palette, type and backdrop).
+// Standalone page, like /presenter-series/. Each benefit marked here is a promise: it needs an owner before launch (see the project brief).
+const JOIN_ONLY = true;
 const groups = [
-  { title: 'Get found', sub: 'Search and discovery that keeps working', color: '#C9A227', items: [
+  { title: 'Get found', sub: 'Search and discovery that keeps working', color: 'var(--red)', items: [
     ['SEO backlink', 'A followed link from mindshiftcollective.net to your site, on your talk page and your member card.'],
     ['Searchable transcript', 'The full text of your talk is on the page, so people searching your topic or company land on it.'],
     ['YouTube reach', 'Published on the Mind Shift Collective channel with your links in the description.'],
     ['An evergreen page', 'Your talk stays in the library after the premiere, filed by sector and stage.'],
     ['Rank for your own name', 'A trusted page about you and your company, which helps your name search show your work.'],
   ] },
-  { title: 'Get seen', sub: 'In front of the people building this field', color: '#3E8E8A', items: [
+  { title: 'Get seen', sub: 'In front of the people building this field', color: 'var(--blue)', items: [
     ['Visibility', 'Premiered to about 300 builders: founders, funders, clinicians, researchers and policy people.'],
     ['Newsletter feature', 'Each new talk goes out to our newsletter and industry update readers.'],
     ['Presented at MSC badge', 'A mark for your website, deck and LinkedIn that signals a vetted talk.'],
     ['Credibility by association', 'Listed beside peers who signed the North Star Ethics Pledge. No pay-to-play.'],
     ['Social posts', 'We post your talk on our channels and tag you, so your network sees it too.'],
   ] },
-  { title: 'Get connected', sub: 'Inbound that is already warm', color: '#8E7CC3', items: [
+  { title: 'Get connected', sub: 'Inbound that is already warm', color: 'var(--maroon)', items: [
     ['Inbound leads', 'Viewers press Contact on your card. We screen every message, so only real ones reach you.'],
     ['Warm introductions', 'Each lead arrives as one email from hello@ to both of you, with context on who they are.'],
     ['Funders and partners', 'Investors, funders and payers browse by sector and by your Looking for list.'],
     ['Hiring', 'Mission-aligned people see what you are building and why, before they ever see a job post.'],
     ['Speaking and press', 'Event organizers and journalists can use the library to find speakers and sources.'],
   ] },
-  { title: 'Get sharper', sub: 'Better at telling your story', color: '#C8754A', items: [
+  { title: 'Get sharper', sub: 'Better at telling your story', color: 'var(--orange)', items: [
     ['Sharing collateral', 'A full kit of video, clips, slides and copy, ready to send. See below.'],
     ['A tighter story', 'Ten slides in five minutes forces the one idea. Reuse it in your pitch and on your homepage.'],
     ['Coaching', 'Our five-act template and a review from the team before you record.'],
@@ -32,8 +32,6 @@ const groups = [
     ['Low lift', 'Recorded once from your desk. No travel, no stage, no fee.'],
   ] },
 ];
-let n = 0;
-const numbered = groups.map((g) => ({ ...g, items: g.items.map(([t, b]) => ({ n: String(++n).padStart(2, '0'), t, b })) }));
 const kit = [
   ['The 5-minute video', 'Full quality, plus an embed code for your website.'],
   ['Three short clips', 'Vertical cuts of about 30 seconds for LinkedIn and Instagram.'],
@@ -45,99 +43,339 @@ const kit = [
   ['Your talk page link', 'One link with the video, your company, your ask and a Contact button.'],
 ];
 const people = [
-  ['Founders', 'Investor and payer interest, pilot sites, customers and hires.'],
-  ['Researchers', 'Collaborators, study sites, participants and funding leads.'],
-  ['Clinicians', 'Referral partners, training partners and peer visibility.'],
-  ['Funders', 'Strong applicants and co-funders who share your priorities.'],
-  ['Consultants and advisors', 'Clients who already understand how you think.'],
+  ['Founders', 'Investor and payer interest, pilot sites, customers and hires.', 'var(--orange)'],
+  ['Researchers', 'Collaborators, study sites, participants and funding leads.', 'var(--red)'],
+  ['Clinicians', 'Referral partners, training partners and peer visibility.', 'var(--maroon)'],
+  ['Funders', 'Strong applicants and co-funders who share your priorities.', 'var(--blue)'],
+  ['Consultants and advisors', 'Clients who already understand how you think.', 'var(--ink)'],
 ];
+let n = 0;
+const numbered = groups.map((g) => ({ ...g, items: g.items.map(([t, b]) => { n += 1; return { n: String(n).padStart(2, '0'), t, b }; }) }));
+const stats = [['5 min', 'to record'], ['10', 'slides, 30 seconds each'], ['$0', 'for members']];
 ---
-<Base title="Why present · Presenter Series" current="/presenter-series" description="What members get from a five-minute Presenter Series talk: discovery, visibility, warm introductions and a ready-to-share kit.">
-  <section class="why-hero">
-    <span class="ring" style="right:-200px;top:-220px;width:720px;height:720px;border-color:#8E7CC3;opacity:.25"></span>
-    <span class="ring" style="right:-100px;top:-120px;width:520px;height:520px;border-color:#3E8E8A;opacity:.3"></span>
-    <span class="ring" style="right:0;top:-20px;width:320px;height:320px;border-color:#C9A227;opacity:.45"></span>
-    <div class="wrap stack-lg" style="position:relative;max-width:900px;margin-left:auto;margin-right:auto;">
-      <p class="eyebrow"><a href="/presenter-series" style="color:inherit;">Presenter Series</a> · Why present</p>
-      <h1 style="font-size:clamp(40px,5.5vw,64px);line-height:1.02;">Five minutes of your time. A year of being found.</h1>
-      <p class="lede">One recorded talk becomes a page, a link, a video, a stack of shareable assets and a steady line of screened introductions. Here is what presenters get.</p>
-    </div>
-  </section>
+<!doctype html>
+<html lang="en" class={JOIN_ONLY ? 'soft-launch' : undefined}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Why present · Presenter Series · Mind Shift Collective</title>
+  <meta name="description" content="What presenters get from a Presenter Series talk: search reach, warm introductions, a shareable kit and a tighter story." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Fira+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style is:global>
 
-  <section style="padding-top:24px;">
-    <div class="wrap stack-lg" style="gap:56px;">
-      {numbered.map((g) => (
-        <div class="stack" style="gap:20px;">
-          <div class="row" style="align-items:baseline;gap:14px;">
-            <span style={`flex:none;width:14px;height:14px;border-radius:4px;background:${g.color}`}></span>
-            <h2 style="font-size:36px;margin:0;">{g.title}</h2>
-            <span class="muted" style="font-size:15px;">{g.sub}</span>
-          </div>
-          <div class="benefits">
-            {g.items.map((it) => (
-              <div class="benefit" style={`border-top-color:${g.color}`}>
-                <span class="muted" style="font-size:12px;font-weight:600;">{it.n}</span>
-                <h3>{it.t}</h3>
-                <p>{it.b}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+/* VOICE: Mind Shift Collective — calm, credible, a little awe. Light, airy, honest.
+ IDEA: the brand's sunburst mark as a slide clock — 10 rays of 30 seconds.
+ PICTURE: ghosted sunburst behind the hero (as in the style reference) + the 10×30s clock panel.
+ COLOUR and TYPE: sage-stone ground #E0E2D8, ink #231F20, orange accent #FF4930, act colours red/maroon/blue.
+ Fira Sans Light for display (matches the reference headlines), DM Sans for text and UI (brand type sheet).
+ LAYOUT: rule-separated bands, ink-bordered cards with colour caps, dark ink band for the call to present. */
+:root{
+ color-scheme:light;
+ --bg:#E0E2D8;--tint:#EAEBE4;--ghost:#C8C9C2;--ink:#231F20;--ink-2:#4A4546;--muted:#6B6767;
+ --orange:#FF4930;--red:#D74339;--maroon:#752A32;--blue:#62A1F8;--on-dark:#E0E2D8;--on-dark-2:#B9BAB3;
+ --display:"Fira Sans",system-ui,sans-serif;--sans:"DM Sans",system-ui,-apple-system,sans-serif;
+ --r:10px;--mark:url("/brand/msc-mark.png");--logo:url("/brand/msc-logo.png");
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-underline-offset:3px}
+h1,h2,h3{font-family:var(--display);font-weight:300;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(34px,4.4vw,52px);line-height:1.05}
+h3{font-weight:500;font-size:22px;line-height:1.2}
+p{margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(5vw,18px)}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);margin:0 0 14px}
+.lede{font-size:clamp(17px,1.6vw,20px);line-height:1.55;color:var(--ink-2);max-width:60ch}
+.muted{color:var(--muted)}
+.rule{border:0;border-top:1px solid var(--ink);opacity:.55;margin:0}
+.mark{display:block;background:currentColor;-webkit-mask:var(--mark) center/contain no-repeat;mask:var(--mark) center/contain no-repeat;aspect-ratio:900/718}
+.logo{display:block;background:currentColor;-webkit-mask:var(--logo) left center/contain no-repeat;mask:var(--logo) left center/contain no-repeat;aspect-ratio:900/196}
+.soft-launch [data-site-only]{display:none!important}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--bg);padding:8px 12px;z-index:10}.skip:focus{left:8px}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
 
-      <div class="kit">
-        <span class="ring" style="left:-160px;bottom:-280px;width:560px;height:560px;border-color:#C9A227;opacity:.3"></span>
-        <div class="stack" style="position:relative;flex:1 1 360px;gap:14px;">
-          <p class="eyebrow" style="color:#F3E7C2;margin:0;">The presenter kit</p>
-          <h2 style="color:#F6F3EC;font-size:40px;line-height:1.08;">Everything you need to share it.</h2>
-          <p style="margin:0;font-size:16px;line-height:1.55;color:#CFD8D2;">Sent to you the day your talk premieres. Use it in investor updates, sales emails, grant applications, your website and LinkedIn.</p>
-        </div>
-        <div class="kit-grid">
-          {kit.map(([t, b]) => (
-            <div class="kit-item"><span class="dot"></span><span class="stack" style="gap:2px;"><strong>{t}</strong><span>{b}</span></span></div>
-          ))}
-        </div>
-      </div>
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 24px;border-radius:var(--r);border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);font:500 16px/1 var(--sans);text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink)}.btn.ghost:hover{background:var(--ink);color:var(--bg)}
+.btn.light{background:var(--on-dark);border-color:var(--on-dark);color:var(--ink)}.btn.light:hover{background:transparent;color:var(--on-dark)}
+.link{font-weight:600;align-self:center}
 
-      <div class="stack" style="gap:20px;">
-        <div class="row" style="align-items:baseline;gap:14px;">
-          <h2 style="font-size:36px;margin:0;">Not just for founders</h2>
-          <span class="muted" style="font-size:15px;">What each kind of member tends to get</span>
-        </div>
-        <div class="benefits">
-          {people.map(([w, g]) => (
-            <div class="person"><span class="iris-sm"><span></span></span><h3>{w}</h3><p>{g}</p></div>
-          ))}
-        </div>
-      </div>
+/* header */
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-top:22px;padding-bottom:22px;flex-wrap:wrap}
+header .logo{width:200px;color:var(--ink)}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;font-size:15px}
+nav a{text-decoration:none}nav a:hover{text-decoration:underline}
+nav a[aria-current]{font-weight:600;color:var(--red)}
+nav .btn{min-height:44px;padding:10px 20px;font-size:15px;background:transparent;color:var(--ink)}
+nav .btn:hover{background:var(--ink);color:var(--bg)}
 
-      <div class="row between" style="gap:32px;align-items:center;border-top:1px solid #D9D3C4;padding-top:48px;">
-        <div class="row" style="gap:40px;font-family:var(--serif);color:var(--forest);">
-          <span class="stack" style="gap:0;"><span style="font-size:52px;line-height:1;">5 min</span><span class="muted" style="font-family:var(--sans);font-size:14px;">to record</span></span>
-          <span class="stack" style="gap:0;"><span style="font-size:52px;line-height:1;">10</span><span class="muted" style="font-family:var(--sans);font-size:14px;">slides, 30 seconds each</span></span>
-          <span class="stack" style="gap:0;"><span style="font-size:52px;line-height:1;">$0</span><span class="muted" style="font-family:var(--sans);font-size:14px;">for members</span></span>
-        </div>
-        <a class="btn" href="/presenter-series#present">Pitch your talk</a>
-      </div>
-    </div>
-  </section>
+/* hero */
+.hero{position:relative;overflow:hidden;padding:clamp(48px,7vw,100px) 0 clamp(56px,7vw,96px)}
+.hero .sun{position:absolute;right:-14vw;top:50%;width:min(980px,82vw);translate:0 -50%;color:var(--ghost);animation:spin 240s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+.hero .wrap{position:relative;display:flex;flex-wrap:wrap;gap:48px 56px;align-items:center}
+.hero-copy{flex:999 1 560px;display:flex;flex-direction:column;gap:22px}
+.hero h1{font-size:clamp(46px,6.6vw,88px);line-height:1}
+.hero h1 em{font-style:normal;color:var(--orange);font-weight:400}
+.hero .tagline{font-family:var(--display);font-size:clamp(20px,2vw,26px);font-weight:300;color:var(--ink)}
 
-  <style>
-    .why-hero { position: relative; overflow: hidden; padding-top: 88px; padding-bottom: 48px; }
-    .ring { position: absolute; border-radius: 50%; border: 1px solid; pointer-events: none; }
-    .benefits { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-    .benefit, .person { display: flex; flex-direction: column; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
-    .benefit { border-top: 4px solid; }
-    .benefit h3 { margin: 0; font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 1.25; }
-    .benefit p, .person p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
-    .person h3 { margin: 0; font-size: 22px; }
-    .iris-sm { width: 44px; height: 44px; border-radius: 50%; padding: 3px; box-sizing: border-box; background: conic-gradient(from 20deg, #C9A227, #3E8E8A, #8E7CC3, #C8754A, #C9A227); }
-    .iris-sm > span { display: block; width: 100%; height: 100%; border-radius: 50%; background: #E9E4D8; border: 3px solid #fff; box-sizing: border-box; }
-    .kit { position: relative; overflow: hidden; display: flex; flex-wrap: wrap; gap: 40px; background: #1F3A31; color: #F6F3EC; border-radius: 28px; padding: clamp(28px, 5vw, 48px); }
-    .kit-grid { position: relative; flex: 2 1 420px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-    .kit-item { display: flex; gap: 12px; align-items: flex-start; background: rgba(246,243,236,.07); border: 1px solid rgba(246,243,236,.14); border-radius: 14px; padding: 14px 16px; }
-    .kit-item .dot { flex: none; width: 10px; height: 10px; margin-top: 6px; border-radius: 3px; background: #C9A227; }
-    .kit-item strong { font-size: 15px; font-weight: 600; }
-    .kit-item span span { font-size: 13px; line-height: 1.45; color: #CFD8D2; }
+/* clock */
+.clock{flex:1 1 340px;max-width:440px;background:var(--tint);border:1.5px solid var(--ink);border-radius:4px;padding:26px 26px 22px;display:flex;flex-direction:column;gap:18px}
+.clock-sum{font-family:var(--display);font-weight:300;font-size:clamp(40px,4.4vw,54px);line-height:1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.clock-sum i{font-style:normal;color:var(--orange);font-size:.55em}
+.clock-sum small{font-size:16px;font-family:var(--sans);color:var(--muted)}
+.bars{display:flex;align-items:flex-end;gap:6px;height:72px}
+.bars span{flex:1;border-radius:2px 2px 0 0;transform-origin:bottom;animation:pulse 3s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scaleY(.55)}to{transform:scaleY(1)}}
+.acts-mini{display:grid;grid-template-columns:minmax(max-content,1fr) 2fr 4fr 2fr minmax(max-content,1fr);gap:6px;font-size:12px;color:var(--ink-2)}
+.acts-mini span{border-top:3px solid;padding-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clock p{font-size:14px;line-height:1.5;color:var(--ink-2)}
+
+/* talks */
+.band{padding:clamp(56px,7vw,96px) 0}
+.band.tint{background:var(--tint)}
+.head-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 40px;margin-bottom:32px}
+.note{font-size:14px;color:var(--muted);max-width:340px;font-style:italic}
+.feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);border:1.5px solid var(--ink);text-decoration:none;color:var(--on-dark);background:var(--ink);margin-bottom:28px}
+.media{position:relative;overflow:hidden;display:grid;place-items:center;min-height:320px;background:var(--maroon)}
+.media .mark{position:absolute;width:150%;max-width:none;color:var(--on-dark);opacity:.14;left:50%;top:50%;translate:-50% -50%}
+.word{position:relative;font-family:var(--display);font-weight:300;color:var(--on-dark);line-height:1}
+.dur,.ex{position:absolute;font-size:12px;font-weight:600;padding:4px 9px;border-radius:6px}
+.dur{right:14px;bottom:14px;background:rgba(35,31,32,.75);color:var(--on-dark)}
+.ex{left:14px;top:14px;border:1px solid rgba(224,226,216,.6);color:var(--on-dark)}
+.pip{position:absolute;left:16px;bottom:14px;width:58px;height:58px;border-radius:50%;background:var(--on-dark);color:var(--ink);display:grid;place-items:center;font-weight:600;font-size:16px;border:3px solid var(--orange)}
+.pip.sm{width:44px;height:44px;font-size:13px;left:12px;bottom:12px}
+.fbody{padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;justify-content:center;gap:14px}
+.fbody .kick{font-size:13px;color:var(--on-dark-2)}
+.fbody .ft{font-family:var(--display);font-weight:300;font-size:clamp(28px,3vw,38px);line-height:1.1}
+.fbody .by{font-size:15px;color:var(--on-dark-2)}
+.ask{border-left:3px solid var(--orange);padding-left:14px;font-size:15px;line-height:1.5}
+.feature:hover .ft{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:24px}
+.card{border:1.5px solid var(--ink);background:var(--bg);display:flex;flex-direction:column}
+.thumb{position:relative;overflow:hidden;height:180px;display:grid;place-items:center;border-bottom:1.5px solid var(--ink)}
+.thumb .mark{position:absolute;width:120%;max-width:none;color:var(--on-dark);opacity:.14;left:50%;top:50%;translate:-50% -50%}
+.cbody{padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px;flex:1}
+.org{display:flex;gap:12px;align-items:center}
+.mono{width:40px;height:40px;flex:none;border-radius:8px;display:grid;place-items:center;color:var(--on-dark);font-weight:700}
+.org b{display:block;font-size:18px;font-weight:600;line-height:1.2}
+.tags{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:600}
+.tag{padding:3px 9px;border-radius:6px;border:1px solid}
+.tag.s{color:var(--red);border-color:var(--red)}.tag.c{background:var(--blue);border-color:var(--blue);color:var(--ink)}.tag.g{background:var(--ghost);border-color:var(--ghost)}
+.mini{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--ink)}
+.cfoot{margin-top:auto;padding-top:14px;border-top:1px solid var(--ghost);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cfoot .bars{height:26px;width:120px;gap:3px}.cfoot .bars span{animation:none}
+.contact{font-weight:600;font-size:15px;min-height:44px;display:inline-flex;align-items:center}
+
+/* format */
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:20px;margin-top:36px}
+.act{border:1.5px solid var(--ink);border-top-width:16px;padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px;background:var(--bg)}
+.act b{font-family:var(--display);font-weight:300;font-size:30px;line-height:1.1}
+.act span{font-size:15px;color:var(--ink-2)}
+
+/* beliefs */
+.beliefs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:36px 40px}
+.belief{border-top:1px solid var(--ink);padding-top:18px}
+.belief h3{margin-bottom:8px}
+.belief p{color:var(--ink-2)}
+.manifesto{font-family:var(--display);font-weight:500;font-size:clamp(32px,4vw,48px);line-height:1.08;text-align:center;margin-bottom:44px}
+
+/* apply */
+.apply{position:relative;overflow:hidden;background:var(--ink);color:var(--on-dark);padding:clamp(32px,5vw,64px);display:flex;flex-wrap:wrap;gap:40px 56px}
+.apply>.mark{position:absolute;width:640px;left:-200px;bottom:-300px;color:var(--on-dark);opacity:.08}
+.apply h2{color:var(--on-dark)}
+.apply .eyebrow{color:var(--orange)}
+.steps{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:14px}
+.steps li{display:flex;gap:14px;align-items:flex-start}
+.num{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--orange);color:var(--orange);display:grid;place-items:center;font-weight:600;font-size:15px}
+.steps small{display:block;font-size:14px;color:var(--on-dark-2)}
+.apply a.more{color:var(--orange);font-weight:600}
+.panel{position:relative;flex:1 1 380px;background:var(--bg);color:var(--ink);border-radius:4px;padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px;flex:none}
+.row>.field,footer form>.field{flex:1 1 180px}
+label{font-size:14px;font-weight:600}
+input,textarea{font:16px/1.4 var(--sans);color:var(--ink);background:var(--tint);border:1.5px solid var(--ink);border-radius:8px;padding:11px 12px;min-height:46px;width:100%}
+input[type=file]{padding:9px;background:transparent;border-style:dashed}
+textarea{resize:vertical}
+input::placeholder{color:var(--muted)}
+.hidden{display:none}
+.sent{font-size:14px;color:var(--maroon);font-weight:600}
+
+/* footer */
+footer{margin-top:clamp(56px,7vw,96px);border-top:1px solid var(--ink)}
+footer .blk{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding-top:36px;padding-bottom:30px;border-bottom:1px solid var(--ghost)}
+footer .big{font-family:var(--display);font-size:26px;font-weight:300}
+footer .sub{font-size:14px;color:var(--muted);margin-top:4px}
+footer form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;flex:1 1 380px;max-width:560px}
+.base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;padding-top:30px;padding-bottom:44px;font-size:14px;color:var(--muted)}
+.base .logo{width:180px;color:var(--ink);margin-bottom:10px}
+.base .links{display:flex;flex-wrap:wrap;gap:8px 18px}
+
+@media(max-width:760px){.feature{grid-template-columns:1fr}.media{min-height:240px}nav{font-size:14px;gap:6px 16px}}
+@media(max-width:600px){.hero .sun{right:-40vw;top:32%;width:130vw}.clock{max-width:none}.acts-mini{font-size:10px;gap:3px}}
+@media(prefers-reduced-motion:reduce){.hero .sun,.bars span{animation:none}html{scroll-behavior:auto}}
+
   </style>
-</Base>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<header>
+  <div class="wrap">
+    <a href={JOIN_ONLY ? '/join' : '/'} aria-label="Mind Shift Collective home"><span class="logo"></span></a>
+    <nav aria-label="Main" data-site-only>
+      <a href="/directory">Directory</a>
+      <a href="/builder-series">Builder Series</a>
+      <a href="/presenter-series" aria-current="page">Presenter Series</a>
+      <a href="/events">Events</a>
+      <a href="/advisory">Work with experts</a>
+      <a href="/join" class="btn">Request to join</a>
+    </nav>
+  </div>
+  <div class="wrap"><hr class="rule" /></div>
+</header>
+
+<main id="main">
+<section class="hero" style="padding-bottom:clamp(32px,4vw,56px)">
+  <span class="mark sun" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow" style="margin:0">Presenter Series / Why present</p>
+      <h1>Five minutes of your time. <em>A year of being found.</em></h1>
+      <p class="lede">One recorded talk becomes a page, a link, a video, a stack of shareable assets and a steady line of screened introductions. Here is what presenters get.</p>
+      <div class="row">
+        <a class="btn" href="/presenter-series/#present">Pitch your talk</a>
+        <a class="link" href="/presenter-series">Back to the series</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><hr class="rule" /></div>
+
+<section class="band" style="padding-top:clamp(40px,5vw,64px)">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:56px">
+    {numbered.map((g) => (
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="head-row" style="margin-bottom:0">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style={`flex:none;width:14px;height:14px;border-radius:50%;background:${g.color}`}></span>
+            <h2 style="font-size:clamp(28px,3.4vw,40px)">{g.title}</h2>
+          </div>
+          <p class="note">{g.sub}</p>
+        </div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))">
+          {g.items.map((it) => (
+            <div style={`display:flex;flex-direction:column;gap:8px;background:var(--bg);border:1.5px solid var(--ink);border-top:12px solid ${g.color};padding:20px`}>
+              <span class="mini">{it.n}</span>
+              <h3 style="font-size:19px">{it.t}</h3>
+              <p style="font-size:14px;line-height:1.5;color:var(--ink-2)">{it.b}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="band tint">
+  <div class="wrap">
+    <div class="apply">
+      <span class="mark" aria-hidden="true"></span>
+      <div class="stack" style="position:relative;flex:999 1 420px;gap:14px">
+        <p class="eyebrow" style="margin:0">The presenter kit</p>
+        <h2>Everything you need to share it.</h2>
+        <p style="font-size:16px;line-height:1.55;color:var(--on-dark-2);max-width:460px">Sent to you the day your talk premieres. Use it in investor updates, sales emails, grant applications, your website and LinkedIn.</p>
+      </div>
+      <div style="position:relative;flex:1 1 420px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+        {kit.map(([t, b]) => (
+          <div style="display:flex;gap:12px;align-items:flex-start;border:1.5px solid rgba(224,226,216,.25);padding:14px 16px">
+            <span style="flex:none;width:10px;height:10px;margin-top:6px;background:var(--orange)"></span>
+            <span style="display:flex;flex-direction:column;gap:2px"><strong style="font-size:15px;font-weight:600">{t}</strong><span style="font-size:13px;line-height:1.45;color:var(--on-dark-2)">{b}</span></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="head-row" style="margin-bottom:28px">
+      <div><p class="eyebrow">Who it works for</p><h2>Not just for founders</h2></div>
+      <p class="note">What each kind of member tends to get</p>
+    </div>
+    <div class="acts" style="margin-top:0">
+      {people.map(([who, gets, color]) => (
+        <div class="act" style={`border-top-color:${color}`}><b style="font-size:24px">{who}</b><span>{gets}</span></div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="band" style="padding-top:0">
+  <div class="wrap">
+    <hr class="rule" style="margin-bottom:40px" />
+    <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:center;justify-content:space-between">
+      <div style="display:flex;gap:44px;flex-wrap:wrap">
+        {stats.map(([big, small]) => (
+          <span style="display:flex;flex-direction:column"><b style="font-family:var(--display);font-weight:300;font-size:56px;line-height:1">{big}</b><span style="font-size:14px;color:var(--muted)">{small}</span></span>
+        ))}
+      </div>
+      <a class="btn" href="/presenter-series/#present">Pitch your talk</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap blk">
+    <div style="max-width:460px"><p class="big">Stay in the loop.</p><p class="sub">Occasional updates on gatherings, community news and the field. One click to unsubscribe. We never share your email.</p></div>
+    <form action="/thank-you?f=newsletter" method="POST" name="newsletter" data-netlify="true" netlify-honeypot="company_website">
+      <input type="hidden" name="form-name" value="newsletter" />
+      <input type="hidden" name="subject" value="[MSC Newsletter] New subscriber" />
+      <input type="hidden" name="topics[]" value="Newsletter" />
+      <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+      <div class="field" style="flex:1 1 130px"><label for="ft-name">First name</label><input id="ft-name" name="first_name" type="text" autocomplete="given-name" /></div>
+      <div class="field" style="flex:2 1 200px"><label for="ft-email">Email</label><input id="ft-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" /></div>
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+  </div>
+  <div class="wrap blk">
+    <div style="max-width:560px"><p class="big">Help keep this community going.</p><p class="sub">Mind Shift Collective is community-run. Contributions of any amount support the Slack, Builder Series, Community Calls and directory.</p></div>
+    <a class="btn ghost" href="https://buy.stripe.com/14A4gBgvK0fB2I9d9T8N201" target="_blank" rel="noopener">Contribute</a>
+  </div>
+  <div class="wrap base">
+    <div><span class="logo" aria-label="Mind Shift Collective" role="img"></span>Rooted in relationship. <a href="https://northstar.guide/ethicspledge">North Star Ethics Pledge</a> signatory.</div>
+    <div class="links" data-site-only>
+      <a href="/companies">Companies</a><a href="/partners">Partners</a><a href="/archive">Events archive</a><a href="/#stay-close">Newsletter</a><a href="/privacy">Privacy</a>
+      <a href="https://www.linkedin.com/company/mind-shift-collective/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.youtube.com/@mindshifthealth">YouTube</a>
+      <a href="mailto:hello@mindshiftcollective.net">hello@mindshiftcollective.net</a>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:28px;font-size:13px;color:var(--muted)">© 2026 Mind Shift Collective. All rights reserved.</div>
+</footer>
+
+<script is:inline>
+  /* Forms post to Netlify when deployed; inside a preview frame they show a note instead. */
+  if (window.self !== window.top) {
+    document.querySelectorAll('form').forEach((f) => f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let n = f.querySelector('.sent');
+      if (!n) { n = document.createElement('p'); n.className = 'sent'; n.setAttribute('role', 'status'); f.appendChild(n); }
+      n.textContent = 'Preview only: this form sends once the page is live on your site.';
+    }));
+  }
+</script>
+</body>
+</html>
