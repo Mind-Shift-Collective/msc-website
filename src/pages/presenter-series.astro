@@ -1,269 +1,405 @@
 ---
-import Base from '../layouts/Base.astro';
-import YouTube from '../components/YouTube.astro';
+// Presenter Series landing page, built from the approved design (brand palette, Fira Sans + DM Sans, sunburst backdrop).
+// Standalone page: it does not use the shared Base layout, so its header, footer and type match the design.
+// Real talks live in src/data/presenter-talks.json ("talks"). Until the first one is added, the page shows "examples" from the same file.
 import data from '../data/presenter-talks.json';
-// Real talks live in src/data/presenter-talks.json ("talks"). Until the first one is added,
-// the page shows the "examples" from the same file, clearly labeled as examples.
-const talks = data.talks;
-const examples = data.examples || [];
-const showExamples = talks.length === 0;
-const featured = examples.find((t) => t.featured) || examples[0];
-const rest = examples.filter((t) => t !== featured);
-const fmtDate = (d) => (d ? new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : '');
 
+const JOIN_ONLY = true;
+const talks = data.talks || [];
+const showTalks = talks.length > 0;
+const items = showTalks ? talks : (data.examples || []);
+const featured = items.find((t) => t.featured) || items[0];
+const rest = items.filter((t) => t !== featured).slice(0, 3);
+const cardColors = ['var(--maroon)', 'var(--ink)', 'var(--red)'];
+
+const C = { o: 'var(--orange)', r: 'var(--red)', m: 'var(--maroon)', b: 'var(--blue)', k: 'var(--ink)' };
+const seq = ['o', 'r', 'r', 'm', 'm', 'm', 'm', 'b', 'b', 'k'];
+const hs = [36, 60, 30, 46, 76, 54, 88, 42, 66, 80];
+const clockBars = seq.map((c, i) => ({ bg: C[c], h: hs[i], delay: (i * 0.14).toFixed(2), dur: (2.4 + (i % 5) * 0.3).toFixed(1) }));
 const acts = [
-  { name: 'Hook', color: '#C9A227', n: 1, slides: 'Slide 1', time: '0:00–0:30', line: 'Why this, why now.' },
-  { name: 'Context', color: '#3E8E8A', n: 2, slides: 'Slides 2–3', time: '0:30–1:30', line: 'What the audience needs to know.' },
-  { name: 'Evidence', color: '#7FB59C', n: 4, slides: 'Slides 4–7', time: '1:30–3:30', line: 'What you found or built.' },
-  { name: 'Opportunity', color: '#8E7CC3', n: 2, slides: 'Slides 8–9', time: '3:30–4:30', line: 'What it opens up.' },
-  { name: 'Close', color: '#C8754A', n: 1, slides: 'Slide 10', time: '4:30–5:00', line: 'End with a door, not a wall.' },
+  ['Hook', 'Slide 1 · 0:00–0:30', 'Why this, why now.', C.o],
+  ['Context', 'Slides 2–3 · 0:30–1:30', 'What the audience needs to know.', C.r],
+  ['Evidence', 'Slides 4–7 · 1:30–3:30', 'What you found or built.', C.m],
+  ['Opportunity', 'Slides 8–9 · 3:30–4:30', 'What it opens up.', C.b],
+  ['Close', 'Slide 10 · 4:30–5:00', 'End with a door, not a wall.', C.k],
 ];
-const heights = [26, 44, 22, 34, 56, 40, 64, 30, 48, 58];
-const barColors = acts.flatMap((a) => Array(a.n).fill(a.color));
-const beliefs = [
-  ['Constraint is a catalyst', 'A clock you can’t pause forces you to find what matters. What survives thirty seconds was worth saying.'],
-  ['Your face on every slide', 'Trust in this field is earned person to person, not business to business.'],
-  ['Rigor and wonder together', 'Speak with evidence. Leave room for awe.'],
-  ['Honesty over hype', 'Name the risks, the headwinds and the open questions.'],
-];
-const steps = [
-  ['Pitch your idea', 'A paragraph and the ask you want to make.'],
-  ['Shape it with us', 'Our template walks you through the five acts.'],
-  ['Record', 'Ten slides advance on their own; you’re on camera in the corner.'],
-  ['Premiere and lean-ins', 'Members watch, and we introduce you to the ones who lean in.'],
-];
-const introHref = (t) => `mailto:hello@mindshiftcollective.net?subject=${encodeURIComponent('Intro request: ' + (t.person || t.presenter) + ' (Presenter Series)')}&body=${encodeURIComponent('I watched "' + t.title + '" and would like an introduction to ' + (t.person || t.presenter) + '.\n\nA little about me and why:\n')}`;
+const isPreview = import.meta.env.PUBLIC_SITE_LIVE !== 'true';
 ---
-<Base title="Presenter Series" current="/presenter-series" description="Five-minute talks from members of Mind Shift Collective: one idea, ten slides, thirty seconds each.">
-  <section class="ps-hero">
-    <span class="ring" style="right:-220px;top:-180px;width:760px;height:760px;border-color:#8E7CC3;opacity:.25"></span>
-    <span class="ring" style="right:-120px;top:-80px;width:560px;height:560px;border-color:#3E8E8A;opacity:.3"></span>
-    <span class="ring" style="right:-20px;top:20px;width:360px;height:360px;border-color:#C9A227;opacity:.45"></span>
-    <div class="wrap row" style="position:relative;gap:56px;align-items:center;">
-      <div class="stack-lg" style="flex:999 1 560px;min-width:0;">
-        <p class="eyebrow">Presenter Series</p>
-        <h1 style="font-size:clamp(44px,6.5vw,84px);line-height:.98;">Five minutes. One idea. See who leans in.</h1>
-        <p class="lede">Our field’s best ideas are buried in journals, dockets and sixty-slide decks. Each talk here is one member, one idea, ten slides that advance on their own. Not to finish the conversation. To start it.</p>
-        <div class="row">
-          <a class="btn" href="#watch">Watch the talks</a>
-          <a class="btn ghost" href="#present">Apply to present</a>
-          <a href="/presenter-series/why" style="align-self:center;font-weight:600;">Why present?</a>
-        </div>
-      </div>
-      <div class="clock" aria-label="10 slides times 30 seconds equals 5 minutes">
-        <div class="clock-sum" aria-hidden="true"><span>10</span><i>×</i><span>30s</span><i>=</i><span>5</span><small>min</small></div>
-        <div class="bars" aria-hidden="true">
-          {barColors.map((c, i) => <span style={`height:${heights[i]}px;background:${c};animation-duration:${(2.4 + (i % 5) * 0.3).toFixed(1)}s;animation-delay:${(i * 0.12).toFixed(2)}s`}></span>)}
-        </div>
-        <div class="acts-mini" aria-hidden="true"><span>Hook</span><span>Context</span><span>Evidence</span><span>Opportunity</span><span>Close</span></div>
-        <p style="margin:0;font-size:14px;line-height:1.5;color:#CFD8D2;">Slides advance every 30 seconds. You’re on camera in the corner the whole time.</p>
+<!doctype html>
+<html lang="en" class={JOIN_ONLY ? 'soft-launch' : undefined}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Presenter Series · Mind Shift Collective</title>
+  <meta name="description" content="Five-minute talks from members of Mind Shift Collective: one idea, ten slides, thirty seconds each." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=Fira+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style is:global>
+
+/* VOICE: Mind Shift Collective — calm, credible, a little awe. Light, airy, honest.
+ IDEA: the brand's sunburst mark as a slide clock — 10 rays of 30 seconds.
+ PICTURE: ghosted sunburst behind the hero (as in the style reference) + the 10×30s clock panel.
+ COLOUR and TYPE: sage-stone ground #E0E2D8, ink #231F20, orange accent #FF4930, act colours red/maroon/blue.
+ Fira Sans Light for display (matches the reference headlines), DM Sans for text and UI (brand type sheet).
+ LAYOUT: rule-separated bands, ink-bordered cards with colour caps, dark ink band for the call to present. */
+:root{
+ color-scheme:light;
+ --bg:#E0E2D8;--tint:#EAEBE4;--ghost:#C8C9C2;--ink:#231F20;--ink-2:#4A4546;--muted:#6B6767;
+ --orange:#FF4930;--red:#D74339;--maroon:#752A32;--blue:#62A1F8;--on-dark:#E0E2D8;--on-dark-2:#B9BAB3;
+ --display:"Fira Sans",system-ui,sans-serif;--sans:"DM Sans",system-ui,-apple-system,sans-serif;
+ --r:10px;--mark:url("/brand/msc-mark.png");--logo:url("/brand/msc-logo.png");
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-underline-offset:3px}
+h1,h2,h3{font-family:var(--display);font-weight:300;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(34px,4.4vw,52px);line-height:1.05}
+h3{font-weight:500;font-size:22px;line-height:1.2}
+p{margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(5vw,18px)}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);margin:0 0 14px}
+.lede{font-size:clamp(17px,1.6vw,20px);line-height:1.55;color:var(--ink-2);max-width:60ch}
+.muted{color:var(--muted)}
+.rule{border:0;border-top:1px solid var(--ink);opacity:.55;margin:0}
+.mark{display:block;background:currentColor;-webkit-mask:var(--mark) center/contain no-repeat;mask:var(--mark) center/contain no-repeat;aspect-ratio:900/718}
+.logo{display:block;background:currentColor;-webkit-mask:var(--logo) left center/contain no-repeat;mask:var(--logo) left center/contain no-repeat;aspect-ratio:900/196}
+.soft-launch [data-site-only]{display:none!important}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--bg);padding:8px 12px;z-index:10}.skip:focus{left:8px}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 24px;border-radius:var(--r);border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);font:500 16px/1 var(--sans);text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink)}.btn.ghost:hover{background:var(--ink);color:var(--bg)}
+.btn.light{background:var(--on-dark);border-color:var(--on-dark);color:var(--ink)}.btn.light:hover{background:transparent;color:var(--on-dark)}
+.link{font-weight:600;align-self:center}
+
+/* header */
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-top:22px;padding-bottom:22px;flex-wrap:wrap}
+header .logo{width:200px;color:var(--ink)}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;font-size:15px}
+nav a{text-decoration:none}nav a:hover{text-decoration:underline}
+nav a[aria-current]{font-weight:600;color:var(--red)}
+nav .btn{min-height:44px;padding:10px 20px;font-size:15px;background:transparent;color:var(--ink)}
+nav .btn:hover{background:var(--ink);color:var(--bg)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:clamp(48px,7vw,100px) 0 clamp(56px,7vw,96px)}
+.hero .sun{position:absolute;right:-14vw;top:50%;width:min(980px,82vw);translate:0 -50%;color:var(--ghost);animation:spin 240s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+.hero .wrap{position:relative;display:flex;flex-wrap:wrap;gap:48px 56px;align-items:center}
+.hero-copy{flex:999 1 560px;display:flex;flex-direction:column;gap:22px}
+.hero h1{font-size:clamp(46px,6.6vw,88px);line-height:1}
+.hero h1 em{font-style:normal;color:var(--orange);font-weight:400}
+.hero .tagline{font-family:var(--display);font-size:clamp(20px,2vw,26px);font-weight:300;color:var(--ink)}
+
+/* clock */
+.clock{flex:1 1 340px;max-width:440px;background:var(--tint);border:1.5px solid var(--ink);border-radius:4px;padding:26px 26px 22px;display:flex;flex-direction:column;gap:18px}
+.clock-sum{font-family:var(--display);font-weight:300;font-size:clamp(40px,4.4vw,54px);line-height:1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.clock-sum i{font-style:normal;color:var(--orange);font-size:.55em}
+.clock-sum small{font-size:16px;font-family:var(--sans);color:var(--muted)}
+.bars{display:flex;align-items:flex-end;gap:6px;height:72px}
+.bars span{flex:1;border-radius:2px 2px 0 0;transform-origin:bottom;animation:pulse 3s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scaleY(.55)}to{transform:scaleY(1)}}
+.acts-mini{display:grid;grid-template-columns:minmax(max-content,1fr) 2fr 4fr 2fr minmax(max-content,1fr);gap:6px;font-size:12px;color:var(--ink-2)}
+.acts-mini span{border-top:3px solid;padding-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clock p{font-size:14px;line-height:1.5;color:var(--ink-2)}
+
+/* talks */
+.band{padding:clamp(56px,7vw,96px) 0}
+.band.tint{background:var(--tint)}
+.head-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 40px;margin-bottom:32px}
+.note{font-size:14px;color:var(--muted);max-width:340px;font-style:italic}
+.feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);border:1.5px solid var(--ink);text-decoration:none;color:var(--on-dark);background:var(--ink);margin-bottom:28px}
+.media{position:relative;overflow:hidden;display:grid;place-items:center;min-height:320px;background:var(--maroon)}
+.media .mark{position:absolute;width:150%;max-width:none;color:var(--on-dark);opacity:.14;left:50%;top:50%;translate:-50% -50%}
+.word{position:relative;font-family:var(--display);font-weight:300;color:var(--on-dark);line-height:1}
+.dur,.ex{position:absolute;font-size:12px;font-weight:600;padding:4px 9px;border-radius:6px}
+.dur{right:14px;bottom:14px;background:rgba(35,31,32,.75);color:var(--on-dark)}
+.ex{left:14px;top:14px;border:1px solid rgba(224,226,216,.6);color:var(--on-dark)}
+.pip{position:absolute;left:16px;bottom:14px;width:58px;height:58px;border-radius:50%;background:var(--on-dark);color:var(--ink);display:grid;place-items:center;font-weight:600;font-size:16px;border:3px solid var(--orange)}
+.pip.sm{width:44px;height:44px;font-size:13px;left:12px;bottom:12px}
+.fbody{padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;justify-content:center;gap:14px}
+.fbody .kick{font-size:13px;color:var(--on-dark-2)}
+.fbody .ft{font-family:var(--display);font-weight:300;font-size:clamp(28px,3vw,38px);line-height:1.1}
+.fbody .by{font-size:15px;color:var(--on-dark-2)}
+.ask{border-left:3px solid var(--orange);padding-left:14px;font-size:15px;line-height:1.5}
+.feature:hover .ft{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:24px}
+.card{border:1.5px solid var(--ink);background:var(--bg);display:flex;flex-direction:column}
+.thumb{position:relative;overflow:hidden;height:180px;display:grid;place-items:center;border-bottom:1.5px solid var(--ink)}
+.thumb .mark{position:absolute;width:120%;max-width:none;color:var(--on-dark);opacity:.14;left:50%;top:50%;translate:-50% -50%}
+.cbody{padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px;flex:1}
+.org{display:flex;gap:12px;align-items:center}
+.mono{width:40px;height:40px;flex:none;border-radius:8px;display:grid;place-items:center;color:var(--on-dark);font-weight:700}
+.org b{display:block;font-size:18px;font-weight:600;line-height:1.2}
+.tags{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:600}
+.tag{padding:3px 9px;border-radius:6px;border:1px solid}
+.tag.s{color:var(--red);border-color:var(--red)}.tag.c{background:var(--blue);border-color:var(--blue);color:var(--ink)}.tag.g{background:var(--ghost);border-color:var(--ghost)}
+.mini{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--ink)}
+.cfoot{margin-top:auto;padding-top:14px;border-top:1px solid var(--ghost);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cfoot .bars{height:26px;width:120px;gap:3px}.cfoot .bars span{animation:none}
+.contact{font-weight:600;font-size:15px;min-height:44px;display:inline-flex;align-items:center}
+
+/* format */
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:20px;margin-top:36px}
+.act{border:1.5px solid var(--ink);border-top-width:16px;padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px;background:var(--bg)}
+.act b{font-family:var(--display);font-weight:300;font-size:30px;line-height:1.1}
+.act span{font-size:15px;color:var(--ink-2)}
+
+/* beliefs */
+.beliefs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:36px 40px}
+.belief{border-top:1px solid var(--ink);padding-top:18px}
+.belief h3{margin-bottom:8px}
+.belief p{color:var(--ink-2)}
+.manifesto{font-family:var(--display);font-weight:500;font-size:clamp(32px,4vw,48px);line-height:1.08;text-align:center;margin-bottom:44px}
+
+/* apply */
+.apply{position:relative;overflow:hidden;background:var(--ink);color:var(--on-dark);padding:clamp(32px,5vw,64px);display:flex;flex-wrap:wrap;gap:40px 56px}
+.apply>.mark{position:absolute;width:640px;left:-200px;bottom:-300px;color:var(--on-dark);opacity:.08}
+.apply h2{color:var(--on-dark)}
+.apply .eyebrow{color:var(--orange)}
+.steps{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:14px}
+.steps li{display:flex;gap:14px;align-items:flex-start}
+.num{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--orange);color:var(--orange);display:grid;place-items:center;font-weight:600;font-size:15px}
+.steps small{display:block;font-size:14px;color:var(--on-dark-2)}
+.apply a.more{color:var(--orange);font-weight:600}
+.panel{position:relative;flex:1 1 380px;background:var(--bg);color:var(--ink);border-radius:4px;padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px;flex:none}
+.row>.field,footer form>.field{flex:1 1 180px}
+label{font-size:14px;font-weight:600}
+input,textarea{font:16px/1.4 var(--sans);color:var(--ink);background:var(--tint);border:1.5px solid var(--ink);border-radius:8px;padding:11px 12px;min-height:46px;width:100%}
+input[type=file]{padding:9px;background:transparent;border-style:dashed}
+textarea{resize:vertical}
+input::placeholder{color:var(--muted)}
+.hidden{display:none}
+.sent{font-size:14px;color:var(--maroon);font-weight:600}
+
+/* footer */
+footer{margin-top:clamp(56px,7vw,96px);border-top:1px solid var(--ink)}
+footer .blk{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 32px;padding-top:36px;padding-bottom:30px;border-bottom:1px solid var(--ghost)}
+footer .big{font-family:var(--display);font-size:26px;font-weight:300}
+footer .sub{font-size:14px;color:var(--muted);margin-top:4px}
+footer form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;flex:1 1 380px;max-width:560px}
+.base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;padding-top:30px;padding-bottom:44px;font-size:14px;color:var(--muted)}
+.base .logo{width:180px;color:var(--ink);margin-bottom:10px}
+.base .links{display:flex;flex-wrap:wrap;gap:8px 18px}
+
+@media(max-width:760px){.feature{grid-template-columns:1fr}.media{min-height:240px}nav{font-size:14px;gap:6px 16px}}
+@media(max-width:600px){.hero .sun{right:-40vw;top:32%;width:130vw}.clock{max-width:none}.acts-mini{font-size:10px;gap:3px}}
+@media(prefers-reduced-motion:reduce){.hero .sun,.bars span{animation:none}html{scroll-behavior:auto}}
+
+  </style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<header>
+  <div class="wrap">
+    <a href={JOIN_ONLY ? '/join' : '/'} aria-label="Mind Shift Collective home"><span class="logo"></span></a>
+    <nav aria-label="Main" data-site-only>
+      <a href="/directory">Directory</a>
+      <a href="/builder-series">Builder Series</a>
+      <a href="/presenter-series" aria-current="page">Presenter Series</a>
+      <a href="/events">Events</a>
+      <a href="/advisory">Work with experts</a>
+      <a href="/join" class="btn">Request to join</a>
+    </nav>
+  </div>
+  <div class="wrap"><hr class="rule" /></div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <span class="mark sun" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow" style="margin:0">Presenter Series / Ten slides / Five minutes</p>
+      <h1>Five minutes. One idea. See who <em>leans in.</em></h1>
+      <p class="tagline">Not to finish the conversation. To start it.</p>
+      <p class="lede">Our field’s best ideas are buried in journals, dockets and sixty-slide decks. Each talk here is one member, one idea, ten slides that advance on their own.</p>
+      <div class="row">
+        <a class="btn" href="#watch">Watch the talks</a>
+        <a class="btn ghost" href="#present">Apply to present</a>
+        <a class="link" href="/presenter-series/why">Why present?</a>
       </div>
     </div>
-  </section>
-
-  <section id="watch" class="white">
-    <div class="wrap stack-lg">
-      {showExamples && featured ? (
-        <>
-          <div class="row between" style="align-items:flex-end;">
-            <div><p class="eyebrow">Talk of the month</p><h2>Start here</h2></div>
-            <p class="example-note">Example talks: these show the format. Our first sessions are being recorded now.</p>
-          </div>
-          <a class="feature" href="#present" aria-label={`Example talk: ${featured.title}`}>
-            <span class="feature-media" style={`background:${featured.bg}`}>
-              <span class="ring" style={`left:50%;top:50%;width:580px;height:580px;margin:-290px 0 0 -290px;border-color:${featured.accent};opacity:.22`}></span>
-              <span class="ring" style={`left:50%;top:50%;width:400px;height:400px;margin:-200px 0 0 -200px;border-color:${featured.accent};opacity:.38`}></span>
-              <span class="ring" style={`left:50%;top:50%;width:240px;height:240px;margin:-120px 0 0 -120px;border-color:${featured.accent};opacity:.55`}></span>
-              <span class="hero-word" style="font-size:clamp(56px,7vw,88px);">{featured.hero}</span>
-              <span class="dur">5:00</span>
-              <span class="example-tag">Example</span>
-              <span class="iris big"><span style={`border-color:${featured.bg}`}>{featured.initials}</span></span>
-            </span>
-            <span class="feature-body">
-              <span style="font-size:13px;color:#CFD8D2;">{featured.lens} lens · {featured.month}</span>
-              <span style="font-family:var(--serif);font-size:36px;line-height:1.1;">{featured.title}</span>
-              <span style="font-size:15px;color:#CFD8D2;">{featured.person} · {featured.role}, {featured.org}</span>
-              <span class="ask"><strong>The ask:</strong> {featured.ask}</span>
-            </span>
-          </a>
-          <div class="talk-grid">
-            {rest.map((t) => (
-              <article class="tcard">
-                <span class="tthumb" style={`background:${t.bg}`}>
-                  <span class="ring" style={`left:50%;top:50%;width:200px;height:200px;margin:-100px 0 0 -100px;border-color:${t.accent};opacity:.45`}></span>
-                  <span class="hero-word" style="font-size:38px;">{t.hero}</span>
-                  <span class="dur small">5:00</span>
-                  <span class="example-tag small">Example</span>
-                  <span class="iris"><span style={`border-color:${t.bg}`}>{t.initials}</span></span>
-                </span>
-                <div class="tbody">
-                  <div class="row" style="gap:12px;align-items:center;flex-wrap:nowrap;">
-                    <span class="mono" style={`background:${t.bg}`}>{t.mono}</span>
-                    <span class="stack" style="gap:2px;min-width:0;">
-                      <span style="font-size:18px;font-weight:600;line-height:1.2;">{t.org}</span>
-                      <span class="muted" style="font-size:13px;">{t.location}</span>
-                    </span>
-                  </div>
-                  <p style="margin:0;font-size:15px;line-height:1.45;">{t.tagline}</p>
-                  <div class="row" style="gap:6px;font-size:12px;font-weight:600;">
-                    <span class="tag gold">S01</span><span class="tag green">{t.lens}</span><span class="tag sand">{t.stage}</span>
-                  </div>
-                  <div style="font-size:13px;color:var(--ink-2);"><strong style="color:var(--ink);font-weight:600;">{t.person}</strong> · {t.role}</div>
-                  <div class="stack" style="gap:6px;">
-                    <span class="mini-label">Looking for</span>
-                    <div class="row" style="gap:6px;">{t.asks.map((a) => <span class="pill">{a}</span>)}</div>
-                  </div>
-                  <div class="tfoot">
-                    <span class="bars small" aria-hidden="true">{barColors.map((c, i) => <span style={`height:${Math.round(heights[i] * 0.38)}px;background:${c === '#7FB59C' ? '#2E5E4E' : c}`}></span>)}</span>
-                    <a class="contact" href="#present" title="Example talk: Contact works on real talks">Contact</a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </>
-      ) : (
-        <>
-          <div class="row between">
-            <div><p class="eyebrow">The talks</p><h2>Watch, then lean in</h2></div>
-            <p style="max-width:460px;color:var(--ink-2);font-size:15px;">Every talk ends with an ask. If one speaks to you, tell us and we'll connect you with the presenter.</p>
-          </div>
-          <div class="talks">
-            {talks.map((t) => (
-              <article class="card talk" id={t.slug}>
-                <YouTube video={t.youtube} title={`${t.title}, ${t.presenter}`} />
-                <div class="stack" style="gap:6px;">
-                  {(t.date || t.topic) && <p class="eyebrow" style="margin:0;">{[fmtDate(t.date), t.topic].filter(Boolean).join(' · ')}</p>}
-                  <h3 style="font-size:22px;margin:0;">{t.title}</h3>
-                  <p style="margin:0;font-weight:500;">{t.presenter}{t.org && <span class="muted" style="font-weight:400;">, {t.org}</span>}</p>
-                  {t.summary && <p style="margin:0;color:var(--ink-2);font-size:15px;">{t.summary}</p>}
-                  {t.ask && <p style="margin:4px 0 0;font-size:15px;"><span class="chip gold">The ask</span> {t.ask}</p>}
-                </div>
-                <div class="row" style="gap:10px;margin-top:auto;">
-                  <a class="btn" href={introHref(t)}>Contact</a>
-                  <a class="btn ghost" href={t.youtube} target="_blank" rel="noopener">Watch on YouTube</a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap stack-lg">
-      <div class="narrow"><p class="eyebrow">The format</p><h2>Five acts, every time.</h2>
-        <p class="lede" style="margin-top:14px;">The same shape for every talk, so audiences know what’s coming and presenters have room to land one idea well.</p></div>
-      <div class="act-grid">
-        {acts.map((a) => (
-          <div class="act" style={`border-top-color:${a.color}`}>
-            <span style="font-family:var(--serif);font-size:26px;">{a.name}</span>
-            <span class="muted" style="font-size:13px;">{a.slides} · {a.time}</span>
-            <span style="font-size:15px;line-height:1.45;color:var(--ink-2);">{a.line}</span>
-          </div>
+    <div class="clock" aria-label="10 slides times 30 seconds equals 5 minutes">
+      <div class="clock-sum" aria-hidden="true"><span>10</span><i>×</i><span>30s</span><i>=</i><span>5</span><small>min</small></div>
+      <div class="bars" aria-hidden="true">
+        {clockBars.map((b) => (
+          <span style={`height:${b.h}%;background:${b.bg};animation-delay:${b.delay}s;animation-duration:${b.dur}s`}></span>
         ))}
       </div>
+      <div class="acts-mini" aria-hidden="true">
+        <span style="border-color:var(--orange)">Hook</span><span style="border-color:var(--red)">Context</span><span style="border-color:var(--maroon)">Evidence</span><span style="border-color:var(--blue)">Opportunity</span><span style="border-color:var(--ink)">Close</span>
+      </div>
+      <p>Slides advance every 30 seconds. You’re on camera in the corner the whole time.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section style="background:#E9E4D8;">
-    <div class="wrap belief-grid">
-      {beliefs.map(([t, b]) => (
-        <div class="belief"><h3>{t}</h3><p>{b}</p></div>
+<div class="wrap"><hr class="rule" /></div>
+
+<section id="watch" class="band">
+  <div class="wrap">
+    <div class="head-row">
+      <div><p class="eyebrow">Talk of the month</p><h2>Start here</h2></div>
+      {!showTalks && <p class="note">Example talks: these show the format. Our first sessions are being recorded now.</p>}
+    </div>
+    {featured && (
+      <a class="feature" href={showTalks && featured.youtube ? featured.youtube : '#present'} aria-label={`${showTalks ? 'Talk' : 'Example talk'}: ${featured.title}`}>
+        <span class="media">
+          <span class="mark" aria-hidden="true"></span>
+          <span class="word" style="font-size:clamp(52px,7vw,88px)">{featured.hero}</span>
+          <span class="dur">5:00</span>{!showTalks && <span class="ex">Example</span>}<span class="pip">{featured.initials}</span>
+        </span>
+        <span class="fbody">
+          <span class="kick">{featured.lens} lens · {featured.month}</span>
+          <span class="ft">{featured.title}</span>
+          <span class="by">{featured.person} · {featured.role}, {featured.org}</span>
+          {featured.ask && <span class="ask"><strong>The ask:</strong> {featured.ask}</span>}
+        </span>
+      </a>
+    )}
+    <div class="grid" id="talks">
+      {rest.map((t, i) => (
+        <article class="card">
+          <span class="thumb" style={`background:${cardColors[i % 3]}`}>
+            <span class="mark" aria-hidden="true"></span>
+            <span class="word" style="font-size:40px">{t.hero}</span>
+            <span class="dur">5:00</span>{!showTalks && <span class="ex">Example</span>}
+            <span class="pip sm">{t.initials}</span>
+          </span>
+          <div class="cbody">
+            <div class="org">
+              <span class="mono" style={`background:${cardColors[i % 3]}`}>{t.mono}</span>
+              <span><b>{t.org}</b><span class="muted" style="font-size:13px">{t.location}</span></span>
+            </div>
+            <p style="font-size:16px;line-height:1.45">{t.tagline}</p>
+            <div class="tags"><span class="tag s">S01</span><span class="tag c">{t.lens}</span><span class="tag g">{t.stage}</span></div>
+            <div style="font-size:14px;color:var(--ink-2)"><strong style="color:var(--ink);font-weight:600">{t.person}</strong> · {t.role}</div>
+            <div class="stack" style="gap:6px"><span class="mini">Looking for</span><div class="pills">{t.asks.map((x) => <span class="pill">{x}</span>)}</div></div>
+            <div class="cfoot">
+              <span class="bars" aria-hidden="true">{clockBars.map((b) => <span style={`height:${b.h}%;background:${b.bg}`}></span>)}</span>
+              <a class="contact" href="#present">Contact →</a>
+            </div>
+          </div>
+        </article>
       ))}
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="present">
-    <div class="wrap">
-      <div class="apply">
-        <span class="ring" style="left:-160px;bottom:-260px;width:520px;height:520px;border-color:#C9A227;opacity:.3"></span>
-        <div class="stack" style="position:relative;flex:999 1 460px;min-width:0;gap:16px;">
-          <p class="eyebrow" style="color:#F3E7C2;margin:0;">Present at a session</p>
-          <h2 style="color:#F6F3EC;">Bring the thing you can’t stop thinking about.</h2>
-          <p style="margin:0;font-size:17px;line-height:1.55;color:#CFD8D2;max-width:540px;">The result that surprised you. The policy question nobody is asking. The bet you would make if you could. Say it in five minutes. Open to members of the collective, free.</p>
-          <ol class="steps">
-            {steps.map(([t, b], i) => (
-              <li><span class="num">{i + 1}</span><span class="stack" style="gap:2px;"><strong>{t}</strong><span style="font-size:14px;color:#CFD8D2;">{b}</span></span></li>
-            ))}
-          </ol>
-          <a href="/presenter-series/why" style="color:#F3E7C2;font-weight:600;">What presenters get →</a>
-        </div>
-        <form class="panel" style="position:relative;flex:1 1 380px;min-width:0;color:var(--ink);" name="presenter-pitch" method="POST" action="/thank-you?f=pitch" data-netlify="true" netlify-honeypot="company_website" enctype="multipart/form-data">
-          <input type="hidden" name="form-name" value="presenter-pitch" />
-          <input type="hidden" name="subject" value="[MSC Pitch] New Presenter Series pitch" />
-          <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
-          <h3>Pitch your talk</h3>
-          <div class="row" style="gap:14px;align-items:flex-start;">
-            <div class="field"><label for="p-name">Your name</label><input id="p-name" name="name" type="text" required autocomplete="name" /></div>
-            <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" required autocomplete="email" /></div>
-          </div>
-          <div class="field"><label for="p-title">Working title</label><input id="p-title" name="title" type="text" required /></div>
-          <div class="field"><label for="p-idea">The one idea, in a sentence</label><textarea id="p-idea" name="idea" rows="3" required></textarea></div>
-          <div class="field"><label for="p-ask">Your ask at the end</label><input id="p-ask" name="ask" type="text" placeholder="A question, a next study, a person to call, a funding need" /></div>
-          <div class="field"><label for="p-file">Video or slides (optional now)</label><input id="p-file" name="attachment" type="file" /></div>
-          <button class="btn" type="submit" style="align-self:flex-start;">Send pitch</button>
-        </form>
-      </div>
+<section class="band tint">
+  <div class="wrap">
+    <div style="max-width:720px">
+      <p class="eyebrow">The format</p>
+      <h2>Five acts, every time.</h2>
+      <p class="lede" style="margin-top:16px">The same shape for every talk, so audiences know what’s coming and presenters have room to land one idea well.</p>
     </div>
-  </section>
+    <div class="acts">
+      {acts.map(([name, time, line, color]) => (
+        <div class="act" style={`border-top-color:${color}`}><b>{name}</b><span class="muted" style="font-size:13px">{time}</span><span>{line}</span></div>
+      ))}
+    </div>
+  </div>
+</section>
 
-  <style>
-    .ps-hero { position: relative; overflow: hidden; padding-top: 96px; padding-bottom: 88px; }
-    .ring { position: absolute; border-radius: 50%; border: 1px solid; pointer-events: none; }
-    .clock { flex: 1 1 360px; display: flex; flex-direction: column; gap: 22px; background: #1F3A31; color: #F6F3EC; border-radius: 26px; padding: 36px; position: relative; }
-    .clock-sum { display: flex; align-items: baseline; gap: 12px; font-family: var(--serif); flex-wrap: wrap; }
-    .clock-sum { flex-wrap: nowrap; gap: 8px; }
-    .clock-sum span { font-size: clamp(40px, 4.4vw, 60px); line-height: 1; }
-    .clock-sum i { font-style: normal; font-size: 28px; color: #C9A227; }
-    .clock-sum small { font-family: var(--sans); font-size: 15px; color: #CFD8D2; }
-    .bars { display: flex; align-items: flex-end; gap: 5px; height: 64px; }
-    .bars span { flex: 1; border-radius: 4px; transform-origin: bottom; animation-name: beat; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
-    .bars.small { flex: 1; gap: 2px; height: 22px; }
-    .bars.small span { border-radius: 2px; animation: none; }
-    @keyframes beat { 0%,100% { transform: scaleY(.55); } 50% { transform: scaleY(1); } }
-    @keyframes iris { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .bars span, .iris.big { animation: none !important; } }
-    .acts-mini { display: grid; grid-template-columns: 1fr 2fr 4fr 2fr 1fr; gap: 5px; font-size: 11px; font-weight: 600; color: #CFD8D2; }
-    .example-note { margin: 0; max-width: 420px; font-size: 14px; color: var(--ink-2); background: #F3E7C2; border-radius: 10px; padding: 10px 14px; }
-    .feature { display: flex; flex-wrap: wrap; background: #1F3A31; border-radius: 24px; overflow: hidden; color: #F6F3EC; text-decoration: none; }
-    .feature:hover { color: #F6F3EC; }
-    .feature-media { flex: 999 1 520px; min-width: 0; position: relative; min-height: 360px; align-self: stretch; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .feature-body { flex: 1 1 360px; padding: 40px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
-    .feature .ask { font-size: 15px; line-height: 1.5; background: rgba(246,243,236,.08); border-radius: 12px; padding: 14px 16px; }
-    .feature .ask strong { font-weight: 600; }
-    .hero-word { position: relative; font-family: var(--serif); color: #fff; }
-    .dur { position: absolute; left: 22px; top: 20px; font-size: 13px; font-weight: 600; color: #fff; background: rgba(0,0,0,.35); padding: 5px 11px; border-radius: 999px; }
-    .dur.small { left: 12px; top: 12px; font-size: 12px; padding: 4px 9px; }
-    .example-tag { position: absolute; right: 22px; top: 20px; font-size: 12px; font-weight: 600; color: #1F3A31; background: #F3E7C2; padding: 4px 10px; border-radius: 999px; }
-    .example-tag.small { right: 12px; top: 12px; font-size: 11px; padding: 3px 8px; }
-    .iris { position: absolute; right: 12px; bottom: 12px; width: 54px; height: 54px; border-radius: 50%; padding: 3px; box-sizing: border-box; background: conic-gradient(from 20deg, #C9A227, #3E8E8A, #8E7CC3, #C8754A, #C9A227); }
-    .iris > span { display: flex; width: 100%; height: 100%; border-radius: 50%; background: #E9E4D8; border: 3px solid; box-sizing: border-box; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #1F3A31; }
-    .iris.big { right: 24px; bottom: 24px; width: 108px; height: 108px; padding: 4px; animation: iris 16s linear infinite; }
-    .iris.big > span { border-width: 4px; font-size: 26px; }
-    .talk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-    .tcard { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-    .tthumb { position: relative; display: flex; align-items: center; justify-content: center; height: 190px; overflow: hidden; }
-    .tbody { padding: 18px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
-    .mono { flex: none; width: 48px; height: 48px; border-radius: 12px; color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 21px; }
-    .tag { padding: 3px 9px; border-radius: 6px; }
-    .tag.gold { color: #5A4310; background: #F3E7C2; } .tag.green { color: #1F3A31; background: #E3EDE7; } .tag.sand { color: #3A403C; background: #EFEADF; }
-    .mini-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-    .pill { font-size: 13px; color: #1F3A31; border: 1px solid #C9D9CF; padding: 4px 10px; border-radius: 999px; }
-    .tfoot { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 12px; border-top: 1px solid #EFEADF; }
-    .contact { flex: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 16px; border-radius: 999px; border: 1px solid var(--forest); color: var(--forest); font-weight: 600; font-size: 14px; text-decoration: none; }
-    .act-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-    .act { display: flex; flex-direction: column; gap: 8px; background: #fff; border: 1px solid var(--line); border-top: 4px solid; border-radius: 14px; padding: 20px; }
-    .belief-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px; }
-    .belief { border-top: 2px solid #1F3A31; padding-top: 18px; }
-    .belief h3 { margin: 0 0 10px; font-size: 24px; line-height: 1.15; }
-    .belief p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
-    .apply { position: relative; overflow: hidden; display: flex; flex-wrap: wrap; gap: 48px; background: #1F3A31; color: #F6F3EC; border-radius: 28px; padding: clamp(28px, 5vw, 56px); }
-    .steps { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px; }
-    .steps li { display: flex; gap: 14px; align-items: flex-start; }
-    .steps .num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #F6F3EC; color: #1F3A31; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; }
-    .talks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 24px; }
-    .talk { gap: 16px; padding: 18px; }
-  </style>
-</Base>
+<section class="band">
+  <div class="wrap">
+    <p class="manifesto">Rigor and wonder. No posturing.</p>
+    <div class="beliefs">
+      <div class="belief"><h3>Constraint is a catalyst</h3><p>A clock you can’t pause forces you to find what matters. What survives thirty seconds was worth saying.</p></div>
+      <div class="belief"><h3>Your face on every slide</h3><p>Trust in this field is earned person to person, not business to business.</p></div>
+      <div class="belief"><h3>Rigor and wonder together</h3><p>Speak with evidence. Leave room for awe.</p></div>
+      <div class="belief"><h3>Honesty over hype</h3><p>Name the risks, the headwinds and the open questions.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="present">
+  <div class="wrap">
+    <div class="apply">
+      <span class="mark" aria-hidden="true"></span>
+      <div class="stack" style="position:relative;flex:999 1 460px;gap:16px">
+        <p class="eyebrow" style="margin:0">Present at a session</p>
+        <h2>Bring the thing you can’t stop thinking about.</h2>
+        <p style="font-size:17px;line-height:1.6;color:var(--on-dark-2);max-width:540px">The result that surprised you. The policy question nobody is asking. The bet you would make if you could. Say it in five minutes. Open to members of the collective, free.</p>
+        <ol class="steps">
+          <li><span class="num">1</span><span><strong>Pitch your idea</strong><small>A paragraph and the ask you want to make.</small></span></li>
+          <li><span class="num">2</span><span><strong>Shape it with us</strong><small>Our template walks you through the five acts.</small></span></li>
+          <li><span class="num">3</span><span><strong>Record</strong><small>Ten slides advance on their own; you’re on camera in the corner.</small></span></li>
+          <li><span class="num">4</span><span><strong>Premiere and lean-ins</strong><small>Members watch, and we introduce you to the ones who lean in.</small></span></li>
+        </ol>
+        <a class="more" href="/presenter-series/why">What presenters get →</a>
+      </div>
+      <form action="/thank-you?f=pitch" class="panel" enctype="multipart/form-data" method="POST" name="presenter-pitch" data-netlify="true" netlify-honeypot="company_website">
+        <input type="hidden" name="form-name" value="presenter-pitch" />
+        <input type="hidden" name="subject" value="[MSC Pitch] New Presenter Series pitch" />
+        <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+        <h3>Pitch your talk</h3>
+        <div class="row" style="align-items:flex-start">
+          <div class="field"><label for="p-name">Your name</label><input id="p-name" name="name" type="text" required autocomplete="name" /></div>
+          <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" required autocomplete="email" /></div>
+        </div>
+        <div class="field"><label for="p-title">Working title</label><input id="p-title" name="title" type="text" required /></div>
+        <div class="field"><label for="p-idea">The one idea, in a sentence</label><textarea id="p-idea" name="idea" rows="3" required></textarea></div>
+        <div class="field"><label for="p-ask">Your ask at the end</label><input id="p-ask" name="ask" type="text" placeholder="A question, a next study, a person to call, a funding need" /></div>
+        <div class="field"><label for="p-file">Video or slides (optional now)</label><input id="p-file" name="attachment" type="file" /></div>
+        <button class="btn" type="submit" style="align-self:flex-start">Send pitch</button>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap blk">
+    <div style="max-width:460px"><p class="big">Stay in the loop.</p><p class="sub">Occasional updates on gatherings, community news and the field. One click to unsubscribe. We never share your email.</p></div>
+    <form action="/thank-you?f=newsletter" method="POST" name="newsletter" data-netlify="true" netlify-honeypot="company_website">
+      <input type="hidden" name="form-name" value="newsletter" />
+      <input type="hidden" name="subject" value="[MSC Newsletter] New subscriber" />
+      <input type="hidden" name="topics[]" value="Newsletter" />
+      <p class="hidden"><label>Leave this empty <input name="company_website" /></label></p>
+      <div class="field" style="flex:1 1 130px"><label for="ft-name">First name</label><input id="ft-name" name="first_name" type="text" autocomplete="given-name" /></div>
+      <div class="field" style="flex:2 1 200px"><label for="ft-email">Email</label><input id="ft-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" /></div>
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+  </div>
+  <div class="wrap blk">
+    <div style="max-width:560px"><p class="big">Help keep this community going.</p><p class="sub">Mind Shift Collective is community-run. Contributions of any amount support the Slack, Builder Series, Community Calls and directory.</p></div>
+    <a class="btn ghost" href="https://buy.stripe.com/14A4gBgvK0fB2I9d9T8N201" target="_blank" rel="noopener">Contribute</a>
+  </div>
+  <div class="wrap base">
+    <div><span class="logo" aria-label="Mind Shift Collective" role="img"></span>Rooted in relationship. <a href="https://northstar.guide/ethicspledge">North Star Ethics Pledge</a> signatory.</div>
+    <div class="links" data-site-only>
+      <a href="/companies">Companies</a><a href="/partners">Partners</a><a href="/archive">Events archive</a><a href="/#stay-close">Newsletter</a><a href="/privacy">Privacy</a>
+      <a href="https://www.linkedin.com/company/mind-shift-collective/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.youtube.com/@mindshifthealth">YouTube</a>
+      <a href="mailto:hello@mindshiftcollective.net">hello@mindshiftcollective.net</a>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:28px;font-size:13px;color:var(--muted)">© 2026 Mind Shift Collective. All rights reserved.</div>
+</footer>
+
+<script is:inline>
+  /* Forms post to Netlify when deployed; inside a preview frame they show a note instead. */
+  if (window.self !== window.top) {
+    document.querySelectorAll('form').forEach((f) => f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let n = f.querySelector('.sent');
+      if (!n) { n = document.createElement('p'); n.className = 'sent'; n.setAttribute('role', 'status'); f.appendChild(n); }
+      n.textContent = 'Preview only: this form sends once the page is live on your site.';
+    }));
+  }
+</script>
+</body>
+</html>
