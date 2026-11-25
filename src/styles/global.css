@@ -1,21 +1,23 @@
 :root {
-  --ground: #F6F3EC;
-  --ground-2: #EFEAE0;
-  --surface: #FFFFFF;
-  --ink: #1A1A1A;
-  --ink-2: #3D3A34;
-  --muted: #55524B;
-  --line: #DDD6C6;
-  --line-2: #B9B2A3;
-  --forest: #2E5E4E;
-  --forest-dark: #1E4337;
-  --deep: #1F3A31;
-  --gold: #C9A227;
-  --gold-text: #7A5C0F;
-  --gold-light: #E2C566;
-  --tag: #E3ECE7;
-  --serif: "Newsreader", Georgia, serif;
-  --sans: "Inter", system-ui, -apple-system, sans-serif;
+  --ground: #E0E2D8;
+  --ground-2: #EAEBE4;
+  --surface: #EAEBE4;
+  --ink: #231F20;
+  --ink-2: #4A4546;
+  --muted: #6B6767;
+  --line: #B9BAB3;
+  --line-2: #6B6767;
+  --forest: #752A32;
+  --forest-dark: #5A1F26;
+  --deep: #231F20;
+  --gold: #FF4930;
+  --gold-text: #A8322A;
+  --gold-light: #FFB3A8;
+  --tag: #EAEBE4;
+  --red: #D74339;
+  --blue: #62A1F8;
+  --serif: "Fira Sans", system-ui, sans-serif;
+  --sans: "DM Sans", system-ui, -apple-system, sans-serif;
 }
 
 * { box-sizing: border-box; }
